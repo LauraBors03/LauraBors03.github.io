@@ -119,7 +119,7 @@
 <body>
   <div class="container">
     <h1>💄 Kozmetikai és parfümtermékek gyártása Romániában</h1>
-    <p class="subtitle">Romániai ipari termelés 2019–2023 (RON)</p>
+    <p class="subtitle">Romániai ipari termelés 2019–2023 (millió RON)</p>
     <div id="viz"></div>
     <div class="footer">
       <p>Adatvizualizáció Vega-Lite használatával | Forrás: <a href="#">IND106C</a></p>
@@ -140,10 +140,18 @@
           {"Kategoria": "Kozmetikai és parfümtermékek", "Ev": 2023, "Ertek": 1596956492}
         ]
       },
+      "transform": [
+        {"calculate": "datum.Ertek / 1e6", "as": "ErtekMillio"}  // Átváltás millió RON-ra
+      ],
       "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
       "encoding": {
         "x": {"field": "Ev", "type": "ordinal", "title": "Év"},
-        "y": {"field": "Ertek", "type": "quantitative", "title": "Termelési érték (RON)", "axis": {"format": ","}},
+        "y": {
+          "field": "ErtekMillio",
+          "type": "quantitative",
+          "title": "Termelési érték (millió RON)",
+          "axis": {"format": ",.0f"}
+        },
         "color": {
           "field": "Kategoria",
           "type": "nominal",
@@ -152,7 +160,8 @@
         },
         "tooltip": [
           {"field": "Ev", "type": "ordinal", "title": "Év"},
-          {"field": "Ertek", "type": "quantitative", "title": "Érték (Lei)", "format": ","}
+          {"field": "Ertek", "type": "quantitative", "title": "Érték (RON)", "format": ",.0f"},
+          {"field": "ErtekMillio", "type": "quantitative", "title": "Érték (millió RON)", "format": ",.1f"}
         ]
       }
     };

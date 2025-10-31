@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Lakossági adatok</title>
+  <title>Kozmetikai termékek gyártása</title>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
@@ -65,11 +65,11 @@
 </head>
 <body>
   <div class="container">
-    <h1>🏙️ Székely városok lakosságának változása</h1>
-    <p class="subtitle">2022-2024 közötti adatok</p>
+    <h1>💄 Kozmetikai és parfümtermékek gyártása Romániában</h1>
+    <p class="subtitle">Romániai ipari termelés 2019-2023 (Lei RON)</p>
     <div id="viz"></div>
     <div class="footer">
-      <p>Adatvizualizáció Vega-Lite használatával</p>
+      <p>Adatvizualizáció Vega-Lite használatával | Forrás: IND106C</p>
     </div>
   </div>
   
@@ -77,27 +77,39 @@
     const spec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "width": "container",
-      "height": 300,
+      "height": 350,
       "data": {
         "values": [
-          {"Varos": "Csikszereda", "Ev": 2022, "Lakossag": 34000},
-          {"Varos": "Udvarhely", "Ev": 2022, "Lakossag": 37000},
-          {"Varos": "Csikszereda", "Ev": 2023, "Lakossag": 35600},
-          {"Varos": "Udvarhely", "Ev": 2023, "Lakossag": 35000},
-          {"Varos": "Csikszereda", "Ev": 2024, "Lakossag": 36000},
-          {"Varos": "Udvarhely", "Ev": 2024, "Lakossag": 33000}
+          {"Kategoria": "Kozmetikai és parfümtermékek gyártása Romániában", "Ev": 2019, "Ertek": 891627927},
+          {"Kategoria": "Kozmetikai és parfümtermékek gyártása Romániában", "Ev": 2020, "Ertek": 927378679},
+          {"Kategoria": "Kozmetikai és parfümtermékek gyártása Romániában", "Ev": 2021, "Ertek": 1436931536},
+          {"Kategoria": "Kozmetikai és parfümtermékek gyártása Romániában", "Ev": 2022, "Ertek": 1447546976},
+          {"Kategoria": "Kozmetikai és parfümtermékek gyártása Romániában", "Ev": 2023, "Ertek": 1596956492}
         ]
       },
       "mark": {"type": "line", "point": true, "strokeWidth": 3},
       "encoding": {
-        "x": {"field": "Ev", "type": "ordinal", "title": "Év"},
-        "y": {"field": "Lakossag", "type": "quantitative", "title": "Lakosság"},
+        "x": {
+          "field": "Ev", 
+          "type": "ordinal", 
+          "title": "Év"
+        },
+        "y": {
+          "field": "Ertek", 
+          "type": "quantitative", 
+          "title": "Termelési érték (Lei RON)",
+          "axis": {"format": "~s"}
+        },
         "color": {
-          "field": "Varos", 
+          "field": "Kategoria", 
           "type": "nominal", 
-          "title": "Város",
-          "scale": {"range": ["#667eea", "#f093fb"]}
-        }
+          "title": "Termékkategória",
+          "scale": {"range": ["#667eea"]}
+        },
+        "tooltip": [
+          {"field": "Ev", "type": "ordinal", "title": "Év"},
+          {"field": "Ertek", "type": "quantitative", "title": "Érték (Lei)", "format": ","}
+        ]
       }
     };
     

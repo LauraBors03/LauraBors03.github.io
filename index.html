@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lakossági adatok</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <h1>Székely városok lakosságának változása</h1>
+  <div id="viz"></div>
+  
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 400,
+      "height": 300,
+      "data": {
+        "values": [
+          {"Varos": "Csikszereda", "Ev": 2022, "Lakossag": 34000},
+          {"Varos": "Udvarhely", "Ev": 2022, "Lakossag": 37000},
+          {"Varos": "Csikszereda", "Ev": 2023, "Lakossag": 35600},
+          {"Varos": "Udvarhely", "Ev": 2023, "Lakossag": 35000},
+          {"Varos": "Csikszereda", "Ev": 2024, "Lakossag": 36000},
+          {"Varos": "Udvarhely", "Ev": 2024, "Lakossag": 33000}
+        ]
+      },
+      "mark": "line",
+      "encoding": {
+        "x": {"field": "Ev", "type": "ordinal", "title": "Év"},
+        "y": {"field": "Lakossag", "type": "quantitative", "title": "Lakosság"},
+        "color": {"field": "Varos", "type": "nominal", "title": "Város"}
+      }
+    };
+    
+    vegaEmbed('#viz', spec);
+  </script>
+</body>
+</html>

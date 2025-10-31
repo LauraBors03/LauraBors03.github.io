@@ -6,15 +6,77 @@
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      color: #667eea;
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+    
+    #viz {
+      background: #f8f9ff;
+      padding: 30px;
+      border-radius: 15px;
+      border: 3px solid #e0e7ff;
+      margin-top: 20px;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #999;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-  <h1>Székely városok lakosságának változása</h1>
-  <div id="viz"></div>
+  <div class="container">
+    <h1>🏙️ Székely városok lakosságának változása</h1>
+    <p class="subtitle">2022-2024 közötti adatok</p>
+    <div id="viz"></div>
+    <div class="footer">
+      <p>Adatvizualizáció Vega-Lite használatával</p>
+    </div>
+  </div>
   
   <script>
     const spec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "width": 400,
+      "width": "container",
       "height": 300,
       "data": {
         "values": [
@@ -26,11 +88,16 @@
           {"Varos": "Udvarhely", "Ev": 2024, "Lakossag": 33000}
         ]
       },
-      "mark": "line",
+      "mark": {"type": "line", "point": true, "strokeWidth": 3},
       "encoding": {
         "x": {"field": "Ev", "type": "ordinal", "title": "Év"},
         "y": {"field": "Lakossag", "type": "quantitative", "title": "Lakosság"},
-        "color": {"field": "Varos", "type": "nominal", "title": "Város"}
+        "color": {
+          "field": "Varos", 
+          "type": "nominal", 
+          "title": "Város",
+          "scale": {"range": ["#667eea", "#f093fb"]}
+        }
       }
     };
     

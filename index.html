@@ -22,7 +22,6 @@
       position: relative;
     }
 
-    /* Lebegő fényes pöttyök a háttérhez */
     body::before {
       content: '';
       position: fixed;
@@ -30,7 +29,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px);
+      background: radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px);
       background-size: 60px 60px;
       animation: float 25s linear infinite;
       pointer-events: none;
@@ -44,10 +43,10 @@
     .container {
       max-width: 900px;
       margin: 0 auto;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       border-radius: 40px;
       padding: 60px;
-      box-shadow: 0 20px 60px rgba(173, 216, 230, 0.4);
+      box-shadow: 0 20px 60px rgba(173, 216, 230, 0.45);
       backdrop-filter: blur(12px);
       animation: fadeIn 1.2s ease-out;
     }
@@ -61,11 +60,11 @@
       text-align: center;
       font-size: 2.8em;
       margin-bottom: 15px;
-      background: linear-gradient(135deg, #64b5f6 0%, #b3e5fc 50%, #f8bbd0 100%);
+      background: linear-gradient(135deg, #4A90E2 0%, #8FD3FE 50%, #F8A1C4 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-shadow: 0 2px 25px rgba(176, 224, 230, 0.4);
+      text-shadow: 0 2px 25px rgba(100, 149, 237, 0.5);
       animation: shimmer 3s ease-in-out infinite;
     }
 
@@ -76,7 +75,7 @@
 
     .subtitle {
       text-align: center;
-      color: #7baedb;
+      color: #5b97c3;
       margin-bottom: 40px;
       font-size: 1.2em;
       font-weight: 300;
@@ -102,13 +101,13 @@
     .footer {
       text-align: center;
       margin-top: 50px;
-      color: #8baecf;
+      color: #7fa8c7;
       font-size: 0.95em;
       font-weight: 300;
     }
 
     .footer a {
-      color: #7baedb;
+      color: #4A90E2;
       text-decoration: none;
     }
 
@@ -149,7 +148,7 @@
           "field": "Kategoria",
           "type": "nominal",
           "title": "Termékkategória",
-          "scale": {"range": ["#90caf9"]}
+          "scale": {"range": ["#64b5f6"]}
         },
         "tooltip": [
           {"field": "Ev", "type": "ordinal", "title": "Év"},

@@ -179,7 +179,7 @@ font-size: 1.5em;
 <body>
 <div class="container">
     <h1>⚔️ Az Arcane hatása a League of Legends-re 🎮</h1>
-    <p class="subtitle">Hősök népszerűsége az Arcane Netflixes sorozat megjelenése előtt és után</p>
+    <p class="subtitle">Champion népszerűség az Arcane Netflix sorozat megjelenése előtt és után</p>
     
     <div style="text-align: center;">
         <span class="arcane-badge">📺 Arcane premierje: 2021. november 6.</span>
@@ -187,9 +187,9 @@ font-size: 1.5em;
     
     <div class="intro-text">
         Az Arcane megjelenése drámai hatással volt a League of Legends közösségére. 
-        A Netflix által készített animációs sorozat, videojáték-adaptáció nemcsak a játékosok számát növelte meg,
-        hanem jelentősen megváltoztatta bizonyos hősök népszerűségét is. Az alábbi diagramok
-        bemutatják, hogyan alakult a főszereplő hősök játékon belüli kedveltsége a sorozat
+        A Netflix által készített animációs sorozat nemcsak a játékosok számát növelte meg,
+        hanem jelentősen megváltoztatta a championok népszerűségét is. Az alábbi diagramok
+        bemutatják, hogyan alakult a főszereplő hősök játékon belüli használata a sorozat
         premierjét követően.
     </div>
 
@@ -197,8 +197,8 @@ font-size: 1.5em;
     <div class="section">
         <h2 class="section-title">📊 Pick Rate változás: Arcane előtt vs. után</h2>
         <div class="section-description">
-            Az első diagram bemutatja az összes Arcane-ben szereplő hős pick rate változását.
-            A sorozat főszereplői (Vi, Jinx, Caitlyn, Jayce) és mellékszereplői egyaránt jelentős 
+            Az első diagram bemutatja az összes Arcane-ben szereplő champion pick rate változását.
+            A sorozat főszereplői (Vi, Jinx, Jayce) és mellékszereplői egyaránt jelentős 
             népszerűségnövekedést mutattak. Vi pick rate-je például több mint háromszorosára 
             nőtt (5.74% → 18.14%), míg Jayce-é több mint triplázódott (3.68% → 11.85%).
         </div>
@@ -211,7 +211,7 @@ font-size: 1.5em;
         <div class="section-description">
             A második diagram az időbeli változásokat mutatja hónapokon keresztül a három 
             főszereplő esetében. Látható, hogy az Arcane premierje után (2021 November) 
-            mindhárom hős népszerűsége ugrásszerűen megnőtt, majd fokozatosan 
+            mindhárom champion népszerűsége ugrásszerűen megnőtt, majd fokozatosan 
             stabilizálódott. Ez a trend azt mutatja, hogy a sorozat nemcsak rövid távú 
             érdeklődést keltett, hanem hosszú távon is megnövelte ezeknek a karaktereknek 
             a játékban való használatát.
@@ -247,22 +247,22 @@ const spec1 = {
 "height": 450,
 "data": {
 "values": [
-{"Champion": "Caitlyn", "Idoszak": "Arcane előtt", "Pick_Rate": 14.99, "Role": "Piltover városának egyik rendfenntartója"},
-{"Champion": "Caitlyn", "Idoszak": "Arcane után", "Pick_Rate": 26.1, "Role": "Piltover városának egyik rendfenntartója"},
-{"Champion": "Ekko", "Idoszak": "Arcane előtt", "Pick_Rate": 7.98, "Role": "Zaunból származó zseni tinédzser"},
-{"Champion": "Ekko", "Idoszak": "Arcane után", "Pick_Rate": 8.3, "Role": "Zaunból származó zseni tinédzser"},
+{"Champion": "Caitlyn", "Idoszak": "Arcane előtt", "Pick_Rate": 14.99, "Role": "Vi partnere és Piltover rendfenntartó"},
+{"Champion": "Caitlyn", "Idoszak": "Arcane után", "Pick_Rate": 26.1, "Role": "Vi partnere és Piltover rendfenntartó"},
+{"Champion": "Ekko", "Idoszak": "Arcane előtt", "Pick_Rate": 7.98, "Role": "A Firelights vezetője"},
+{"Champion": "Ekko", "Idoszak": "Arcane után", "Pick_Rate": 8.3, "Role": "A Firelights vezetője"},
 {"Champion": "Heimerdinger", "Idoszak": "Arcane előtt", "Pick_Rate": 1.08, "Role": "Tisztelt professzor és feltaláló"},
 {"Champion": "Heimerdinger", "Idoszak": "Arcane után", "Pick_Rate": 1.33, "Role": "Tisztelt professzor és feltaláló"},
-{"Champion": "Jayce", "Idoszak": "Arcane előtt", "Pick_Rate": 3.68, "Role": "A Hextech társfeltalálója és tanácstag"},
-{"Champion": "Jayce", "Idoszak": "Arcane után", "Pick_Rate": 11.85, "Role": "A Hextech társfeltalálója és tanácstag"},
-{"Champion": "Jinx", "Idoszak": "Arcane előtt", "Pick_Rate": 11.85, "Role": "Az egyik főszereplő, Vi húga"},
-{"Champion": "Jinx", "Idoszak": "Arcane után", "Pick_Rate": 18.38, "Role": "Az egyik főszereplő, Vi húga"},
+{"Champion": "Jayce", "Idoszak": "Arcane előtt", "Pick_Rate": 3.68, "Role": "A Hextech társalapítója és tanácstag"},
+{"Champion": "Jayce", "Idoszak": "Arcane után", "Pick_Rate": 11.85, "Role": "A Hextech társalapítója és tanácstag"},
+{"Champion": "Jinx", "Idoszak": "Arcane előtt", "Pick_Rate": 11.85, "Role": "Az egyik főszereplő; ingatag bűnöző"},
+{"Champion": "Jinx", "Idoszak": "Arcane után", "Pick_Rate": 18.38, "Role": "Az egyik főszereplő; ingatag bűnöző"},
 {"Champion": "Singed", "Idoszak": "Arcane előtt", "Pick_Rate": 1.37, "Role": "Sötét alkimista az alsóvárosból"},
 {"Champion": "Singed", "Idoszak": "Arcane után", "Pick_Rate": 2.3, "Role": "Sötét alkimista az alsóvárosból"},
-{"Champion": "Vi", "Idoszak": "Arcane előtt", "Pick_Rate": 5.74, "Role": "A másik főszereplő; Jinx nővére, piltoveri rendfenntartó"},
-{"Champion": "Vi", "Idoszak": "Arcane után", "Pick_Rate": 18.14, "Role": "A másik főszereplő; Jinx nővére, piltoveri rendfenntartó"},
-{"Champion": "Viktor", "Idoszak": "Arcane előtt", "Pick_Rate": 2.53, "Role": "Zseniális feltaláló Zaunból, Jayce partnere"},
-{"Champion": "Viktor", "Idoszak": "Arcane után", "Pick_Rate": 4.17, "Role": "Zseniális feltaláló Zaunból, Jayce partnere"}
+{"Champion": "Vi", "Idoszak": "Arcane előtt", "Pick_Rate": 5.74, "Role": "A másik főszereplő; Piltover rendfenntartó"},
+{"Champion": "Vi", "Idoszak": "Arcane után", "Pick_Rate": 18.14, "Role": "A másik főszereplő; Piltover rendfenntartó"},
+{"Champion": "Viktor", "Idoszak": "Arcane előtt", "Pick_Rate": 2.53, "Role": "A Hextech társalapítója és Jayce partnere"},
+{"Champion": "Viktor", "Idoszak": "Arcane után", "Pick_Rate": 4.17, "Role": "A Hextech társalapítója és Jayce partnere"}
 ]
 },
 "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
@@ -293,7 +293,7 @@ const spec1 = {
 "xOffset": {"field": "Idoszak"},
 "tooltip": [
 {"field": "Champion", "type": "nominal", "title": "Hős"},
-{"field": "Role", "type": "nominal", "title": "Szerep az Arcane-ben"},
+{"field": "Role", "type": "nominal", "title": "Szerep az Arcane-ban"},
 {"field": "Idoszak", "type": "nominal", "title": "Időszak"},
 {"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".2f"}
 ]
@@ -360,7 +360,7 @@ const spec2 = {
 const spec3 = {
 "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 "width": "container",
-"height": 350,
+"height": 400,
 "data": {
 "values": [
 {"Champion": "Jinx", "Idoszak": "Arcane előtt", "Win_Rate": 50.2},
@@ -384,7 +384,7 @@ const spec3 = {
 "type": "quantitative", 
 "title": "Win Rate (%)",
 "axis": {"grid": true},
-"scale": {"domain": [45, 55]}
+"scale": {"domain": [0, 60]}
 },
 "color": {
 "field": "Idoszak", 

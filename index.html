@@ -15,7 +15,7 @@ box-sizing: border-box;
 
 body {
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: linear-gradient(135deg, #0a1428 0%, #1a2942 50%, #2d1b3d 100%);
+background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #1e1b2e 100%);
 min-height: 100vh;
 padding: 40px 20px;
 overflow-x: hidden;
@@ -29,28 +29,28 @@ top: -50%;
 left: -50%;
 width: 200%;
 height: 200%;
-background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 1px, transparent 1px);
-background-size: 50px 50px;
-animation: float 20s linear infinite;
+background: radial-gradient(circle, rgba(123, 97, 255, 0.03) 1px, transparent 1px);
+background-size: 60px 60px;
+animation: float 25s linear infinite;
 pointer-events: none;
 }
 
 @keyframes float {
 0% { transform: translate(0, 0); }
-100% { transform: translate(50px, 50px); }
+100% { transform: translate(60px, 60px); }
 }
 
 .container {
 max-width: 1200px;
 margin: 0 auto;
-background: rgba(15, 25, 45, 0.92);
+background: linear-gradient(135deg, rgba(20, 24, 35, 0.95) 0%, rgba(25, 28, 40, 0.95) 100%);
 border-radius: 30px;
 padding: 50px;
-box-shadow: 0 30px 80px rgba(212, 175, 55, 0.3),
-0 0 0 1px rgba(212, 175, 55, 0.4) inset;
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+0 0 0 1px rgba(123, 97, 255, 0.1) inset;
 backdrop-filter: blur(10px);
 animation: fadeIn 1s ease-out;
-border: 2px solid rgba(212, 175, 55, 0.3);
+border: 1px solid rgba(123, 97, 255, 0.2);
 }
 
 @keyframes fadeIn {
@@ -62,103 +62,106 @@ h1 {
 text-align: center;
 font-size: 2.8em;
 margin-bottom: 10px;
-background: linear-gradient(135deg, #d4af37 0%, #4a90e2 40%, #8b5cf6 100%);
+background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #7b61ff 100%);
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
 background-clip: text;
-filter: drop-shadow(0 2px 20px rgba(212, 175, 55, 0.4));
-animation: shimmer 3s ease-in-out infinite;
-font-weight: bold;
+filter: drop-shadow(0 2px 15px rgba(123, 97, 255, 0.3));
+animation: shimmer 4s ease-in-out infinite;
+font-weight: 700;
+letter-spacing: -0.5px;
 }
 
 @keyframes shimmer {
-0%, 100% { filter: drop-shadow(0 2px 20px rgba(212, 175, 55, 0.4)); }
-50% { filter: drop-shadow(0 2px 30px rgba(74, 144, 226, 0.6)); }
+0%, 100% { filter: drop-shadow(0 2px 15px rgba(123, 97, 255, 0.3)); }
+50% { filter: drop-shadow(0 4px 25px rgba(142, 197, 252, 0.4)); }
 }
 
 .subtitle {
 text-align: center;
-color: #a0aec0;
+color: #b8c5d6;
 margin-bottom: 40px;
-font-size: 1.15em;
+font-size: 1.1em;
 font-weight: 300;
-letter-spacing: 0.4px;
+letter-spacing: 0.3px;
 }
 
 .intro-text {
-color: #cbd5e0;
-line-height: 1.8;
+color: #d4dce8;
+line-height: 1.9;
 margin-bottom: 30px;
 text-align: center;
 font-size: 1.05em;
-padding: 20px;
-background: rgba(212, 175, 55, 0.05);
-border-radius: 15px;
-border-left: 4px solid #d4af37;
+padding: 25px;
+background: linear-gradient(135deg, rgba(123, 97, 255, 0.08) 0%, rgba(142, 197, 252, 0.05) 100%);
+border-radius: 20px;
+border-left: 3px solid #7b61ff;
 }
 
 .section {
-margin-bottom: 50px;
+margin-bottom: 60px;
 }
 
 .section-title {
-color: #d4af37;
-font-size: 1.8em;
-margin-bottom: 15px;
+color: #e0c3fc;
+font-size: 1.9em;
+margin-bottom: 20px;
 text-align: center;
 font-weight: 600;
+letter-spacing: -0.3px;
 }
 
 .section-description {
-color: #cbd5e0;
-line-height: 1.8;
-margin-bottom: 25px;
+color: #c8d3e0;
+line-height: 1.9;
+margin-bottom: 30px;
 text-align: justify;
 font-size: 1.05em;
-padding: 20px;
-background: rgba(74, 144, 226, 0.05);
-border-radius: 15px;
-border-left: 4px solid #4a90e2;
+padding: 25px;
+background: linear-gradient(135deg, rgba(142, 197, 252, 0.06) 0%, rgba(123, 97, 255, 0.04) 100%);
+border-radius: 20px;
+border-left: 3px solid #8ec5fc;
 }
 
 #viz, #viz2, #viz3 {
 display: flex;
 justify-content: center;
 align-items: center;
-background: linear-gradient(135deg, rgba(10, 20, 40, 0.6) 0%, rgba(45, 27, 61, 0.6) 100%);
-padding: 40px;
+background: linear-gradient(135deg, rgba(15, 20, 30, 0.6) 0%, rgba(25, 25, 40, 0.6) 100%);
+padding: 45px;
 border-radius: 25px;
-border: 2px solid rgba(212, 175, 55, 0.2);
-margin-top: 20px;
-box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2),
-0 0 0 1px rgba(212, 175, 55, 0.3) inset;
+border: 1px solid rgba(123, 97, 255, 0.15);
+margin-top: 25px;
+box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
+0 0 0 1px rgba(142, 197, 252, 0.1) inset;
 transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #viz:hover, #viz2:hover, #viz3:hover {
-transform: translateY(-5px);
-box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4),
-0 0 0 1px rgba(74, 144, 226, 0.4) inset;
+transform: translateY(-3px);
+box-shadow: 0 15px 50px rgba(123, 97, 255, 0.2),
+0 0 0 1px rgba(142, 197, 252, 0.2) inset;
 }
 
 .footer {
 text-align: center;
-margin-top: 40px;
-color: #718096;
+margin-top: 50px;
+color: #8896a8;
 font-size: 0.95em;
 font-weight: 300;
 }
 
 .arcane-badge {
 display: inline-block;
-background: linear-gradient(135deg, #d4af37 0%, #8b5cf6 100%);
-color: #0a1428;
-padding: 8px 20px;
-border-radius: 20px;
-font-weight: bold;
+background: linear-gradient(135deg, #7b61ff 0%, #8ec5fc 100%);
+color: #ffffff;
+padding: 10px 24px;
+border-radius: 25px;
+font-weight: 600;
 font-size: 0.9em;
-margin-bottom: 20px;
-box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+margin-bottom: 25px;
+box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
+letter-spacing: 0.3px;
 }
 
 @media (max-width: 768px) {
@@ -178,8 +181,8 @@ font-size: 1.5em;
 </head>
 <body>
 <div class="container">
-    <h1>⚔️ Az Arcane hatása a League of Legends-re 🎮</h1>
-    <p class="subtitle">Champion népszerűség az Arcane Netflix sorozat megjelenése előtt és után</p>
+    <h1> Az Arcane hatása a League of Legends-re </h1>
+    <p class="subtitle">Hősök népszerűsége az Arcane Netflix sorozat megjelenése előtt és után</p>
     
     <div style="text-align: center;">
         <span class="arcane-badge">📺 Arcane premierje: 2021. november 6.</span>
@@ -187,8 +190,8 @@ font-size: 1.5em;
     
     <div class="intro-text">
         Az Arcane megjelenése drámai hatással volt a League of Legends közösségére. 
-        A Netflix által készített animációs sorozat nemcsak a játékosok számát növelte meg,
-        hanem jelentősen megváltoztatta a championok népszerűségét is. Az alábbi diagramok
+        A Netflix által készített animációs sorozat, videojáték-adaptáció nemcsak a játékosok számát növelte meg,
+        hanem jelentősen megváltoztatta egyes hősök népszerűségét is. Az alábbi diagramok
         bemutatják, hogyan alakult a főszereplő hősök játékon belüli használata a sorozat
         premierjét követően.
     </div>
@@ -197,8 +200,8 @@ font-size: 1.5em;
     <div class="section">
         <h2 class="section-title">📊 Pick Rate változás: Arcane előtt vs. után</h2>
         <div class="section-description">
-            Az első diagram bemutatja az összes Arcane-ben szereplő champion pick rate változását.
-            A sorozat főszereplői (Vi, Jinx, Jayce) és mellékszereplői egyaránt jelentős 
+            Az első diagram bemutatja az összes Arcane-ben szereplő hős pick rate változását.
+            A sorozat főszereplői (Vi, Jinx, Jayce, Caitlyn) és mellékszereplői egyaránt jelentős 
             népszerűségnövekedést mutattak. Vi pick rate-je például több mint háromszorosára 
             nőtt (5.74% → 18.14%), míg Jayce-é több mint triplázódott (3.68% → 11.85%).
         </div>
@@ -211,7 +214,7 @@ font-size: 1.5em;
         <div class="section-description">
             A második diagram az időbeli változásokat mutatja hónapokon keresztül a három 
             főszereplő esetében. Látható, hogy az Arcane premierje után (2021 November) 
-            mindhárom champion népszerűsége ugrásszerűen megnőtt, majd fokozatosan 
+            mindhárom hős népszerűsége ugrásszerűen megnőtt, majd fokozatosan 
             stabilizálódott. Ez a trend azt mutatja, hogy a sorozat nemcsak rövid távú 
             érdeklődést keltett, hanem hosszú távon is megnövelte ezeknek a karaktereknek 
             a játékban való használatát.
@@ -228,7 +231,7 @@ font-size: 1.5em;
             el a játékot) kezdetben alacsonyabb win rate-tel játszottak ezekkel a hősökkel,
             mivel még nem voltak hozzájuk szokva. Ez természetes jelenség: a megnövekedett
             pick rate mellett a win rate átmenetileg csökkent, mivel sok kezdő játékos
-            próbálta ki először ezeket a karaktereket.
+            próbálta ki először ezeket a karaktereket, és magát a játékot.
         </div>
         <div id="viz3"></div>
     </div>
@@ -247,22 +250,22 @@ const spec1 = {
 "height": 450,
 "data": {
 "values": [
-{"Champion": "Caitlyn", "Idoszak": "Arcane előtt", "Pick_Rate": 14.99, "Role": "Vi partnere és Piltover rendfenntartó"},
-{"Champion": "Caitlyn", "Idoszak": "Arcane után", "Pick_Rate": 26.1, "Role": "Vi partnere és Piltover rendfenntartó"},
-{"Champion": "Ekko", "Idoszak": "Arcane előtt", "Pick_Rate": 7.98, "Role": "A Firelights vezetője"},
-{"Champion": "Ekko", "Idoszak": "Arcane után", "Pick_Rate": 8.3, "Role": "A Firelights vezetője"},
+{"Champion": "Caitlyn", "Idoszak": "Arcane előtt", "Pick_Rate": 14.99, "Role": "Piltover egyik seriffje, rendfenntartója"},
+{"Champion": "Caitlyn", "Idoszak": "Arcane után", "Pick_Rate": 26.1, "Role": "Piltover egyik seriffje, rendfenntartója"},
+{"Champion": "Ekko", "Idoszak": "Arcane előtt", "Pick_Rate": 7.98, "Role": "Zauni tini zseni"},
+{"Champion": "Ekko", "Idoszak": "Arcane után", "Pick_Rate": 8.3, "Role": "Zauni tini zseni"},
 {"Champion": "Heimerdinger", "Idoszak": "Arcane előtt", "Pick_Rate": 1.08, "Role": "Tisztelt professzor és feltaláló"},
 {"Champion": "Heimerdinger", "Idoszak": "Arcane után", "Pick_Rate": 1.33, "Role": "Tisztelt professzor és feltaláló"},
 {"Champion": "Jayce", "Idoszak": "Arcane előtt", "Pick_Rate": 3.68, "Role": "A Hextech társalapítója és tanácstag"},
 {"Champion": "Jayce", "Idoszak": "Arcane után", "Pick_Rate": 11.85, "Role": "A Hextech társalapítója és tanácstag"},
-{"Champion": "Jinx", "Idoszak": "Arcane előtt", "Pick_Rate": 11.85, "Role": "Az egyik főszereplő; ingatag bűnöző"},
-{"Champion": "Jinx", "Idoszak": "Arcane után", "Pick_Rate": 18.38, "Role": "Az egyik főszereplő; ingatag bűnöző"},
+{"Champion": "Jinx", "Idoszak": "Arcane előtt", "Pick_Rate": 11.85, "Role": "Az egyik főszereplő; Vi húga"},
+{"Champion": "Jinx", "Idoszak": "Arcane után", "Pick_Rate": 18.38, "Role": "Az egyik főszereplő; Vi húga"},
 {"Champion": "Singed", "Idoszak": "Arcane előtt", "Pick_Rate": 1.37, "Role": "Sötét alkimista az alsóvárosból"},
 {"Champion": "Singed", "Idoszak": "Arcane után", "Pick_Rate": 2.3, "Role": "Sötét alkimista az alsóvárosból"},
-{"Champion": "Vi", "Idoszak": "Arcane előtt", "Pick_Rate": 5.74, "Role": "A másik főszereplő; Piltover rendfenntartó"},
-{"Champion": "Vi", "Idoszak": "Arcane után", "Pick_Rate": 18.14, "Role": "A másik főszereplő; Piltover rendfenntartó"},
-{"Champion": "Viktor", "Idoszak": "Arcane előtt", "Pick_Rate": 2.53, "Role": "A Hextech társalapítója és Jayce partnere"},
-{"Champion": "Viktor", "Idoszak": "Arcane után", "Pick_Rate": 4.17, "Role": "A Hextech társalapítója és Jayce partnere"}
+{"Champion": "Vi", "Idoszak": "Arcane előtt", "Pick_Rate": 5.74, "Role": "A másik főszereplő; Jinx nővére, rendfenntartó Piltoverben"},
+{"Champion": "Vi", "Idoszak": "Arcane után", "Pick_Rate": 18.14, "Role": "A másik főszereplő; Jinx nővére, rendfenntartó Piltoverben"},
+{"Champion": "Viktor", "Idoszak": "Arcane előtt", "Pick_Rate": 2.53, "Role": "A Hextech társalapítója és Jayce partnere, brilliáns elme"},
+{"Champion": "Viktor", "Idoszak": "Arcane után", "Pick_Rate": 4.17, "Role": "A Hextech társalapítója és Jayce partnere, brilliáns elme"}
 ]
 },
 "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
@@ -286,7 +289,7 @@ const spec1 = {
 "title": "Időszak",
 "scale": {
 "domain": ["Arcane előtt", "Arcane után"],
-"range": ["#4a5568", "#d4af37"]
+"range": ["#5a6a7a", "#7b61ff"]
 },
 "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
 },
@@ -344,7 +347,7 @@ const spec2 = {
 "title": "Champion",
 "scale": {
 "domain": ["Jinx", "Vi", "Caitlyn"],
-"range": ["#d4af37", "#4a90e2", "#8b5cf6"]
+"range": ["#e0c3fc", "#7b61ff", "#8ec5fc"]
 },
 "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
 },
@@ -392,7 +395,7 @@ const spec3 = {
 "title": "Időszak",
 "scale": {
 "domain": ["Arcane előtt", "Arcane után"],
-"range": ["#4a90e2", "#8b5cf6"]
+"range": ["#8ec5fc", "#7b61ff"]
 },
 "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
 },

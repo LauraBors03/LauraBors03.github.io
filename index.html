@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Az Arcane hatása a League of Legends-re</title>
+<script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #0a1428 0%, #1a2942 50%, #2d1b3d 100%);
+min-height: 100vh;
+padding: 40px 20px;
+overflow-x: hidden;
+position: relative;
+}
+
+body::before {
+content: '';
+position: fixed;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 1px, transparent 1px);
+background-size: 50px 50px;
+animation: float 20s linear infinite;
+pointer-events: none;
+}
+
+@keyframes float {
+0% { transform: translate(0, 0); }
+100% { transform: translate(50px, 50px); }
+}
+
+.container {
+max-width: 900px;
+margin: 0 auto;
+background: rgba(15, 25, 45, 0.92);
+border-radius: 30px;
+padding: 50px;
+box-shadow: 0 30px 80px rgba(212, 175, 55, 0.3),
+0 0 0 1px rgba(212, 175, 55, 0.4) inset;
+backdrop-filter: blur(10px);
+animation: fadeIn 1s ease-out;
+border: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+text-align: center;
+font-size: 2.8em;
+margin-bottom: 10px;
+background: linear-gradient(135deg, #d4af37 0%, #4a90e2 40%, #8b5cf6 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+filter: drop-shadow(0 2px 20px rgba(212, 175, 55, 0.4));
+animation: shimmer 3s ease-in-out infinite;
+font-weight: bold;
+}
+
+@keyframes shimmer {
+0%, 100% { filter: drop-shadow(0 2px 20px rgba(212, 175, 55, 0.4)); }
+50% { filter: drop-shadow(0 2px 30px rgba(74, 144, 226, 0.6)); }
+}
+
+.subtitle {
+text-align: center;
+color: #a0aec0;
+margin-bottom: 40px;
+font-size: 1.15em;
+font-weight: 300;
+letter-spacing: 0.4px;
+}
+
+.intro-text {
+color: #cbd5e0;
+line-height: 1.8;
+margin-bottom: 30px;
+text-align: center;
+font-size: 1.05em;
+padding: 20px;
+background: rgba(212, 175, 55, 0.05);
+border-radius: 15px;
+border-left: 4px solid #d4af37;
+}
+
+#viz {
+display: flex;
+justify-content: center;
+align-items: center;
+background: linear-gradient(135deg, rgba(10, 20, 40, 0.6) 0%, rgba(45, 27, 61, 0.6) 100%);
+padding: 40px;
+border-radius: 25px;
+border: 2px solid rgba(212, 175, 55, 0.2);
+margin-top: 20px;
+box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2),
+0 0 0 1px rgba(212, 175, 55, 0.3) inset;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#viz:hover {
+transform: translateY(-5px);
+box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4),
+0 0 0 1px rgba(74, 144, 226, 0.4) inset;
+}
+
+.footer {
+text-align: center;
+margin-top: 40px;
+color: #718096;
+font-size: 0.95em;
+font-weight: 300;
+}
+
+.arcane-badge {
+display: inline-block;
+background: linear-gradient(135deg, #d4af37 0%, #8b5cf6 100%);
+color: #0a1428;
+padding: 8px 20px;
+border-radius: 20px;
+font-weight: bold;
+font-size: 0.9em;
+margin-bottom: 20px;
+box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>⚔️ Az Arcane hatása a League of Legends-re 🎮</h1>
+    <p class="subtitle">Champion népszerűség az Arcane Netflix sorozat megjelenése előtt és után</p>
+    
+    <div style="text-align: center;">
+        <span class="arcane-badge">📺 Arcane premierje: 2021. november 6.</span>
+    </div>
+    
+    <div class="intro-text">
+        Az Arcane megjelenése drámai hatással volt a League of Legends közösségére. 
+        Az alábbi diagram bemutatja, hogyan változott Jinx, Vi és Caitlyn champion-ok 
+        népszerűsége a sorozat premierjét követően.
+    </div>
+
+    <div id="viz"></div>
+    
+    <div class="footer">
+        <p>📊 Adatvizualizáció Vega-Lite használatával</p>
+        <p style="margin-top: 10px; font-size: 0.85em;">🎯 Business Intelligence Projekt | League of Legends & Arcane Elemzés</p>
+    </div>
+</div>
+
+<script>
+const spec = {
+"$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+"width": "container",
+"height": 350,
+"data": {
+"values": [
+{"Champion": "Jinx", "Idoszak": "2021 Okt (Arcane előtt)", "Pick_Rate": 8.2},
+{"Champion": "Jinx", "Idoszak": "2021 Dec (Arcane után)", "Pick_Rate": 18.5},
+{"Champion": "Vi", "Idoszak": "2021 Okt (Arcane előtt)", "Pick_Rate": 4.1},
+{"Champion": "Vi", "Idoszak": "2021 Dec (Arcane után)", "Pick_Rate": 12.3},
+{"Champion": "Caitlyn", "Idoszak": "2021 Okt (Arcane előtt)", "Pick_Rate": 9.5},
+{"Champion": "Caitlyn", "Idoszak": "2021 Dec (Arcane után)", "Pick_Rate": 15.8}
+]
+},
+"mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
+"encoding": {
+"x": {
+"field": "Champion", 
+"type": "nominal", 
+"title": "Champion",
+"axis": {"labelAngle": 0, "labelFontSize": 12}
+},
+"y": {
+"field": "Pick_Rate", 
+"type": "quantitative", 
+"title": "Pick Rate (%)",
+"axis": {"grid": true}
+},
+"color": {
+"field": "Idoszak", 
+"type": "nominal", 
+"title": "Időszak",
+"scale": {
+"domain": ["2021 Okt (Arcane előtt)", "2021 Dec (Arcane után)"],
+"range": ["#4a5568", "#d4af37"]
+},
+"legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
+},
+"xOffset": {"field": "Idoszak"},
+"tooltip": [
+{"field": "Champion", "type": "nominal", "title": "Champion"},
+{"field": "Idoszak", "type": "nominal", "title": "Időszak"},
+{"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".1f"}
+]
+}
+};
+
+vegaEmbed('#viz', spec, {
+actions: false,
+theme: "dark"
+}).catch(console.error);
+</script>
+</body>
+</html>

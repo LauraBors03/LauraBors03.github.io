@@ -15,9 +15,10 @@ box-sizing: border-box;
 
 body {
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #1e1b2e 100%);
+background: #0a0e14;
 min-height: 100vh;
-padding: 40px 20px;
+padding: 0;
+margin: 0;
 overflow-x: hidden;
 position: relative;
 }
@@ -33,6 +34,7 @@ background: radial-gradient(circle, rgba(123, 97, 255, 0.03) 1px, transparent 1p
 background-size: 60px 60px;
 animation: float 25s linear infinite;
 pointer-events: none;
+z-index: 0;
 }
 
 @keyframes float {
@@ -40,50 +42,208 @@ pointer-events: none;
 100% { transform: translate(60px, 60px); }
 }
 
+/* HERO HEADER */
+.hero-header {
+position: relative;
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+margin-bottom: -100px;
+}
+
+.hero-background {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(135deg, #0a0e14 0%, #1a1f2e 50%, #2a1f3e 100%);
+z-index: 0;
+}
+
+.hex-pattern {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(123, 97, 255, 0.03) 50px, rgba(123, 97, 255, 0.03) 51px),
+    repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(142, 197, 252, 0.03) 50px, rgba(142, 197, 252, 0.03) 51px);
+animation: hexMove 20s linear infinite;
+}
+
+@keyframes hexMove {
+0% { transform: translate(0, 0); }
+100% { transform: translate(50px, 50px); }
+}
+
+.glow-orb {
+position: absolute;
+border-radius: 50%;
+filter: blur(100px);
+opacity: 0.3;
+animation: float-orb 15s ease-in-out infinite;
+}
+
+.glow-orb-1 {
+width: 500px;
+height: 500px;
+background: radial-gradient(circle, #7b61ff, transparent);
+top: -10%;
+right: -10%;
+animation-delay: 0s;
+}
+
+.glow-orb-2 {
+width: 400px;
+height: 400px;
+background: radial-gradient(circle, #8ec5fc, transparent);
+bottom: -10%;
+left: -10%;
+animation-delay: 5s;
+}
+
+.glow-orb-3 {
+width: 300px;
+height: 300px;
+background: radial-gradient(circle, #e0c3fc, transparent);
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+animation-delay: 10s;
+}
+
+@keyframes float-orb {
+0%, 100% { transform: translate(0, 0) scale(1); }
+33% { transform: translate(30px, -30px) scale(1.1); }
+66% { transform: translate(-30px, 30px) scale(0.9); }
+}
+
+.hero-content {
+position: relative;
+z-index: 2;
+text-align: center;
+padding: 40px 20px;
+animation: fadeInUp 1.5s ease-out;
+}
+
+@keyframes fadeInUp {
+from { 
+    opacity: 0; 
+    transform: translateY(50px); 
+}
+to { 
+    opacity: 1; 
+    transform: translateY(0); 
+}
+}
+
+.logo-container {
+margin-bottom: 30px;
+animation: rotateLogo 20s linear infinite;
+}
+
+@keyframes rotateLogo {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+
+.arcane-logo {
+width: 120px;
+height: 120px;
+filter: drop-shadow(0 0 30px rgba(123, 97, 255, 0.6));
+}
+
+.hero-title {
+font-size: 4em;
+font-weight: 800;
+margin: 0;
+line-height: 1.1;
+letter-spacing: -2px;
+}
+
+.title-line {
+display: block;
+background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+filter: drop-shadow(0 2px 20px rgba(123, 97, 255, 0.4));
+animation: shimmerTitle 3s ease-in-out infinite;
+}
+
+.title-line.main {
+font-size: 1.3em;
+background: linear-gradient(135deg, #7b61ff 0%, #8ec5fc 50%, #e0c3fc 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+margin-top: 10px;
+}
+
+@keyframes shimmerTitle {
+0%, 100% { filter: drop-shadow(0 2px 20px rgba(123, 97, 255, 0.4)); }
+50% { filter: drop-shadow(0 4px 40px rgba(142, 197, 252, 0.6)); }
+}
+
+.hero-subtitle {
+color: #b8c5d6;
+font-size: 1.3em;
+font-weight: 300;
+margin: 25px 0;
+letter-spacing: 0.5px;
+}
+
+.hero-badge-container {
+margin-top: 40px;
+}
+
+.hero-badge {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+background: linear-gradient(135deg, rgba(123, 97, 255, 0.2) 0%, rgba(142, 197, 252, 0.2) 100%);
+border: 2px solid rgba(123, 97, 255, 0.4);
+color: #e0c3fc;
+padding: 15px 35px;
+border-radius: 50px;
+font-weight: 600;
+font-size: 1.1em;
+box-shadow: 0 8px 30px rgba(123, 97, 255, 0.3),
+            0 0 0 1px rgba(142, 197, 252, 0.2) inset;
+letter-spacing: 0.3px;
+backdrop-filter: blur(10px);
+transition: all 0.3s ease;
+}
+
+.hero-badge:hover {
+transform: translateY(-3px);
+box-shadow: 0 12px 40px rgba(123, 97, 255, 0.5),
+            0 0 0 2px rgba(142, 197, 252, 0.4) inset;
+}
+
 .container {
 max-width: 1200px;
 margin: 0 auto;
-background: linear-gradient(135deg, rgba(20, 24, 35, 0.95) 0%, rgba(25, 28, 40, 0.95) 100%);
-border-radius: 30px;
-padding: 50px;
-box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
-0 0 0 1px rgba(123, 97, 255, 0.1) inset;
-backdrop-filter: blur(10px);
+background: linear-gradient(135deg, rgba(20, 24, 35, 0.98) 0%, rgba(25, 28, 40, 0.98) 100%);
+border-radius: 40px;
+padding: 80px 60px;
+box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+0 0 0 1px rgba(123, 97, 255, 0.15) inset;
+backdrop-filter: blur(20px);
 animation: fadeIn 1s ease-out;
-border: 1px solid rgba(123, 97, 255, 0.2);
+border: 1px solid rgba(123, 97, 255, 0.25);
+position: relative;
+z-index: 1;
+transform: translateY(-50px);
 }
 
 @keyframes fadeIn {
 from { opacity: 0; transform: translateY(30px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-h1 {
-text-align: center;
-font-size: 2.8em;
-margin-bottom: 10px;
-background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #7b61ff 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-filter: drop-shadow(0 2px 15px rgba(123, 97, 255, 0.3));
-animation: shimmer 4s ease-in-out infinite;
-font-weight: 700;
-letter-spacing: -0.5px;
-}
-
-@keyframes shimmer {
-0%, 100% { filter: drop-shadow(0 2px 15px rgba(123, 97, 255, 0.3)); }
-50% { filter: drop-shadow(0 4px 25px rgba(142, 197, 252, 0.4)); }
-}
-
-.subtitle {
-text-align: center;
-color: #b8c5d6;
-margin-bottom: 40px;
-font-size: 1.1em;
-font-weight: 300;
-letter-spacing: 0.3px;
+to { opacity: 1; transform: translateY(-50px); }
 }
 
 .intro-text {
@@ -151,26 +311,28 @@ font-size: 0.95em;
 font-weight: 300;
 }
 
-.arcane-badge {
-display: inline-block;
-background: linear-gradient(135deg, #7b61ff 0%, #8ec5fc 100%);
-color: #ffffff;
-padding: 10px 24px;
-border-radius: 25px;
-font-weight: 600;
-font-size: 0.9em;
-margin-bottom: 25px;
-box-shadow: 0 4px 20px rgba(123, 97, 255, 0.3);
-letter-spacing: 0.3px;
-}
-
 @media (max-width: 768px) {
 .container {
-padding: 30px 20px;
+padding: 40px 25px;
+transform: translateY(-30px);
 }
 
-h1 {
-font-size: 2em;
+.hero-title {
+font-size: 2.5em;
+}
+
+.hero-subtitle {
+font-size: 1em;
+}
+
+.hero-badge {
+font-size: 0.95em;
+padding: 12px 25px;
+}
+
+.arcane-logo {
+width: 80px;
+height: 80px;
 }
 
 .section-title {
@@ -180,14 +342,47 @@ font-size: 1.5em;
 </style>
 </head>
 <body>
-<div class="container">
-    <h1> Az Arcane hatása a League of Legends-re </h1>
-    <p class="subtitle">Hős népszerűség az Arcane Netflix sorozat megjelenése előtt és után</p>
-    
-    <div style="text-align: center;">
-        <span class="arcane-badge">📺 Arcane premierje: 2021. november 6.</span>
+
+<div class="hero-header">
+    <div class="hero-background">
+        <div class="hex-pattern"></div>
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
     </div>
-    
+    <div class="hero-content">
+        <div class="logo-container">
+            <svg viewBox="0 0 100 100" class="arcane-logo">
+                <defs>
+                    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#e0c3fc;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#8ec5fc;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#7b61ff;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <polygon points="50,10 90,35 90,65 50,90 10,65 10,35" fill="none" stroke="url(#logo-gradient)" stroke-width="2"/>
+                <polygon points="50,20 80,37.5 80,62.5 50,80 20,62.5 20,37.5" fill="none" stroke="url(#logo-gradient)" stroke-width="1.5" opacity="0.6"/>
+                <circle cx="50" cy="50" r="15" fill="url(#logo-gradient)" opacity="0.8"/>
+            </svg>
+        </div>
+        <h1 class="hero-title">
+            <span class="title-line">Az Arcane hatása</span>
+            <span class="title-line main">League of Legends</span>
+        </h1>
+        <p class="hero-subtitle">Hős népszerűség az Arcane Netflix sorozat megjelenése előtt és után</p>
+        <div class="hero-badge-container">
+            <span class="hero-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                    <polyline points="17 2 12 7 7 2"></polyline>
+                </svg>
+                Arcane premierje: 2021. november 6.
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="container">
     <div class="intro-text">
         Az Arcane megjelenése drámai hatással volt a League of Legends közösségére. 
         A Netflix által készített animációs sorozat nemcsak a játékosok számát növelte meg,

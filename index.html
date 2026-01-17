@@ -7,6 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
 <style>
+/* ... A CSS RÉSZ VÁLTOZATLAN ... */
 * {
 margin: 0;
 padding: 0;
@@ -392,7 +393,6 @@ font-size: 1.5em;
         premierjét követően.
     </div>
 
-    <!-- Diagram 1: Összes Arcane Champion Pick Rate összehasonlítás -->
     <div class="section">
         <h2 class="section-title">📊 Pick Rate változás: Arcane előtt vs. után</h2>
         <div class="section-description">
@@ -404,30 +404,22 @@ font-size: 1.5em;
         <div id="viz"></div>
     </div>
 
-    <!-- Diagram 2: Időbeli trend -->
     <div class="section">
         <h2 class="section-title">📈 Időbeli trend: Hónapok szerinti népszerűség</h2>
         <div class="section-description">
             A második diagram az időbeli változásokat mutatja hónapokon keresztül a három 
-            főszereplő esetében. Látható, hogy az Arcane premierje után (2021 November) 
-            mindhárom hős népszerűsége ugrásszerűen megnőtt, majd fokozatosan 
-            stabilizálódott. Ez a trend azt mutatja, hogy a sorozat nemcsak rövid távú 
-            érdeklődést keltett, hanem hosszú távon is megnövelte ezeknek a karaktereknek 
-            a játékban való használatát.
+            főszereplő esetében. <strong>Próbáld ki:</strong> Használd a legördülő menüt a diagram alatt,
+            hogy külön-külön vizsgáld meg Jinx, Vi vagy Caitlyn népszerűségét!
         </div>
         <div id="viz2"></div>
     </div>
 
-    <!-- Diagram 3: Win Rate összehasonlítás -->
     <div class="section">
         <h2 class="section-title">🎯 Win Rate változás: Tapasztaltság vs. eredmény</h2>
         <div class="section-description">
-            A harmadik diagram a win rate (győzelmi arány) változását mutatja. Érdekes
-            megfigyelés, hogy az Arcane után az új játékosok (akik a sorozat miatt kezdték
-            el a játékot) kezdetben alacsonyabb win rate-tel játszottak ezekkel a hősökkel,
-            mivel még nem voltak hozzájuk szokva. Ez természetes jelenség: a megnövekedett
-            pick rate mellett a win rate átmenetileg csökkent, mivel sok kezdő játékos
-            próbálta ki először ezeket a karaktereket.
+            A harmadik diagram a win rate (győzelmi arány) változását mutatja. 
+            Jól látható a csökkenés, ami az új játékosok beáramlásának köszönhető.
+            A diagram csak azokat a hősöket listázza, akikről releváns win rate adatunk van.
         </div>
         <div id="viz3"></div>
     </div>
@@ -439,186 +431,164 @@ font-size: 1.5em;
 </div>
 
 <script>
-// Diagram 1: Összes Arcane Champion Pick Rate összehasonlítás
+// Közös beállítások
+const commonConfig = {
+    actions: false, // Ez tünteti el a "..." gombot a diagramokról
+    theme: "dark",
+    background: "transparent" // Átlátszó háttér
+};
+
+// Diagram 1: Összes Arcane Champion Pick Rate (CSV-ből)
 const spec1 = {
-"$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-"width": "container",
-"height": 450,
-"data": {
-"values": [
-{"Champion": "Caitlyn", "Idoszak": "Arcane előtt", "Pick_Rate": 14.99, "Role": "Vi partnere és Piltover rendfenntartó"},
-{"Champion": "Caitlyn", "Idoszak": "Arcane után", "Pick_Rate": 26.1, "Role": "Vi partnere és Piltover rendfenntartó"},
-{"Champion": "Ekko", "Idoszak": "Arcane előtt", "Pick_Rate": 7.98, "Role": "A Firelights vezetője"},
-{"Champion": "Ekko", "Idoszak": "Arcane után", "Pick_Rate": 8.3, "Role": "A Firelights vezetője"},
-{"Champion": "Heimerdinger", "Idoszak": "Arcane előtt", "Pick_Rate": 1.08, "Role": "Tisztelt professzor és feltaláló"},
-{"Champion": "Heimerdinger", "Idoszak": "Arcane után", "Pick_Rate": 1.33, "Role": "Tisztelt professzor és feltaláló"},
-{"Champion": "Jayce", "Idoszak": "Arcane előtt", "Pick_Rate": 3.68, "Role": "A Hextech társalapítója és tanácstag"},
-{"Champion": "Jayce", "Idoszak": "Arcane után", "Pick_Rate": 11.85, "Role": "A Hextech társalapítója és tanácstag"},
-{"Champion": "Jinx", "Idoszak": "Arcane előtt", "Pick_Rate": 11.85, "Role": "Az egyik főszereplő; ingatag bűnöző"},
-{"Champion": "Jinx", "Idoszak": "Arcane után", "Pick_Rate": 18.38, "Role": "Az egyik főszereplő; ingatag bűnöző"},
-{"Champion": "Singed", "Idoszak": "Arcane előtt", "Pick_Rate": 1.37, "Role": "Sötét alkimista az alsóvárosból"},
-{"Champion": "Singed", "Idoszak": "Arcane után", "Pick_Rate": 2.3, "Role": "Sötét alkimista az alsóvárosból"},
-{"Champion": "Vi", "Idoszak": "Arcane előtt", "Pick_Rate": 5.74, "Role": "A másik főszereplő; Piltover rendfenntartó"},
-{"Champion": "Vi", "Idoszak": "Arcane után", "Pick_Rate": 18.14, "Role": "A másik főszereplő; Piltover rendfenntartó"},
-{"Champion": "Viktor", "Idoszak": "Arcane előtt", "Pick_Rate": 2.53, "Role": "A Hextech társalapítója és Jayce partnere"},
-{"Champion": "Viktor", "Idoszak": "Arcane után", "Pick_Rate": 4.17, "Role": "A Hextech társalapítója és Jayce partnere"}
-]
-},
-"mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
-"encoding": {
-"x": {
-"field": "Champion", 
-"type": "nominal", 
-"title": "League Of Legends hősök",
-"axis": {"labelAngle": -45, "labelFontSize": 12},
-"sort": ["Vi", "Jinx", "Jayce", "Caitlyn", "Ekko", "Viktor", "Singed", "Heimerdinger"]
-},
-"y": {
-"field": "Pick_Rate", 
-"type": "quantitative", 
-"title": "Pick Rate (%)",
-"axis": {"grid": true}
-},
-"color": {
-"field": "Idoszak", 
-"type": "nominal", 
-"title": "Időszak",
-"scale": {
-"domain": ["Arcane előtt", "Arcane után"],
-"range": ["#5a6a7a", "#7b61ff"]
-},
-"legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
-},
-"xOffset": {"field": "Idoszak"},
-"tooltip": [
-{"field": "Champion", "type": "nominal", "title": "Hős"},
-{"field": "Role", "type": "nominal", "title": "Szerep az Arcane-ban"},
-{"field": "Idoszak", "type": "nominal", "title": "Időszak"},
-{"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".2f"}
-]
-}
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": "container",
+    "height": 450,
+    "data": { "url": "arcane_stats.csv" }, // KÜLSŐ ADATFORRÁS
+    "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
+    "encoding": {
+        "x": {
+            "field": "Champion", 
+            "type": "nominal", 
+            "title": "League Of Legends hősök",
+            "axis": {"labelAngle": -45, "labelFontSize": 12},
+            "sort": ["Vi", "Jinx", "Jayce", "Caitlyn", "Ekko", "Viktor", "Singed", "Heimerdinger"]
+        },
+        "y": {
+            "field": "Pick_Rate", 
+            "type": "quantitative", 
+            "title": "Pick Rate (%)",
+            "axis": {"grid": true}
+        },
+        "color": {
+            "field": "Idoszak", 
+            "type": "nominal", 
+            "title": "Időszak",
+            "scale": {
+                "domain": ["Arcane előtt", "Arcane után"],
+                "range": ["#5a6a7a", "#7b61ff"]
+            },
+            "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
+        },
+        "xOffset": {"field": "Idoszak"},
+        "tooltip": [
+            {"field": "Champion", "type": "nominal", "title": "Hős"},
+            {"field": "Role", "type": "nominal", "title": "Szerep az Arcane-ban"},
+            {"field": "Idoszak", "type": "nominal", "title": "Időszak"},
+            {"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".2f"}
+        ]
+    }
 };
 
-// Diagram 2: Időbeli trend (vonaldiagram)
+// Diagram 2: Időbeli trend (CSV-ből + Interaktív szűrés)
 const spec2 = {
-"$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-"width": "container",
-"height": 400,
-"data": {
-"values": [
-{"Honap": "2021-08", "Jinx": 8.1, "Vi": 4.0, "Caitlyn": 9.3},
-{"Honap": "2021-09", "Jinx": 8.3, "Vi": 4.2, "Caitlyn": 9.4},
-{"Honap": "2021-10", "Jinx": 8.2, "Vi": 4.1, "Caitlyn": 9.5},
-{"Honap": "2021-11", "Jinx": 15.2, "Vi": 9.8, "Caitlyn": 13.1},
-{"Honap": "2021-12", "Jinx": 18.5, "Vi": 12.3, "Caitlyn": 15.8},
-{"Honap": "2022-01", "Jinx": 16.8, "Vi": 11.5, "Caitlyn": 14.2},
-{"Honap": "2022-02", "Jinx": 15.5, "Vi": 10.8, "Caitlyn": 13.6},
-{"Honap": "2022-03", "Jinx": 14.2, "Vi": 9.9, "Caitlyn": 12.8}
-]
-},
-"transform": [
-{"fold": ["Jinx", "Vi", "Caitlyn"], "as": ["Champion", "Pick_Rate"]}
-],
-"mark": {
-"type": "line",
-"point": true,
-"strokeWidth": 3
-},
-"encoding": {
-"x": {
-"field": "Honap",
-"type": "ordinal",
-"title": "Hónap",
-"axis": {"labelAngle": -45, "labelFontSize": 11}
-},
-"y": {
-"field": "Pick_Rate",
-"type": "quantitative",
-"title": "Pick Rate (%)",
-"axis": {"grid": true}
-},
-"color": {
-"field": "Champion",
-"type": "nominal",
-"title": "Champion",
-"scale": {
-"domain": ["Jinx", "Vi", "Caitlyn"],
-"range": ["#e0c3fc", "#7b61ff", "#8ec5fc"]
-},
-"legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
-},
-"tooltip": [
-{"field": "Honap", "type": "ordinal", "title": "Hónap"},
-{"field": "Champion", "type": "nominal", "title": "Champion"},
-{"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".1f"}
-]
-}
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": "container",
+    "height": 400,
+    "data": { "url": "time_trend.csv" }, // KÜLSŐ ADATFORRÁS
+    
+    // INTERAKTIVITÁS (DROPDOWN MENÜ)
+    "params": [
+        {
+            "name": "Hos_Kivalasztas",
+            "value": "Összes",
+            "bind": {
+                "input": "select", 
+                "options": ["Összes", "Jinx", "Vi", "Caitlyn"],
+                "name": "Válassz hőst: "
+            }
+        }
+    ],
+    // SZŰRÉS LOGIKA
+    "transform": [
+        {
+            "filter": "datum.Champion == Hos_Kivalasztas || Hos_Kivalasztas == 'Összes'"
+        }
+    ],
+
+    "mark": {
+        "type": "line",
+        "point": true,
+        "strokeWidth": 3
+    },
+    "encoding": {
+        "x": {
+            "field": "Honap",
+            "type": "ordinal",
+            "title": "Hónap",
+            "axis": {"labelAngle": -45, "labelFontSize": 11}
+        },
+        "y": {
+            "field": "Pick_Rate",
+            "type": "quantitative",
+            "title": "Pick Rate (%)",
+            "axis": {"grid": true}
+        },
+        "color": {
+            "field": "Champion",
+            "type": "nominal",
+            "title": "Champion",
+            "scale": {
+                "domain": ["Jinx", "Vi", "Caitlyn"],
+                "range": ["#e0c3fc", "#7b61ff", "#8ec5fc"]
+            },
+            "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
+        },
+        "tooltip": [
+            {"field": "Honap", "type": "ordinal", "title": "Hónap"},
+            {"field": "Champion", "type": "nominal", "title": "Champion"},
+            {"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".1f"}
+        ]
+    }
 };
 
-// Diagram 3: Win Rate változás
+// Diagram 3: Win Rate változás (CSV-ből + Szűkebb skála)
 const spec3 = {
-"$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-"width": "container",
-"height": 400,
-"data": {
-"values": [
-{"Champion": "Jinx", "Idoszak": "Arcane előtt", "Win_Rate": 50.2},
-{"Champion": "Jinx", "Idoszak": "Arcane után", "Win_Rate": 48.5},
-{"Champion": "Vi", "Idoszak": "Arcane előtt", "Win_Rate": 51.8},
-{"Champion": "Vi", "Idoszak": "Arcane után", "Win_Rate": 49.2},
-{"Champion": "Caitlyn", "Idoszak": "Arcane előtt", "Win_Rate": 50.5},
-{"Champion": "Caitlyn", "Idoszak": "Arcane után", "Win_Rate": 48.8}
-]
-},
-"mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
-"encoding": {
-"x": {
-"field": "Champion", 
-"type": "nominal", 
-"title": "Hős",
-"axis": {"labelAngle": 0, "labelFontSize": 12}
-},
-"y": {
-"field": "Win_Rate", 
-"type": "quantitative", 
-"title": "Win Rate (%)",
-"axis": {"grid": true},
-"scale": {"domain": [45, 55]} 
-},
-"color": {
-"field": "Idoszak", 
-"type": "nominal", 
-"title": "Időszak",
-"scale": {
-"domain": ["Arcane előtt", "Arcane után"],
-"range": ["#8ec5fc", "#7b61ff"]
-},
-"legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
-},
-"xOffset": {"field": "Idoszak"},
-"tooltip": [
-{"field": "Champion", "type": "nominal", "title": "Hős"},
-{"field": "Idoszak", "type": "nominal", "title": "Időszak"},
-{"field": "Win_Rate", "type": "quantitative", "title": "Win Rate (%)", "format": ".1f"}
-]
-}
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": "container",
+    "height": 400,
+    "data": { "url": "arcane_stats.csv" }, // KÜLSŐ ADATFORRÁS
+    "transform": [
+        // Csak azokat a sorokat tartjuk meg, ahol van Win_Rate adat (nem null)
+        {"filter": "datum.Win_Rate != null"} 
+    ],
+    "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
+    "encoding": {
+        "x": {
+            "field": "Champion", 
+            "type": "nominal", 
+            "title": "Hős",
+            "axis": {"labelAngle": 0, "labelFontSize": 12}
+        },
+        "y": {
+            "field": "Win_Rate", 
+            "type": "quantitative", 
+            "title": "Win Rate (%)",
+            "axis": {"grid": true},
+            "scale": {"domain": [45, 55]} // ZOOMOLT SKÁLA: Így jobban látszik a változás
+        },
+        "color": {
+            "field": "Idoszak", 
+            "type": "nominal", 
+            "title": "Időszak",
+            "scale": {
+                "domain": ["Arcane előtt", "Arcane után"],
+                "range": ["#8ec5fc", "#7b61ff"]
+            },
+            "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
+        },
+        "xOffset": {"field": "Idoszak"},
+        "tooltip": [
+            {"field": "Champion", "type": "nominal", "title": "Hős"},
+            {"field": "Idoszak", "type": "nominal", "title": "Időszak"},
+            {"field": "Win_Rate", "type": "quantitative", "title": "Win Rate (%)", "format": ".1f"}
+        ]
+    }
 };
 
 // Diagramok renderelése
-vegaEmbed('#viz', spec1, {
-actions: false,
-theme: "dark"
-}).catch(console.error);
-
-vegaEmbed('#viz2', spec2, {
-actions: false,
-theme: "dark"
-}).catch(console.error);
-
-vegaEmbed('#viz3', spec3, {
-actions: false,
-theme: "dark"
-}).catch(console.error);
+vegaEmbed('#viz', spec1, commonConfig).catch(console.error);
+vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);
+vegaEmbed('#viz3', spec3, commonConfig).catch(console.error);
 </script>
 </body>
 </html>

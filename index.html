@@ -613,29 +613,42 @@ const spec2 = {
 };
 
 // Diagram 3: Win Rate változás (CSV-ből + Szűkebb skála)
+// Diagram 3: Win Rate változás (JAVÍTOTT MEGJELENÉS)
 const spec3 = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
+    
+    // FONTOS VÁLTOZÁS: "container" helyett "step"-et használunk.
+    // Ez azt jelenti, hogy minden hőshöz adunk kb. 120 pixel helyet, 
+    // így nem nyújtja szét az oszlopokat a végtelenségig.
+    "width": {"step": 120}, 
     "height": 400,
-    "data": { "url": "arcane_stats.csv" }, // KÜLSŐ ADATFORRÁS
+    
+    "data": { "url": "arcane_stats.csv" },
     "transform": [
-        // Csak azokat a sorokat tartjuk meg, ahol van Win_Rate adat (nem null)
         {"filter": "datum.Win_Rate != null"} 
     ],
+    // Kis padding, hogy a tengelyek feliratai biztosan elférjenek
+    "padding": {"left": 20, "top": 20, "right": 20, "bottom": 20},
+    
     "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
     "encoding": {
         "x": {
             "field": "Champion", 
             "type": "nominal", 
-            "title": "Hős",
-            "axis": {"labelAngle": 0, "labelFontSize": 12}
+            "title": null, // Levettem a "Hős" feliratot, mert a nevek egyértelműek
+            "axis": {
+                "labelAngle": 0, 
+                "labelFontSize": 13, 
+                "labelPadding": 10,
+                "labelFontWeight": "bold"
+            }
         },
         "y": {
             "field": "Win_Rate", 
             "type": "quantitative", 
             "title": "Win Rate (%)",
-            "axis": {"grid": true},
-            "scale": {"domain": [45, 55]} // ZOOMOLT SKÁLA: Így jobban látszik a változás
+            "axis": {"grid": true, "titleFontSize": 12},
+            "scale": {"domain": [45, 55]} 
         },
         "color": {
             "field": "Idoszak", 
@@ -655,7 +668,6 @@ const spec3 = {
         ]
     }
 };
-
 // Diagramok renderelése
 vegaEmbed('#viz', spec1, commonConfig).catch(console.error);
 vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);

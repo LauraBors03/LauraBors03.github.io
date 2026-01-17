@@ -8,6 +8,34 @@
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
 <style>
 /* ... A CSS RÉSZ VÁLTOZATLAN ... */
+/* VEGA-LITE INTERAKCIÓ STÍLUSOK */
+.vega-bind {
+    margin-top: 10px;
+    font-family: 'Segoe UI', sans-serif;
+    color: #e0c3fc !important; /* Lila szöveg, hogy látsszon */
+    font-size: 1.1em;
+}
+
+.vega-bind label {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.vega-bind select {
+    background: rgba(20, 24, 35, 0.9);
+    border: 1px solid #7b61ff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.vega-bind select:hover {
+    box-shadow: 0 0 10px rgba(123, 97, 255, 0.4);
+}
+
+    
 * {
 margin: 0;
 padding: 0;

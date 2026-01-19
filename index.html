@@ -2,676 +2,394 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<title>Az Arcane hatása a League of Legends-re</title>
+<title>The Ghost of the Mountains: Hópárduc BI Elemzés</title>
 <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* ALAP BEÁLLÍTÁSOK - JEGES TÉMA */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #0a0e14;
-    min-height: 100vh;
-    padding: 0;
-    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #0b1026; /* Mélykék éjszakai égbolt */
+    color: #e6f4f1; /* Jeges fehér szöveg */
     overflow-x: hidden;
-    position: relative;
 }
 
-body::before {
-    content: '';
+/* HÁTTÉR EFFEKT - HÓESÉS */
+.snow-bg {
     position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(123, 97, 255, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    animation: float 25s linear infinite;
-    pointer-events: none;
-    z-index: 0;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at bottom, #1b2949 0%, #0b1026 100%);
+    z-index: -1;
 }
 
-@keyframes float {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(60px, 60px); }
-}
-
-/* HERO HEADER */
-.hero-header {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    margin-bottom: -100px;
-}
-
-.hero-background {
+.snowflake {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #0a0e14 0%, #1a1f2e 50%, #2a1f3e 100%);
-    z-index: 0;
-}
-
-.hex-pattern {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(123, 97, 255, 0.03) 50px, rgba(123, 97, 255, 0.03) 51px),
-        repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(142, 197, 252, 0.03) 50px, rgba(142, 197, 252, 0.03) 51px);
-    animation: hexMove 20s linear infinite;
-}
-
-@keyframes hexMove {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
-}
-
-.glow-orb {
-    position: absolute;
+    top: -10px;
+    background: white;
     border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.3;
-    animation: float-orb 15s ease-in-out infinite;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    to { transform: translateY(105vh); }
 }
 
-.glow-orb-1 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #7b61ff, transparent);
-    top: -10%;
-    right: -10%;
-    animation-delay: 0s;
-}
-
-.glow-orb-2 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, #8ec5fc, transparent);
-    bottom: -10%;
-    left: -10%;
-    animation-delay: 5s;
-}
-
-.glow-orb-3 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, #e0c3fc, transparent);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation-delay: 10s;
-}
-
-@keyframes float-orb {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -30px) scale(1.1); }
-66% { transform: translate(-30px, 30px) scale(0.9); }
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 40px 20px;
-    animation: fadeInUp 1.5s ease-out;
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(50px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.logo-container {
-    margin-bottom: 30px;
-    animation: rotateLogo 20s linear infinite;
-}
-
-@keyframes rotateLogo {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.arcane-logo {
-    width: 120px;
-    height: 120px;
-    filter: drop-shadow(0 0 30px rgba(123, 97, 255, 0.6));
-}
-
-.hero-title {
-    font-size: 4em;
-    font-weight: 800;
-    margin: 0;
-    line-height: 1.1;
-    letter-spacing: -2px;
-}
-
-.title-line {
-    display: block;
-    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 2px 20px rgba(123, 97, 255, 0.4));
-    animation: shimmerTitle 3s ease-in-out infinite;
-}
-
-.title-line.main {
-    font-size: 1.3em;
-    background: linear-gradient(135deg, #7b61ff 0%, #8ec5fc 50%, #e0c3fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-top: 10px;
-}
-
-@keyframes shimmerTitle {
-    0%, 100% { filter: drop-shadow(0 2px 20px rgba(123, 97, 255, 0.4)); }
-    50% { filter: drop-shadow(0 4px 40px rgba(142, 197, 252, 0.6)); }
-}
-
-.hero-subtitle {
-    color: #b8c5d6;
-    font-size: 1.3em;
-    font-weight: 300;
-    margin: 25px 0;
-    letter-spacing: 0.5px;
-}
-
-.hero-badge-container {
-    margin-top: 40px;
-}
-
-.hero-badge {
-    display: inline-flex;
+/* HERO SECTION */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
-    background: linear-gradient(135deg, rgba(123, 97, 255, 0.2) 0%, rgba(142, 197, 252, 0.2) 100%);
-    border: 2px solid rgba(123, 97, 255, 0.4);
-    color: #e0c3fc;
-    padding: 15px 35px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 1.1em;
-    box-shadow: 0 8px 30px rgba(123, 97, 255, 0.3),
-                0 0 0 1px rgba(142, 197, 252, 0.2) inset;
-    letter-spacing: 0.3px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    text-align: center;
+    padding: 20px;
+    position: relative;
 }
 
-.hero-badge:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(123, 97, 255, 0.5),
-                0 0 0 2px rgba(142, 197, 252, 0.4) inset;
+.hero h1 {
+    font-size: 4.5em;
+    font-weight: 800;
+    letter-spacing: -2px;
+    background: linear-gradient(to right, #ffffff, #aed9e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
 }
 
+.hero p {
+    font-size: 1.4em;
+    max-width: 800px;
+    color: #aed9e0;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    animation: bounce 2s infinite;
+    opacity: 0.7;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-10px);}
+    60% {transform: translateY(-5px);}
+}
+
+/* CONTAINER ÉS KÁRTYÁK */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: linear-gradient(135deg, rgba(20, 24, 35, 0.98) 0%, rgba(25, 28, 40, 0.98) 100%);
-    border-radius: 40px;
-    padding: 80px 60px;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(123, 97, 255, 0.15) inset;
-    backdrop-filter: blur(20px);
-    animation: fadeIn 1s ease-out;
-    border: 1px solid rgba(123, 97, 255, 0.25);
-    position: relative;
-    z-index: 1;
-    transform: translateY(-50px);
+    padding: 50px 20px;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(-50px); }
-}
-
-.intro-text {
-    color: #d4dce8;
-    line-height: 1.9;
-    margin-bottom: 30px;
-    text-align: center;
-    font-size: 1.05em;
-    padding: 25px;
-    background: linear-gradient(135deg, rgba(123, 97, 255, 0.08) 0%, rgba(142, 197, 252, 0.05) 100%);
+.card {
+    background: rgba(255, 255, 255, 0.05); /* Üveg hatás */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(174, 217, 224, 0.2);
     border-radius: 20px;
-    border-left: 3px solid #7b61ff;
+    padding: 40px;
+    margin-bottom: 60px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
 }
 
-.section {
-    margin-bottom: 60px;
+.card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(174, 217, 224, 0.5);
 }
 
 .section-title {
-    color: #e0c3fc;
-    font-size: 1.9em;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: 600;
-    letter-spacing: -0.3px;
+    font-size: 2em;
+    margin-bottom: 15px;
+    color: #fff;
+    border-left: 4px solid #00d2ff; /* Kiemelő szín */
+    padding-left: 20px;
 }
 
-.section-description {
-    color: #c8d3e0;
-    line-height: 1.9;
+.section-desc {
+    color: #b0c4de;
     margin-bottom: 30px;
-    text-align: justify;
+    line-height: 1.7;
     font-size: 1.05em;
-    padding: 25px;
-    background: linear-gradient(135deg, rgba(142, 197, 252, 0.06) 0%, rgba(123, 97, 255, 0.04) 100%);
-    border-radius: 20px;
-    border-left: 3px solid #8ec5fc;
 }
 
-/* DIAGRAM TÁROLÓK - ITT A JAVÍTÁS */
-#viz, #viz2, #viz3 {
+/* DIAGRAM TÁROLÓK */
+.viz-container {
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, rgba(15, 20, 30, 0.6) 0%, rgba(25, 25, 40, 0.6) 100%);
-    padding: 45px;
-    border-radius: 25px;
-    border: 1px solid rgba(123, 97, 255, 0.15);
-    margin-top: 25px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(142, 197, 252, 0.1) inset;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* KÜLÖNLEGES STÍLUS A 2. DIAGRAMHOZ (hogy a gomb alulra kerüljön) */
-#viz2 {
-    flex-direction: column !important; /* EZ A KULCS! Egymás alá teszi őket */
-    gap: 15px;
-}
-
-#viz:hover, #viz2:hover, #viz3:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 50px rgba(123, 97, 255, 0.2),
-    0 0 0 1px rgba(142, 197, 252, 0.2) inset;
-}
-
-.footer {
-    text-align: center;
-    margin-top: 50px;
-    color: #8896a8;
-    font-size: 0.95em;
-    font-weight: 300;
-}
-
-/* ----------------------------------------------- */
-/* ÚJ HEXTECH DROPDOWN STÍLUSOK (JAVÍTOTT VERZIÓ) */
-/* ----------------------------------------------- */
-
-/* A gombot tartalmazó sáv */
+/* ELEGÁNS DROPDOWN STÍLUS (National Geo stílus) */
 .vega-bindings {
-    background: rgba(20, 24, 35, 0.6);
-    padding: 10px 25px;
-    border-radius: 20px;
-    border: 1px solid rgba(123, 97, 255, 0.2);
+    margin-top: 15px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    backdrop-filter: blur(5px);
-    margin-top: 10px;
 }
-
-/* A "Válassz hőst:" felirat */
 .vega-bind-name {
-    color: #e0c3fc !important;
-    font-size: 0.95em;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
-    margin-right: 15px !important;
-    font-family: 'Segoe UI', sans-serif;
-    display: inline-block;
-}
-
-/* Maga a legördülő lista */
-.vega-bind select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    
-    background-color: #0f131a;
-    border: 2px solid #7b61ff;
-    color: #fff;
-    padding: 8px 40px 8px 15px; /* Jobb oldalon extra hely a nyílnak */
-    border-radius: 8px;
-    font-family: 'Segoe UI', sans-serif;
+    color: #aed9e0;
     font-weight: 600;
-    cursor: pointer;
-    outline: none;
-    box-shadow: 0 0 10px rgba(123, 97, 255, 0.2);
-    transition: all 0.3s ease;
-    
-    /* Egyedi lila nyíl ikon */
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b61ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 14px;
-    min-width: 150px;
+    margin-right: 10px;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 1px;
 }
-
-/* Hover effekt */
-.vega-bind select:hover {
-    background-color: #1a1f2e;
-    box-shadow: 0 0 20px rgba(123, 97, 255, 0.6);
-    border-color: #8ec5fc;
-    transform: translateY(-1px);
-}
-
-.vega-bind select option {
-    background-color: #1a1f2e;
+.vega-bind select {
+    background: #0b1026;
     color: #fff;
+    border: 1px solid #00d2ff;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    cursor: pointer;
 }
 
-/* ----------------------------------------------- */
-
-@media (max-width: 768px) {
-    .container {
-        padding: 40px 25px;
-        transform: translateY(-30px);
-    }
-
-    .hero-title {
-        font-size: 2.5em;
-    }
-
-    .hero-subtitle {
-        font-size: 1em;
-    }
-
-    .hero-badge {
-        font-size: 0.95em;
-        padding: 12px 25px;
-    }
-
-    .arcane-logo {
-        width: 80px;
-        height: 80px;
-    }
-
-    .section-title {
-        font-size: 1.5em;
-    }
+/* LÁBLÉC */
+footer {
+    text-align: center;
+    padding: 50px;
+    color: #5d6d7e;
+    font-size: 0.9em;
 }
 </style>
 </head>
 <body>
 
-<div class="hero-header">
-    <div class="hero-background">
-        <div class="hex-pattern"></div>
-        <div class="glow-orb glow-orb-1"></div>
-        <div class="glow-orb glow-orb-2"></div>
-        <div class="glow-orb glow-orb-3"></div>
-    </div>
-    <div class="hero-content">
-        <div class="logo-container">
-            <svg viewBox="0 0 100 100" class="arcane-logo">
-                <defs>
-                    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#e0c3fc;stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:#8ec5fc;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#7b61ff;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-                <polygon points="50,10 90,35 90,65 50,90 10,65 10,35" fill="none" stroke="url(#logo-gradient)" stroke-width="2"/>
-                <polygon points="50,20 80,37.5 80,62.5 50,80 20,62.5 20,37.5" fill="none" stroke="url(#logo-gradient)" stroke-width="1.5" opacity="0.6"/>
-                <circle cx="50" cy="50" r="15" fill="url(#logo-gradient)" opacity="0.8"/>
-            </svg>
-        </div>
-        <h1 class="hero-title">
-            <span class="title-line">Arcane</span>
-            <span class="title-line">🔹</span>
-            <span class="title-line main">League of Legends</span>
-        </h1>
-        
-        <div class="hero-badge-container">
-            <span class="hero-badge">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
-                    <polyline points="17 2 12 7 7 2"></polyline>
-                </svg>
-                Arcane premierje: 2021. november 6.
-            </span>
-        </div>
+<div class="snow-bg" id="snow-container"></div>
+
+<div class="hero">
+    <h1>GHOST OF THE MOUNTAINS</h1>
+    <p>
+        A hópárduc (Panthera uncia) Belső-Ázsia legrejtélyesebb csúcsragadozója. 
+        Ez a BI elemzés feltárja a populációk állapotát, az ökológiai összefüggéseket 
+        és a fajmegőrzés gazdasági hatásait a 21. században.
+    </p>
+    <div class="scroll-indicator">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+            <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+        </svg>
     </div>
 </div>
 
 <div class="container">
-    <div class="intro-text">
-        Az Arcane megjelenése drámai hatással volt a League of Legends közösségére. 
-        A Netflix által készített animációs sorozat nemcsak a játékosok számát növelte meg,
-        hanem jelentősen megváltoztatta a hősök népszerűségét is. Az alábbi diagramok
-        bemutatják, hogyan alakult a főszereplő hősök játékon belüli használata a sorozat
-        premierjét követően.
+
+    <div class="card">
+        <h2 class="section-title">🗺️ Élőhely és Védettség Elemzése</h2>
+        <p class="section-desc">
+            Hol élnek a hópárducok, és mennyire védettek ezek a területek? 
+            Az alábbi diagram nemcsak a becsült egyedszámot mutatja régiónként, hanem színkóddal jelzi az élőhely minőségét is. 
+            Látható, hogy Kína rendelkezik a legnagyobb populációval, de Bhutánban a legjobb az élőhely minősége (sötétebb szín).
+        </p>
+        <div id="viz1" class="viz-container"></div>
     </div>
 
-    <div class="section">
-        <h2 class="section-title">📊 Pick Rate változás: Arcane előtt vs. után</h2>
-        <div class="section-description">
-            Az első diagram bemutatja az összes Arcane-ben szereplő hős pick rate változását.
-            A sorozat főszereplői (Vi, Jinx, Jayce) és mellékszereplői egyaránt jelentős 
-            népszerűségnövekedést mutattak. Vi pick rate-je például több mint háromszorosára 
-            nőtt (5.74% → 18.14%), míg Jayce-é több mint triplázódott (3.68% → 11.85%).
-        </div>
-        <div id="viz"></div>
+    <div class="card">
+        <h2 class="section-title">⚖️ A Zsákmányállatok Szerepe</h2>
+        <p class="section-desc">
+            Van-e statisztikai összefüggés a zsákmányállatok (kék juh, kőszáli kecske) sűrűsége és a hópárducok száma között?
+            <strong>Ez a Scatter Plot (Pontdiagram) választ ad:</strong> Minden pont egy megfigyelt területet jelöl. 
+            Az emelkedő trendvonal egyértelmű pozitív korrelációt mutat: több zsákmány = több ragadozó.
+            <em>Vidd az egeret a pontokra a részletekért!</em>
+        </p>
+        <div id="viz2" class="viz-container"></div>
     </div>
 
-    <div class="section">
-        <h2 class="section-title">📈 Időbeli trend: Hónapok szerinti népszerűség</h2>
-        <div class="section-description">
-            A második diagram az időbeli változásokat mutatja hónapokon keresztül a három 
-            főszereplő esetében. <strong>Próbáld ki:</strong> Használd a legördülő menüt a diagram alatt,
-            hogy külön-külön vizsgáld meg Jinx, Vi vagy Caitlyn népszerűségét!
-        </div>
-        <div id="viz2"></div>
+    <div class="card">
+        <h2 class="section-title">💰 Konfliktus vs. Megőrzés (Trendek)</h2>
+        <p class="section-desc">
+            Hogyan változott az orvvadászat és a turizmus kapcsolata? 
+            Az interaktív vonaldiagramon látható, hogy ahogy nő a "Turizmus Bevétel" (zöld vonal), 
+            úgy csökken az "Orvvadászat" (piros vonal). Ez bizonyítja, hogy ha a helyiek érdekeltek a párducok életben tartásában, a védelem hatékonyabb.
+            <br><small>Használd a legördülő menüt a különböző mutatók vizsgálatához!</small>
+        </p>
+        <div id="viz3" class="viz-container"></div>
     </div>
 
-    <div class="section">
-        <h2 class="section-title">🎯 Win Rate változás: Tapasztaltság vs. eredmény</h2>
-        <div class="section-description">
-            A harmadik diagram a win rate (győzelmi arány) változását mutatja. 
-            Jól látható a csökkenés, ami az új játékosok beáramlásának köszönhető.
-            A diagram csak azokat a hősöket listázza, akikről releváns win rate adatunk van.
-        </div>
-        <div id="viz3"></div>
-    </div>
-    
-    <div class="footer">
-        <p>📊 Adatvizualizáció Vega-Lite használatával | GitHub Pages</p>
-        <p style="margin-top: 10px; font-size: 0.85em;">🎯 Business Intelligence Projekt | League of Legends & Arcane Elemzés</p>
-    </div>
 </div>
 
+<footer>
+    <p>Adatok forrása: Snow Leopard Trust, IUCN Red List, GSLEP Program Estimates</p>
+    <p>BI Projekt 2024 - Természetvédelmi Elemzés</p>
+</footer>
+
 <script>
-// Közös beállítások
-const commonConfig = {
-    actions: false, // Ez tünteti el a "..." gombot a diagramokról
-    theme: "dark",
-    background: "transparent" // Átlátszó háttér
-};
-
-// Diagram 1: Összes Arcane Champion Pick Rate (CSV-ből)
-const spec1 = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
-    "height": 450,
-    "data": { "url": "arcane_stats.csv" }, // KÜLSŐ ADATFORRÁS
-    "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
-    "encoding": {
-        "x": {
-            "field": "Champion", 
-            "type": "nominal", 
-            "title": "League Of Legends hősök",
-            "axis": {"labelAngle": -45, "labelFontSize": 12},
-            "sort": ["Vi", "Jinx", "Jayce", "Caitlyn", "Ekko", "Viktor", "Singed", "Heimerdinger"]
-        },
-        "y": {
-            "field": "Pick_Rate", 
-            "type": "quantitative", 
-            "title": "Pick Rate (%)",
-            "axis": {"grid": true}
-        },
-        "color": {
-            "field": "Idoszak", 
-            "type": "nominal", 
-            "title": "Időszak",
-            "scale": {
-                "domain": ["Arcane előtt", "Arcane után"],
-                "range": ["#5a6a7a", "#7b61ff"]
-            },
-            "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
-        },
-        "xOffset": {"field": "Idoszak"},
-        "tooltip": [
-            {"field": "Champion", "type": "nominal", "title": "Hős"},
-            {"field": "Role", "type": "nominal", "title": "Szerep az Arcane-ban"},
-            {"field": "Idoszak", "type": "nominal", "title": "Időszak"},
-            {"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".2f"}
-        ]
+    // JS a hóeséshez
+    const snowContainer = document.getElementById('snow-container');
+    for(let i=0; i<50; i++){
+        let flake = document.createElement('div');
+        flake.className = 'snowflake';
+        flake.style.left = Math.random() * 100 + 'vw';
+        flake.style.width = flake.style.height = (Math.random() * 3 + 2) + 'px';
+        flake.style.animationDuration = (Math.random() * 10 + 5) + 's';
+        flake.style.opacity = Math.random();
+        snowContainer.appendChild(flake);
     }
-};
 
-// Diagram 2: Időbeli trend (CSV-ből + Interaktív szűrés)
-const spec2 = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
-    "height": 400,
-    "data": { "url": "time_trend.csv" }, // KÜLSŐ ADATFORRÁS
-    
-    // INTERAKTIVITÁS (DROPDOWN MENÜ)
-    "params": [
-        {
-            "name": "Hos_Kivalasztas",
-            "value": "Összes",
-            "bind": {
-                "input": "select", 
-                "options": ["Összes", "Jinx", "Vi", "Caitlyn"],
-                "name": "Válassz hőst: "
-            }
+    // VEGA-LITE KONFIGURÁCIÓ
+    const commonConfig = {
+        actions: false,
+        background: "transparent",
+        theme: "dark" // Sötét téma a diagramoknak is
+    };
+
+    // 1. SPEC: Populáció + Élőhely Minőség (Oszlopdiagram Heatmap színezéssel)
+    const spec1 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container",
+        "height": 400,
+        "data": { "url": "snow_leopard_extended.csv" },
+        "mark": {"type": "bar", "cornerRadiusTopLeft": 4, "cornerRadiusTopRight": 4},
+        "encoding": {
+            "x": {
+                "field": "Regio", 
+                "type": "nominal", 
+                "sort": "-y", 
+                "title": null,
+                "axis": {"labelAngle": -45, "labelColor": "#aed9e0"}
+            },
+            "y": {
+                "field": "Populacio_Becsles", 
+                "type": "quantitative", 
+                "title": "Becsült Egyedszám",
+                "axis": {"gridColor": "#334", "labelColor": "#fff"}
+            },
+            "color": {
+                "field": "Elohely_Minoseg_Pontszam", 
+                "type": "quantitative", 
+                "title": "Élőhely Minőség (1-10)",
+                "scale": {"scheme": "tealblues"} // Kékes színskála
+            },
+            "tooltip": [
+                {"field": "Orszag", "title": "Ország"},
+                {"field": "Regio", "title": "Régió"},
+                {"field": "Populacio_Becsles", "title": "Populáció"},
+                {"field": "Vedett_Terulet_Arany", "title": "Védett Terület (%)"}
+            ]
         }
-    ],
-    // SZŰRÉS LOGIKA
-    "transform": [
-        {
-            "filter": "datum.Champion == Hos_Kivalasztas || Hos_Kivalasztas == 'Összes'"
-        }
-    ],
+    };
 
-    "mark": {
-        "type": "line",
-        "point": true,
-        "strokeWidth": 3
-    },
-    "encoding": {
-        "x": {
-            "field": "Honap",
-            "type": "ordinal",
-            "title": "Hónap",
-            "axis": {"labelAngle": -45, "labelFontSize": 11}
-        },
-        "y": {
-            "field": "Pick_Rate",
-            "type": "quantitative",
-            "title": "Pick Rate (%)",
-            "axis": {"grid": true}
-        },
-        "color": {
-            "field": "Champion",
-            "type": "nominal",
-            "title": "Champion",
-            "scale": {
-                "domain": ["Jinx", "Vi", "Caitlyn"],
-                "range": ["#e0c3fc", "#7b61ff", "#8ec5fc"]
+    // 2. SPEC: Zsákmány vs Ragadozó (Scatter Plot)
+    const spec2 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container",
+        "height": 400,
+        "data": { "url": "prey_predator_stats.csv" },
+        "mark": {"type": "circle", "size": 150, "opacity": 0.8},
+        "encoding": {
+            "x": {
+                "field": "Zsakmany_Suruseg_km2", 
+                "type": "quantitative", 
+                "title": "Zsákmányállat Sűrűség (db/km²)",
+                "scale": {"zero": false},
+                "axis": {"gridColor": "#334", "labelColor": "#fff"}
             },
-            "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
+            "y": {
+                "field": "Hoparduc_Suruseg_100km2", 
+                "type": "quantitative", 
+                "title": "Hópárduc Sűrűség (db/100km²)",
+                "scale": {"zero": false},
+                "axis": {"gridColor": "#334", "labelColor": "#fff"}
+            },
+            "color": {
+                "field": "Terulet_Tipus", 
+                "type": "nominal", 
+                "title": "Védettség Típusa",
+                "scale": {"range": ["#ff6b6b", "#feca57", "#48dbfb", "#1dd1a1"]}
+            },
+            "size": {
+                 // Interakció: Nagyobb pötty, ha ráviszed az egeret
+                "condition": {"param": "hover", "value": 300},
+                "value": 150
+            },
+            "tooltip": [
+                {"field": "Terulet_Nev", "title": "Terület"},
+                {"field": "Zsakmany_Suruseg_km2", "title": "Zsákmány Sűrűség"},
+                {"field": "Hoparduc_Suruseg_100km2", "title": "Hópárduc Sűrűség"}
+            ]
         },
-        "tooltip": [
-            {"field": "Honap", "type": "ordinal", "title": "Hónap"},
-            {"field": "Champion", "type": "nominal", "title": "Champion"},
-            {"field": "Pick_Rate", "type": "quantitative", "title": "Pick Rate (%)", "format": ".1f"}
-        ]
-    }
-};
+        "params": [{"name": "hover", "select": {"type": "point", "on": "mouseover"}}]
+    };
 
-// Diagram 3: Win Rate változás (CSV-ből + Szűkebb skála)
-// Diagram 3: Win Rate változás (JAVÍTOTT MEGJELENÉS)
-const spec3 = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    
-    // FONTOS VÁLTOZÁS: "container" helyett "step"-et használunk.
-    // Ez azt jelenti, hogy minden hőshöz adunk kb. 120 pixel helyet, 
-    // így nem nyújtja szét az oszlopokat a végtelenségig.
-    "width": {"step": 120}, 
-    "height": 400,
-    
-    "data": { "url": "arcane_stats.csv" },
-    "transform": [
-        {"filter": "datum.Win_Rate != null"} 
-    ],
-    // Kis padding, hogy a tengelyek feliratai biztosan elférjenek
-    "padding": {"left": 20, "top": 20, "right": 20, "bottom": 20},
-    
-    "mark": {"type": "bar", "cornerRadiusTopLeft": 8, "cornerRadiusTopRight": 8},
-    "encoding": {
-        "x": {
-            "field": "Champion", 
-            "type": "nominal", 
-            "title": null, // Levettem a "Hős" feliratot, mert a nevek egyértelműek
-            "axis": {
-                "labelAngle": 0, 
-                "labelFontSize": 13, 
-                "labelPadding": 10,
-                "labelFontWeight": "bold"
+    // 3. SPEC: Gazdaság és Konfliktus (Multi-Line Chart)
+    const spec3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container",
+        "height": 400,
+        "data": { "url": "leopard_economy.csv" },
+        "params": [
+            {
+                "name": "Mutato_Valaszto",
+                "value": "Orvvadaszat_Esetek",
+                "bind": {
+                    "input": "select",
+                    "options": [
+                        "Orvvadaszat_Esetek", 
+                        "Turizmus_Bevetel_USD", 
+                        "Haszonallat_Veszteseg_USD",
+                        "Vedelmi_Koltsegvetes_Millio_USD"
+                    ],
+                    "labels": [
+                        "Orvvadászat Esetek (db)", 
+                        "Turizmus Bevétel ($)", 
+                        "Állatállomány Veszteség ($)",
+                        "Védelmi Költségvetés (M $)"
+                    ],
+                    "name": "Mutató Kiválasztása: "
+                }
             }
+        ],
+        "mark": {
+            "type": "line", 
+            "point": true, 
+            "strokeWidth": 4,
+            "interpolate": "monotone" // Szép íves vonalak
         },
-        "y": {
-            "field": "Win_Rate", 
-            "type": "quantitative", 
-            "title": "Win Rate (%)",
-            "axis": {"grid": true, "titleFontSize": 12},
-            "scale": {"domain": [45, 55]} 
-        },
-        "color": {
-            "field": "Idoszak", 
-            "type": "nominal", 
-            "title": "Időszak",
-            "scale": {
-                "domain": ["Arcane előtt", "Arcane után"],
-                "range": ["#8ec5fc", "#7b61ff"]
+        "encoding": {
+            "x": {
+                "field": "Ev", 
+                "type": "ordinal", 
+                "title": "Év",
+                "axis": {"labelColor": "#aed9e0"}
             },
-            "legend": {"orient": "top", "titleFontSize": 12, "labelFontSize": 11}
+            "y": {
+                "field": {"repeat": "layer"}, // Ez trükkös, de a transform miatt működik
+                "type": "quantitative",
+                "title": "Érték",
+                "axis": {"gridColor": "#334", "labelColor": "#fff"}
+            },
+            "color": {
+                "value": "#00d2ff" // Neon kék vonal
+            },
+            "tooltip": [
+                {"field": "Ev", "title": "Év"},
+                {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat"},
+                {"field": "Turizmus_Bevetel_USD", "title": "Turizmus ($)"}
+            ]
         },
-        "xOffset": {"field": "Idoszak"},
-        "tooltip": [
-            {"field": "Champion", "type": "nominal", "title": "Hős"},
-            {"field": "Idoszak", "type": "nominal", "title": "Időszak"},
-            {"field": "Win_Rate", "type": "quantitative", "title": "Win Rate (%)", "format": ".1f"}
-        ]
-    }
-};
-// Diagramok renderelése
-vegaEmbed('#viz', spec1, commonConfig).catch(console.error);
-vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);
-vegaEmbed('#viz3', spec3, commonConfig).catch(console.error);
+        // Itt trükközünk, hogy a dropdown működjön: dinamikusan cseréljük az Y mezőt
+        "transform": [
+            {"calculate": "datum[Mutato_Valaszto]", "as": "Y_Ertek"}
+        ],
+        "encoding": {
+            "x": {"field": "Ev", "type": "ordinal", "axis": {"labelAngle": 0, "labelColor": "#fff"}},
+            "y": {"field": "Y_Ertek", "type": "quantitative", "title": null, "axis": {"gridColor": "#333"}},
+            "tooltip": [{"field": "Y_Ertek", "title": "Kiválasztott Érték"}]
+        }
+    };
+
+    vegaEmbed('#viz1', spec1, commonConfig).catch(console.error);
+    vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);
+    vegaEmbed('#viz3', spec3, commonConfig).catch(console.error);
+
 </script>
 </body>
 </html>

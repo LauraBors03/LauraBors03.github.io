@@ -320,33 +320,56 @@ footer {
     };
 
     // 3. SPEC: Gazdaság és Konfliktus (Multi-Line Chart)
+    // 3. SPEC: Gazdaság és Konfliktus (JAVÍTOTT - FOLD MÓDSZERREL)
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container",
         "height": 400,
         "data": { "url": "leopard_economy.csv" },
+        
+        // PARAMÉTER (A legördülő menü)
         "params": [
             {
-                "name": "Mutato_Valaszto",
-                "value": "Orvvadaszat_Esetek",
+                "name": "Kivalasztott_Adat",
+                "value": "Orvvadaszat_Esetek", // Alapértelmezett érték
                 "bind": {
                     "input": "select",
                     "options": [
                         "Orvvadaszat_Esetek", 
                         "Turizmus_Bevetel_USD", 
-                        "Haszonallat_Veszteseg_USD",
+                        "Haszonallat_Veszteseg_USD", 
                         "Vedelmi_Koltsegvetes_Millio_USD"
                     ],
                     "labels": [
                         "Orvvadászat Esetek (db)", 
                         "Turizmus Bevétel ($)", 
-                        "Állatállomány Veszteség ($)",
+                        "Állatállomány Veszteség ($)", 
                         "Védelmi Költségvetés (M $)"
                     ],
                     "name": "Mutató Kiválasztása: "
                 }
             }
         ],
+
+        // TRANSZFORMÁCIÓ (Itt van a javítás lényege!)
+        "transform": [
+            // 1. "Fold": A széles táblázatot hosszúvá alakítjuk
+            {
+                "fold": [
+                    "Orvvadaszat_Esetek", 
+                    "Turizmus_Bevetel_USD", 
+                    "Haszonallat_Veszteseg_USD", 
+                    "Vedelmi_Koltsegvetes_Millio_USD"
+                ],
+                "as": ["Mutato_Tipus", "Ertek"]
+            },
+            // 2. Szűrés: Csak azt tartjuk meg, amit a menüben kiválasztottál
+            {
+                "filter": "datum.Mutato_Tipus == Kivalasztott_Adat"
+            }
+        ],
+
+        // MEGJELENÍTÉS
         "mark": {
             "type": "line", 
             "point": true, 
@@ -358,38 +381,24 @@ footer {
                 "field": "Ev", 
                 "type": "ordinal", 
                 "title": "Év",
-                "axis": {"labelColor": "#aed9e0"}
+                "axis": {"labelColor": "#aed9e0", "labelAngle": 0}
             },
             "y": {
-                "field": {"repeat": "layer"}, // Ez trükkös, de a transform miatt működik
+                "field": "Ertek", 
                 "type": "quantitative",
-                "title": "Érték",
+                "title": null, // Nem kell cím, mert a menüben úgyis ott van
                 "axis": {"gridColor": "#334", "labelColor": "#fff"}
             },
             "color": {
-                "value": "#00d2ff" // Neon kék vonal
+                "value": "#00d2ff" // A szép neonkék szín
             },
             "tooltip": [
                 {"field": "Ev", "title": "Év"},
-                {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat"},
-                {"field": "Turizmus_Bevetel_USD", "title": "Turizmus ($)"}
+                {"field": "Ertek", "title": "Érték"},
+                {"field": "Mutato_Tipus", "title": "Típus"}
             ]
-        },
-        // Itt trükközünk, hogy a dropdown működjön: dinamikusan cseréljük az Y mezőt
-        "transform": [
-            {"calculate": "datum[Mutato_Valaszto]", "as": "Y_Ertek"}
-        ],
-        "encoding": {
-            "x": {"field": "Ev", "type": "ordinal", "axis": {"labelAngle": 0, "labelColor": "#fff"}},
-            "y": {"field": "Y_Ertek", "type": "quantitative", "title": null, "axis": {"gridColor": "#333"}},
-            "tooltip": [{"field": "Y_Ertek", "title": "Kiválasztott Érték"}]
         }
     };
-
-    vegaEmbed('#viz1', spec1, commonConfig).catch(console.error);
-    vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);
-    vegaEmbed('#viz3', spec3, commonConfig).catch(console.error);
-
 </script>
 </body>
 </html>

@@ -20,7 +20,7 @@ body {
     overflow-x: hidden;
 }
 
-/* --- HÁTTÉR EFFEKT (HÓESÉS) --- */
+/* --- HÁTTÉR EFFEKT --- */
 .snow-bg {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -41,7 +41,7 @@ body {
     to { transform: translateY(105vh); }
 }
 
-/* --- HERO SECTION (HÓPÁRDUC FOTÓVAL) --- */
+/* --- HERO SECTION (KÉP JAVÍTVA) --- */
 .hero {
     height: 100vh;
     display: flex;
@@ -51,12 +51,14 @@ body {
     text-align: center;
     padding: 20px;
     position: relative;
-    /* Itt a kép és a sötétítés: */
-    background: linear-gradient(rgba(11, 16, 38, 0.4), rgba(11, 16, 38, 0.95)),
-                url('https://images.unsplash.com/photo-1564731071754-001b5e1966f3?q=80&w=1920&auto=format&fit=crop');
+    
+    /* JAVÍTÁS: Stabil Wikimedia linket használok, ami biztosan betölt */
+    background: linear-gradient(rgba(11, 16, 38, 0.3), rgba(11, 16, 38, 0.9)),
+                url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Irbis4.JPG/1920px-Irbis4.JPG');
+    
     background-size: cover;
-    background-position: center;
-    background-attachment: fixed; /* Parallax effekt */
+    background-position: center 30%; /* Kicsit feljebb igazítva a párduc arcához */
+    background-attachment: fixed;
     box-shadow: inset 0 -150px 150px #0b1026;
 }
 
@@ -65,7 +67,7 @@ body {
     font-weight: 800;
     letter-spacing: -2px;
     color: #fff;
-    text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    text-shadow: 0 5px 20px rgba(0,0,0,0.9);
     margin-bottom: 20px;
     text-transform: uppercase;
 }
@@ -73,17 +75,18 @@ body {
 .hero p {
     font-size: 1.3em;
     max-width: 800px;
-    color: #dbecef;
-    font-weight: 400;
+    color: #fff;
+    font-weight: 500;
     line-height: 1.6;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    background: rgba(11, 16, 38, 0.6);
-    padding: 20px;
+    text-shadow: 0 2px 10px rgba(0,0,0,1);
+    background: rgba(0, 0, 0, 0.5); /* Sötét doboz a szöveg mögé */
+    padding: 25px;
     border-radius: 15px;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(3px);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* --- TARTALOM KONTÉNER --- */
+/* --- TARTALOM --- */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -98,12 +101,6 @@ body {
     padding: 40px;
     margin-bottom: 80px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(174, 217, 224, 0.3);
 }
 
 .section-title {
@@ -121,47 +118,20 @@ body {
     font-size: 1.1em;
 }
 
-/* --- DIAGRAMOK MEGJELENÉSE --- */
 .viz-container {
     width: 100%;
     display: flex;
     justify-content: center;
-    /* Fontos: ha a diagram szélesebb, ne lógjon ki */
-    overflow-x: auto; 
+    overflow-x: auto;
 }
 
-/* --- DROPDOWN (LEGÖRDÜLŐ) STÍLUS --- */
-.vega-bindings {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    background: rgba(0,0,0,0.3);
-    padding: 10px;
-    border-radius: 10px;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.vega-bind-name {
-    color: #aed9e0;
-    font-weight: 700;
-    margin-right: 15px;
-    text-transform: uppercase;
+/* --- LEGEND (Jelmagyarázat) --- */
+.custom-legend {
+    text-align: center;
+    margin-bottom: 15px;
     font-size: 0.9em;
-    align-self: center;
 }
-
-.vega-bind select {
-    background: #0b1026;
-    color: #fff;
-    border: 1px solid #00d2ff;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-family: 'Montserrat', sans-serif;
-    outline: none;
-    cursor: pointer;
-}
+.dot { height: 10px; width: 10px; display: inline-block; border-radius: 50%; margin-right: 5px; }
 
 /* --- LÁBLÉC --- */
 footer {
@@ -172,7 +142,6 @@ footer {
     border-top: 1px solid rgba(255,255,255,0.05);
 }
 
-/* Mobil nézet javítás */
 @media (max-width: 768px) {
     .hero h1 { font-size: 2.5em; }
     .hero p { font-size: 1em; }
@@ -188,8 +157,8 @@ footer {
     <h1>GHOST OF THE MOUNTAINS</h1>
     <p>
         A hópárduc (Panthera uncia) Belső-Ázsia legrejtélyesebb csúcsragadozója. 
-        Az alábbi adatvizualizáció feltárja a populációk állapotát, az ökológiai összefüggéseket 
-        és a fajmegőrzés gazdasági hatásait a 21. században.
+        Ez a projekt feltárja a populációk állapotát, az ökológiai összefüggéseket 
+        és a fajmegőrzés gazdasági hatásait.
     </p>
 </div>
 
@@ -198,9 +167,8 @@ footer {
     <div class="card">
         <h2 class="section-title">🗺️ Élőhely és Védettség Elemzése</h2>
         <p class="section-desc">
-            Hol élnek a hópárducok, és mennyire védettek ezek a területek? 
-            Az alábbi diagram nemcsak a becsült egyedszámot mutatja régiónként, hanem színkóddal jelzi az élőhely minőségét is. 
-            Látható, hogy Kína rendelkezik a legnagyobb populációval, de Bhutánban a legjobb az élőhely minősége (sötétebb szín).
+            Hol élnek a hópárducok? Az alábbi diagram a becsült egyedszámot mutatja régiónként, 
+            a színek pedig az élőhely minőségét jelzik (sötétebb kék = jobb minőség).
         </p>
         <div id="viz1" class="viz-container"></div>
     </div>
@@ -208,20 +176,22 @@ footer {
     <div class="card">
         <h2 class="section-title">⚖️ A Zsákmányállatok Szerepe</h2>
         <p class="section-desc">
-            Van-e statisztikai összefüggés a zsákmányállatok (kék juh, kőszáli kecske) sűrűsége és a hópárducok száma között?
-            <strong>Ez a Scatter Plot (Pontdiagram) választ ad:</strong> Minden pont egy megfigyelt területet jelöl. 
-            Az emelkedő trendvonal egyértelmű pozitív korrelációt mutat: több zsákmány = több ragadozó.
+            Van-e összefüggés a zsákmányállatok és a ragadozók száma között? 
+            A pontdiagram emelkedő trendje bizonyítja: ahol több a zsákmány (vízszintes tengely), 
+            ott több a hópárduc is (függőleges tengely).
         </p>
         <div id="viz2" class="viz-container"></div>
     </div>
 
     <div class="card">
-        <h2 class="section-title">💰 Konfliktus vs. Megőrzés (Trendek)</h2>
+        <h2 class="section-title">💰 Konfliktus vs. Megőrzés (Összehasonlítás)</h2>
         <p class="section-desc">
-            Hogyan változott az orvvadászat és a turizmus kapcsolata? 
-            Az interaktív vonaldiagramon látható, hogy ahogy nő a "Turizmus Bevétel" (zöld vonal), 
-            úgy csökken az "Orvvadászat" (piros vonal). Ez bizonyítja, hogy ha a helyiek érdekeltek a párducok életben tartásában, a védelem hatékonyabb.
-            <br><small>Használd a legördülő menüt a különböző mutatók vizsgálatához!</small>
+            Ez a diagram két eltérő adatot hasonlít össze egyszerre:
+            <br>
+            <span style="color:#00d2ff; font-weight:bold;">● Zöld vonal (Bal tengely):</span> Turizmusból származó bevétel ($).<br>
+            <span style="color:#ff6b6b; font-weight:bold;">● Piros vonal (Jobb tengely):</span> Orvvadászat esetek száma (db).<br>
+            <br>
+            Jól látható az "olló": ahogy a turizmus bevétele nő, az orvvadászat drasztikusan csökken.
         </p>
         <div id="viz3" class="viz-container"></div>
     </div>
@@ -234,7 +204,7 @@ footer {
 </footer>
 
 <script>
-    // --- HÓESÉS EFFEKT JS ---
+    // --- HÓESÉS ---
     const snowContainer = document.getElementById('snow-container');
     for(let i=0; i<50; i++){
         let flake = document.createElement('div');
@@ -246,168 +216,74 @@ footer {
         snowContainer.appendChild(flake);
     }
 
-    // --- VEGA-LITE KONFIGURÁCIÓ ---
-    const commonConfig = {
-        actions: false,
-        background: "transparent",
-        theme: "dark"
-    };
+    // --- VEGA KONFIG ---
+    const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
     // 1. SPEC: Populáció
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container",
-        "height": 400,
+        "width": "container", "height": 400,
         "data": { "url": "snow_leopard_extended.csv" },
-        "mark": {"type": "bar", "cornerRadiusTopLeft": 4, "cornerRadiusTopRight": 4},
+        "mark": {"type": "bar", "cornerRadius": 4},
         "encoding": {
-            "x": {
-                "field": "Regio", 
-                "type": "nominal", 
-                "sort": "-y", 
-                "title": null,
-                "axis": {"labelAngle": -45, "labelColor": "#aed9e0", "labelLimit": 200}
-            },
-            "y": {
-                "field": "Populacio_Becsles", 
-                "type": "quantitative", 
-                "title": "Becsült Egyedszám",
-                "axis": {"gridColor": "#334", "labelColor": "#fff"}
-            },
-            "color": {
-                "field": "Elohely_Minoseg_Pontszam", 
-                "type": "quantitative", 
-                "title": "Minőség (1-10)",
-                "scale": {"scheme": "tealblues"}
-            },
-            "tooltip": [
-                {"field": "Orszag", "title": "Ország"},
-                {"field": "Regio", "title": "Régió"},
-                {"field": "Populacio_Becsles", "title": "Populáció"},
-                {"field": "Vedett_Terulet_Arany", "title": "Védett Terület (%)"}
-            ]
+            "x": {"field": "Regio", "type": "nominal", "sort": "-y", "title": null, "axis": {"labelAngle": -45, "labelColor": "#aed9e0"}},
+            "y": {"field": "Populacio_Becsles", "type": "quantitative", "title": "Populáció", "axis": {"gridColor": "#334", "labelColor": "#fff"}},
+            "color": {"field": "Elohely_Minoseg_Pontszam", "type": "quantitative", "scale": {"scheme": "tealblues"}, "legend": {"title": "Minőség"}}
         }
     };
 
-    // 2. SPEC: Scatter Plot
+    // 2. SPEC: Scatter
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container",
-        "height": 400,
+        "width": "container", "height": 400,
         "data": { "url": "prey_predator_stats.csv" },
         "mark": {"type": "circle", "size": 150, "opacity": 0.8},
         "encoding": {
-            "x": {
-                "field": "Zsakmany_Suruseg_km2", 
-                "type": "quantitative", 
-                "title": "Zsákmányállat Sűrűség (db/km²)",
-                "scale": {"zero": false},
-                "axis": {"gridColor": "#334", "labelColor": "#fff"}
-            },
-            "y": {
-                "field": "Hoparduc_Suruseg_100km2", 
-                "type": "quantitative", 
-                "title": "Hópárduc Sűrűség (db/100km²)",
-                "scale": {"zero": false},
-                "axis": {"gridColor": "#334", "labelColor": "#fff"}
-            },
-            "color": {
-                "field": "Terulet_Tipus", 
-                "type": "nominal", 
-                "title": "Védettség Típusa",
-                "scale": {"range": ["#ff6b6b", "#feca57", "#48dbfb", "#1dd1a1"]}
-            },
-            "size": {
-                "condition": {"param": "hover", "value": 300},
-                "value": 150
-            },
-            "tooltip": [
-                {"field": "Terulet_Nev", "title": "Terület"},
-                {"field": "Zsakmany_Suruseg_km2", "title": "Zsákmány Sűrűség"},
-                {"field": "Hoparduc_Suruseg_100km2", "title": "Hópárduc Sűrűség"}
-            ]
-        },
-        "params": [{"name": "hover", "select": {"type": "point", "on": "mouseover"}}]
-    };
-
-    // 3. SPEC: Gazdaság (A JAVÍTOTT FOLD VERZIÓ)
-    const spec3 = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container",
-        "height": 400,
-        "data": { "url": "leopard_economy.csv" },
-        
-        "params": [
-            {
-                "name": "Kivalasztott_Adat",
-                "value": "Orvvadaszat_Esetek",
-                "bind": {
-                    "input": "select",
-                    "options": [
-                        "Orvvadaszat_Esetek", 
-                        "Turizmus_Bevetel_USD", 
-                        "Haszonallat_Veszteseg_USD", 
-                        "Vedelmi_Koltsegvetes_Millio_USD"
-                    ],
-                    "labels": [
-                        "Orvvadászat Esetek (db)", 
-                        "Turizmus Bevétel ($)", 
-                        "Állatállomány Veszteség ($)", 
-                        "Védelmi Költségvetés (M $)"
-                    ],
-                    "name": "Mutató Kiválasztása: "
-                }
-            }
-        ],
-
-        "transform": [
-            {
-                "fold": [
-                    "Orvvadaszat_Esetek", 
-                    "Turizmus_Bevetel_USD", 
-                    "Haszonallat_Veszteseg_USD", 
-                    "Vedelmi_Koltsegvetes_Millio_USD"
-                ],
-                "as": ["Mutato_Tipus", "Ertek"]
-            },
-            {
-                "filter": "datum.Mutato_Tipus == Kivalasztott_Adat"
-            }
-        ],
-
-        "mark": {
-            "type": "line", 
-            "point": true, 
-            "strokeWidth": 4,
-            "interpolate": "monotone"
-        },
-        "encoding": {
-            "x": {
-                "field": "Ev", 
-                "type": "ordinal", 
-                "title": "Év",
-                "axis": {"labelColor": "#aed9e0", "labelAngle": 0}
-            },
-            "y": {
-                "field": "Ertek", 
-                "type": "quantitative",
-                "title": null,
-                "axis": {"gridColor": "#334", "labelColor": "#fff"}
-            },
-            "color": { "value": "#00d2ff" },
-            "tooltip": [
-                {"field": "Ev", "title": "Év"},
-                {"field": "Ertek", "title": "Érték"},
-                {"field": "Mutato_Tipus", "title": "Típus"}
-            ]
+            "x": {"field": "Zsakmany_Suruseg_km2", "type": "quantitative", "title": "Zsákmány (db/km²)", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
+            "y": {"field": "Hoparduc_Suruseg_100km2", "type": "quantitative", "title": "Hópárduc (db/100km²)", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
+            "color": {"field": "Terulet_Tipus", "type": "nominal", "legend": {"title": "Védettség"}},
+            "tooltip": [{"field": "Terulet_Nev"}, {"field": "Zsakmany_Suruseg_km2"}, {"field": "Hoparduc_Suruseg_100km2"}]
         }
     };
 
-    // Diagramok kirajzolása
+    // 3. SPEC: DUAL AXIS (Zöld és Piros vonal egyszerre)
+    const spec3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container", "height": 400,
+        "data": { "url": "leopard_economy.csv" },
+        "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff"} } },
+        "layer": [
+            {
+                "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true}, // ZÖLDESKÉK VONAL
+                "encoding": {
+                    "y": {
+                        "field": "Turizmus_Bevetel_USD",
+                        "type": "quantitative",
+                        "title": "Turizmus Bevétel ($)",
+                        "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"}
+                    },
+                    "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD", "title": "Bevétel ($)"}]
+                }
+            },
+            {
+                "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true}, // PIROS VONAL
+                "encoding": {
+                    "y": {
+                        "field": "Orvvadaszat_Esetek",
+                        "type": "quantitative",
+                        "title": "Orvvadászat (eset)",
+                        "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} // Jobb oldali tengely!
+                    },
+                    "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat (db)"}]
+                }
+            }
+        ],
+        "resolve": {"scale": {"y": "independent"}} // FONTOS: Ez teszi lehetővé a két külön skálát
+    };
+
     vegaEmbed('#viz1', spec1, commonConfig).catch(console.error);
     vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);
     vegaEmbed('#viz3', spec3, commonConfig).catch(console.error);
-
 </script>
 </body>
 </html>

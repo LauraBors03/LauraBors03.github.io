@@ -10,160 +10,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
-/* --- ALAP STÍLUSOK --- */
+/* --- STÍLUSOK (DESIGN) --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Montserrat', sans-serif; background-color: #0b1026; color: #e6f4f1; overflow-x: hidden; }
 
-body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #0b1026;
-    color: #e6f4f1;
-    overflow-x: hidden;
-}
+/* HÓESÉS */
+.snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 10; pointer-events: none; }
+body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at bottom, #1b2949 0%, #0b1026 100%); z-index: -2; }
+.snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; filter: blur(1px); }
+@keyframes fall { to { transform: translateY(105vh); } }
 
-/* --- HÁTTÉR EFFEKT (HÓESÉS) - JAVÍTVA! --- */
-.snow-bg {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    /* ITT A VÁLTOZÁS: Nincs háttérszín, csak a részecskék */
-    background: transparent; 
-    
-    /* FONTOS: Előre hozzuk a réteget (z-index: 10), 
-       de átkattinthatóvá tesszük (pointer-events: none) */
-    z-index: 10; 
-    pointer-events: none;
-}
+/* HERO */
+.hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; background: linear-gradient(rgba(11, 16, 38, 0.3), rgba(11, 16, 38, 0.8)), url('snowleo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; box-shadow: inset 0 -150px 150px #0b1026; z-index: 1; }
+.hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 5px 20px rgba(0,0,0,0.9); margin-bottom: 20px; text-transform: uppercase; position: relative; z-index: 20; }
+.hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(3px); border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 20; }
 
-/* A háttér sötétítése külön réteg lett, hogy a hó ne takarja ki a hátteret, csak a képet */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at bottom, #1b2949 0%, #0b1026 100%);
-    z-index: -2;
-}
-
-.snowflake {
-    position: absolute;
-    top: -10px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: fall linear infinite;
-    /* Egy kis homályosítás, hogy térhatású legyen */
-    filter: blur(1px); 
-}
-@keyframes fall {
-    to { transform: translateY(105vh); }
-}
-
-/* --- HERO SECTION --- */
-.hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    position: relative;
-    
-    /* A SAJÁT KÉPED BETÖLTÉSE */
-    background: linear-gradient(rgba(11, 16, 38, 0.3), rgba(11, 16, 38, 0.8)),
-                url('snowleo.jpg'); 
-    
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    box-shadow: inset 0 -150px 150px #0b1026;
-    /* Ez biztosítja, hogy a hero tartalom a hó alatt, de a háttér felett legyen */
-    z-index: 1; 
-}
-
-.hero h1 {
-    font-size: 4em;
-    font-weight: 800;
-    letter-spacing: -2px;
-    color: #fff;
-    text-shadow: 0 5px 20px rgba(0,0,0,0.9);
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 20; /* A szöveg legyen a hó felett is, hogy olvasható maradjon */
-}
-
-.hero p {
-    font-size: 1.3em;
-    max-width: 800px;
-    color: #fff;
-    font-weight: 500;
-    line-height: 1.6;
-    text-shadow: 0 2px 10px rgba(0,0,0,1);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 25px;
-    border-radius: 15px;
-    backdrop-filter: blur(3px);
-    border: 1px solid rgba(255,255,255,0.1);
-    position: relative;
-    z-index: 20;
-}
-
-/* --- TARTALOM --- */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 50px 20px;
-    position: relative;
-    z-index: 5; /* A tartalom legyen a háttér felett */
-}
-
-.card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(174, 217, 224, 0.1);
-    border-radius: 20px;
-    padding: 40px;
-    margin-bottom: 80px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-}
-
-.section-title {
-    font-size: 2em;
-    margin-bottom: 15px;
-    color: #fff;
-    border-left: 5px solid #00d2ff;
-    padding-left: 20px;
-}
-
-.section-desc {
-    color: #b0c4de;
-    margin-bottom: 30px;
-    line-height: 1.7;
-    font-size: 1.1em;
-}
-
-.viz-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    overflow-x: auto;
-}
-
-/* --- LÁBLÉC --- */
-footer {
-    text-align: center;
-    padding: 50px;
-    color: #5d6d7e;
-    font-size: 0.9em;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    position: relative;
-    z-index: 5;
-}
-
-@media (max-width: 768px) {
-    .hero h1 { font-size: 2.5em; }
-    .hero p { font-size: 1em; }
-    .card { padding: 20px; }
-}
+/* KONTÉNER */
+.container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
+.card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(174, 217, 224, 0.1); border-radius: 20px; padding: 40px; margin-bottom: 80px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+.section-title { font-size: 2em; margin-bottom: 15px; color: #fff; border-left: 5px solid #00d2ff; padding-left: 20px; }
+.section-desc { color: #b0c4de; margin-bottom: 30px; line-height: 1.7; font-size: 1.1em; }
+.viz-container { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
+footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 5; }
+@media (max-width: 768px) { .hero h1 { font-size: 2.5em; } .hero p { font-size: 1em; } .card { padding: 20px; } }
 </style>
 </head>
 <body>
@@ -174,7 +43,7 @@ footer {
     <h1>GHOST OF THE MOUNTAINS</h1>
     <p>
         A hópárduc (Panthera uncia) Belső-Ázsia legrejtélyesebb csúcsragadozója. 
-        Az alábbi vizualizációk feltárják a populációk állapotát, az ökológiai összefüggéseket 
+        Az alábbi vizualizációk feltárják a populációk állapotát, a mozgási mintázatokat
         és a fajmegőrzés gazdasági hatásait.
     </p>
 </div>
@@ -191,24 +60,23 @@ footer {
     </div>
 
     <div class="card">
-        <h2 class="section-title">⚖️ A Zsákmányállatok Szerepe</h2>
+        <h2 class="section-title">📡 GPS Telemetria (1000 Adatpont)</h2>
         <p class="section-desc">
-            Van-e összefüggés a zsákmányállatok és a ragadozók száma között? 
-            A pontdiagram emelkedő trendje bizonyítja: ahol több a zsákmány (vízszintes tengely), 
-            ott több a hópárduc is (függőleges tengely).
+            A modern természetvédelem alapja az adat. Ezen a diagramon 
+            <strong>1000 szimulált GPS adatpontot</strong> láthatunk, amely 5 különböző, 
+            jeladóval ellátott hópárduc mozgását követi a mongol Altaj-hegységben.
+            <br>
+            <em>Interakció: Nagyíthatsz (görgő) és mozgathatod a térképet!</em>
         </p>
         <div id="viz2" class="viz-container"></div>
     </div>
 
     <div class="card">
-        <h2 class="section-title">💰 Konfliktus vs. Megőrzés (Összehasonlítás)</h2>
+        <h2 class="section-title">💰 Konfliktus vs. Megőrzés</h2>
         <p class="section-desc">
-            Ez a diagram két eltérő adatot hasonlít össze egyszerre:
-            <br>
-            <span style="color:#00d2ff; font-weight:bold;">● Zöld vonal (Bal tengely):</span> Turizmusból származó bevétel ($).<br>
-            <span style="color:#ff6b6b; font-weight:bold;">● Piros vonal (Jobb tengely):</span> Orvvadászat esetek száma (db).<br>
-            <br>
-            Jól látható az "olló": ahogy a turizmus bevétele nő, az orvvadászat drasztikusan csökken.
+            Hogyan hat a pénz a védelemre? Jól látható az "olló": ahogy a 
+            <span style="color:#00d2ff; font-weight:bold;">Turizmus Bevétel (Zöld, bal tengely)</span> nő, 
+            úgy csökken az <span style="color:#ff6b6b; font-weight:bold;">Orvvadászat (Piros, jobb tengely)</span>.
         </p>
         <div id="viz3" class="viz-container"></div>
     </div>
@@ -216,28 +84,26 @@ footer {
 </div>
 
 <footer>
-    <p>Adatok forrása: Snow Leopard Trust, IUCN Red List, GSLEP Program Estimates</p>
+    <p>Adatok forrása: Snow Leopard Trust, IUCN Red List (Szimulált adatkészletek)</p>
     <p>BI Projekt 2024 - Természetvédelmi Elemzés</p>
 </footer>
 
 <script>
-    // --- HÓESÉS ---
+    // HÓESÉS
     const snowContainer = document.getElementById('snow-container');
     for(let i=0; i<50; i++){
         let flake = document.createElement('div');
         flake.className = 'snowflake';
         flake.style.left = Math.random() * 100 + 'vw';
-        // Véletlenszerű méret, hogy természetesebb legyen
         flake.style.width = flake.style.height = (Math.random() * 4 + 2) + 'px';
         flake.style.animationDuration = (Math.random() * 10 + 5) + 's';
         flake.style.opacity = Math.random() * 0.7 + 0.3;
         snowContainer.appendChild(flake);
     }
 
-    // --- VEGA KONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // 1. SPEC: Populáció
+    // 1. SPEC
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,
@@ -250,18 +116,19 @@ footer {
         }
     };
 
-    // 2. SPEC: Scatter
+    // 2. SPEC: GPS (1000 PONT)
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,
-        "data": { "url": "prey_predator_stats.csv" },
-        "mark": {"type": "circle", "size": 150, "opacity": 0.8},
+        "data": { "url": "gps_data.csv" },
+        "mark": {"type": "circle", "size": 60, "opacity": 0.6},
         "encoding": {
-            "x": {"field": "Zsakmany_Suruseg_km2", "type": "quantitative", "title": "Zsákmány (db/km²)", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
-            "y": {"field": "Hoparduc_Suruseg_100km2", "type": "quantitative", "title": "Hópárduc (db/100km²)", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
-            "color": {"field": "Terulet_Tipus", "type": "nominal", "legend": {"title": "Védettség"}},
-            "tooltip": [{"field": "Terulet_Nev"}, {"field": "Zsakmany_Suruseg_km2"}, {"field": "Hoparduc_Suruseg_100km2"}]
-        }
+            "x": {"field": "Longitude", "type": "quantitative", "title": "Hosszúság", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
+            "y": {"field": "Latitude", "type": "quantitative", "title": "Szélesség", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
+            "color": {"field": "Leopard_ID", "type": "nominal", "title": "Párduc", "scale": {"scheme": "category10"}},
+            "tooltip": [{"field": "Leopard_ID"}, {"field": "Honap"}]
+        },
+        "selection": { "grid": { "type": "interval", "bind": "scales" } }
     };
 
     // 3. SPEC: DUAL AXIS
@@ -272,28 +139,12 @@ footer {
         "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff"} } },
         "layer": [
             {
-                "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true}, // ZÖLDESKÉK VONAL
-                "encoding": {
-                    "y": {
-                        "field": "Turizmus_Bevetel_USD",
-                        "type": "quantitative",
-                        "title": "Turizmus Bevétel ($)",
-                        "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"}
-                    },
-                    "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD", "title": "Bevétel ($)"}]
-                }
+                "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true},
+                "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} } }
             },
             {
-                "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true}, // PIROS VONAL
-                "encoding": {
-                    "y": {
-                        "field": "Orvvadaszat_Esetek",
-                        "type": "quantitative",
-                        "title": "Orvvadászat (eset)",
-                        "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} // Jobb oldali tengely!
-                    },
-                    "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat (db)"}]
-                }
+                "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true},
+                "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} } }
             }
         ],
         "resolve": {"scale": {"y": "independent"}}

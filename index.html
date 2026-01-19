@@ -43,7 +43,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     <h1>GHOST OF THE MOUNTAINS</h1>
     <p>
         A hópárduc (Panthera uncia) Belső-Ázsia legrejtélyesebb csúcsragadozója. 
-        Az alábbi vizualizációk feltárják a populációk állapotát, a mozgási mintázatokat
+        Ez a projekt feltárja a populációk állapotát, a mozgási mintázatokat (Big Data)
         és a fajmegőrzés gazdasági hatásait.
     </p>
 </div>
@@ -63,7 +63,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         <h2 class="section-title">📡 GPS Telemetria (1000 Adatpont)</h2>
         <p class="section-desc">
             A modern természetvédelem alapja az adat. Ezen a diagramon 
-            <strong>1000 szimulált GPS adatpontot</strong> láthatunk, amely 5 különböző, 
+            <strong>szimulált GPS adatpontokat</strong> láthatunk, amely 5 különböző, 
             jeladóval ellátott hópárduc mozgását követi a mongol Altaj-hegységben.
             <br>
             <em>Interakció: Nagyíthatsz (görgő) és mozgathatod a térképet!</em>
@@ -89,7 +89,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
 </footer>
 
 <script>
-    // HÓESÉS
+    // 1. HÓESÉS
     const snowContainer = document.getElementById('snow-container');
     for(let i=0; i<50; i++){
         let flake = document.createElement('div');
@@ -103,7 +103,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // 1. SPEC
+    // SPEC 1: POPULÁCIÓ
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,
@@ -116,11 +116,14 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         }
     };
 
-    // 2. SPEC: GPS (1000 PONT)
+    // SPEC 2: GPS (KÜLSŐ FÁJLBÓL!)
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,
-        "data": { "url": "gps_data.csv" },
+        
+        // ITT A LÉNYEG: Most már a fájlt olvassa be!
+        "data": { "url": "gpsdata.csv" },
+        
         "mark": {"type": "circle", "size": 60, "opacity": 0.6},
         "encoding": {
             "x": {"field": "Longitude", "type": "quantitative", "title": "Hosszúság", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
@@ -131,7 +134,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         "selection": { "grid": { "type": "interval", "bind": "scales" } }
     };
 
-    // 3. SPEC: DUAL AXIS
+    // SPEC 3: GAZDASÁG
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,

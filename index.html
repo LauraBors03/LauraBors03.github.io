@@ -89,7 +89,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
 </footer>
 
 <script>
-    // 1. HÓESÉS
+    // --- 1. HÓESÉS GENERÁLÁS ---
     const snowContainer = document.getElementById('snow-container');
     for(let i=0; i<50; i++){
         let flake = document.createElement('div');
@@ -101,53 +101,123 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         snowContainer.appendChild(flake);
     }
 
-    const commonConfig = { actions: false, background: "transparent", theme: "dark" };
+    // --- 2. GPS ADAT GENERÁLÁS ---
+    const gpsData = [];
+    const leopards = ['Artemis', 'Batu', 'Chione', 'Danko', 'Elsa'];
+    const bases = {
+        'Artemis': {lat: 43.1, lon: 100.4},
+        'Batu':    {lat: 42.9, lon: 99.1},
+        'Chione':  {lat: 43.5, lon: 101.2},
+        'Danko':   {lat: 43.8, lon: 98.7},
+        'Elsa':    {lat: 42.4, lon: 100.9}
+    };
+    for(let i=0; i<1000; i++) {
+        const leo = leopards[Math.floor(Math.random() * leopards.length)];
+        const base = bases[leo];
+        gpsData.push({
+            Latitude: base.lat + (Math.random() - 0.5) * 0.4,
+            Longitude: base.lon + (Math.random() - 0.5) * 0.4,
+            Leopard_ID: leo,
+            Honap: Math.floor(Math.random() * 12) + 1
+        });
+    }
 
-    // SPEC 1: POPULÁCIÓ
-    const spec1 = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400,
-        "data": { "url": "snow_leopard_extended.csv" },
-        "mark": {"type": "bar", "cornerRadius": 4},
-        "encoding": {
-            "x": {"field": "Regio", "type": "nominal", "sort": "-y", "title": null, "axis": {"labelAngle": -45, "labelColor": "#aed9e0"}},
-            "y": {"field": "Populacio_Becsles", "type": "quantitative", "title": "Populáció", "axis": {"gridColor": "#334", "labelColor": "#fff"}},
-            "color": {"field": "Elohely_Minoseg_Pontszam", "type": "quantitative", "scale": {"scheme": "tealblues"}, "legend": {"title": "Minőség"}}
-        }
+    // --- VEGA CONFIG (Sötét téma alapbeállításai) ---
+    const commonConfig = { 
+        actions: false, 
+        background: "transparent", 
+        theme: "dark"
     };
 
-    // SPEC 2: GPS (KÜLSŐ FÁJLBÓL!)
+    // --- SPEC 1: POPULÁCIÓ (JAVÍTOTT DESIGN) ---
+    const spec1 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container", "height": 450, // Magasabb, hogy elférjenek a sávok
+        "data": { "url": "snow_leopard_extended.csv" },
+        "mark": {
+            "type": "bar", 
+            "cornerRadiusEnd": 4, // Lekerekített végek
+            "cursor": "pointer"   // Kéz ikon ha ráviszed az egeret
+        },
+        "encoding": {
+            // Y tengelyen vannak a nevek (Vízszintes diagram)
+            "y": {
+                "field": "Regio", 
+                "type": "nominal", 
+                "sort": "-x", // A legnagyobb legyen felül
+                "title": null, 
+                "axis": {"labelFontSize": 12, "labelColor": "#aed9e0", "grid": false}
+            },
+            // X tengelyen a számok
+            "x": {
+                "field": "Populacio_Becsles", 
+                "type": "quantitative", 
+                "title": "Becsült Egyedszám", 
+                "axis": {"gridColor": "#334", "labelColor": "#fff"}
+            },
+            // Színezés minőség szerint
+            "color": {
+                "field": "Elohely_Minoseg_Pontszam", 
+                "type": "quantitative", 
+                "scale": {"scheme": "tealblues"}, // Szép kék átmenet
+                "legend": {"title": "Élőhely Minőség (1-10)", "orient": "bottom"}
+            },
+            // INTERAKCIÓ: Átlátszóság változik hover-re
+            "opacity": {
+                "condition": {"param": "hover", "value": 1},
+                "value": 0.5 // Alapból halványabb
+            },
+            // TOOLTIP (Javítva a CSV mezőnevekhez)
+            "tooltip": [
+                {"field": "Orszag", "title": "Ország"},
+                {"field": "Regio", "title": "Régió"},
+                {"field": "Populacio_Becsles", "title": "Egyedszám"},
+                {"field": "Vedett_Terulet_Arany", "title": "Védett Terület (%)"},
+                {"field": "Elohely_Minoseg_Pontszam", "title": "Minőség Pontszám"}
+            ]
+        },
+        // Ez kell a hover effekthez
+        "params": [{
+            "name": "hover",
+            "select": {"type": "point", "on": "mouseover"}
+        }]
+    };
+
+    // --- SPEC 2: GPS (Generált adatokkal) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,
-        
-        // ITT A LÉNYEG: Most már a fájlt olvassa be!
-        "data": { "url": "gpsdata.csv" },
-        
+        "data": { "values": gpsData },
         "mark": {"type": "circle", "size": 60, "opacity": 0.6},
         "encoding": {
             "x": {"field": "Longitude", "type": "quantitative", "title": "Hosszúság", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
             "y": {"field": "Latitude", "type": "quantitative", "title": "Szélesség", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
-            "color": {"field": "Leopard_ID", "type": "nominal", "title": "Párduc", "scale": {"scheme": "category10"}},
+            "color": {"field": "Leopard_ID", "type": "nominal", "title": "Párduc", "scale": {"scheme": "set2"}}, // Jobb színek sötét háttérhez
             "tooltip": [{"field": "Leopard_ID"}, {"field": "Honap"}]
         },
         "selection": { "grid": { "type": "interval", "bind": "scales" } }
     };
 
-    // SPEC 3: GAZDASÁG
+    // --- SPEC 3: GAZDASÁG (DUAL AXIS) ---
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,
         "data": { "url": "leopard_economy.csv" },
-        "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff"} } },
+        "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff", "grid": false} } },
         "layer": [
             {
                 "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true},
-                "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} } }
+                "encoding": { 
+                    "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} },
+                    "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD", "title": "Bevétel ($)"}]
+                }
             },
             {
                 "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true},
-                "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} } }
+                "encoding": { 
+                    "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} },
+                    "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat (db)"}]
+                }
             }
         ],
         "resolve": {"scale": {"y": "independent"}}

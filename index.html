@@ -2,29 +2,31 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<title>The Ghost of the Mountains: Hópárduc BI Elemzés</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghost of the Mountains: Hópárduc BI Elemzés</title>
 <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
-/* ALAP BEÁLLÍTÁSOK - JEGES TÉMA */
+/* --- ALAP STÍLUSOK --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #0b1026; /* Mélykék éjszakai égbolt */
-    color: #e6f4f1; /* Jeges fehér szöveg */
+    background-color: #0b1026;
+    color: #e6f4f1;
     overflow-x: hidden;
 }
 
-/* HÁTTÉR EFFEKT - HÓESÉS */
+/* --- HÁTTÉR EFFEKT (HÓESÉS) --- */
 .snow-bg {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: radial-gradient(circle at bottom, #1b2949 0%, #0b1026 100%);
     z-index: -1;
+    pointer-events: none;
 }
 
 .snowflake {
@@ -39,7 +41,7 @@ body {
     to { transform: translateY(105vh); }
 }
 
-/* HERO SECTION - HÓPÁRDUC HÁTTÉRREL */
+/* --- HERO SECTION (HÓPÁRDUC FOTÓVAL) --- */
 .hero {
     height: 100vh;
     display: flex;
@@ -49,26 +51,39 @@ body {
     text-align: center;
     padding: 20px;
     position: relative;
-    
-    /* ITT A VÁLTOZÁS: */
-    /* 1. réteg: Sötét átmenet, hogy a szöveg olvasható legyen */
-    /* 2. réteg: Maga a hópárduc fotó (Unsplash-ről) */
-    background: linear-gradient(rgba(11, 16, 38, 0.5), rgba(11, 16, 38, 0.9)),
+    /* Itt a kép és a sötétítés: */
+    background: linear-gradient(rgba(11, 16, 38, 0.4), rgba(11, 16, 38, 0.95)),
                 url('https://images.unsplash.com/photo-1564731071754-001b5e1966f3?q=80&w=1920&auto=format&fit=crop');
-    
-    background-size: cover;      /* Kitölti az egészet */
-    background-position: center; /* Középre igazítja */
-    background-attachment: fixed; /* PARALLAX EFFEKT: A kép áll, miközben görgetsz! */
-    box-shadow: inset 0 -100px 100px #0b1026; /* Finom átmenet az alján a sötétbe */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Parallax effekt */
+    box-shadow: inset 0 -150px 150px #0b1026;
 }
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-    40% {transform: translateY(-10px);}
-    60% {transform: translateY(-5px);}
+.hero h1 {
+    font-size: 4em;
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: #fff;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
-/* CONTAINER ÉS KÁRTYÁK */
+.hero p {
+    font-size: 1.3em;
+    max-width: 800px;
+    color: #dbecef;
+    font-weight: 400;
+    line-height: 1.6;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    background: rgba(11, 16, 38, 0.6);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+}
+
+/* --- TARTALOM KONTÉNER --- */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -76,26 +91,26 @@ body {
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.05); /* Üveg hatás */
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(174, 217, 224, 0.2);
+    border: 1px solid rgba(174, 217, 224, 0.1);
     border-radius: 20px;
     padding: 40px;
-    margin-bottom: 60px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    margin-bottom: 80px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
     transition: transform 0.3s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    border-color: rgba(174, 217, 224, 0.5);
+    border-color: rgba(174, 217, 224, 0.3);
 }
 
 .section-title {
     font-size: 2em;
     margin-bottom: 15px;
     color: #fff;
-    border-left: 4px solid #00d2ff; /* Kiemelő szín */
+    border-left: 5px solid #00d2ff;
     padding-left: 20px;
 }
 
@@ -103,47 +118,65 @@ body {
     color: #b0c4de;
     margin-bottom: 30px;
     line-height: 1.7;
-    font-size: 1.05em;
+    font-size: 1.1em;
 }
 
-/* DIAGRAM TÁROLÓK */
+/* --- DIAGRAMOK MEGJELENÉSE --- */
 .viz-container {
     width: 100%;
     display: flex;
     justify-content: center;
+    /* Fontos: ha a diagram szélesebb, ne lógjon ki */
+    overflow-x: auto; 
 }
 
-/* ELEGÁNS DROPDOWN STÍLUS (National Geo stílus) */
+/* --- DROPDOWN (LEGÖRDÜLŐ) STÍLUS --- */
 .vega-bindings {
-    margin-top: 15px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
+    background: rgba(0,0,0,0.3);
+    padding: 10px;
+    border-radius: 10px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 .vega-bind-name {
     color: #aed9e0;
-    font-weight: 600;
-    margin-right: 10px;
+    font-weight: 700;
+    margin-right: 15px;
     text-transform: uppercase;
-    font-size: 0.85em;
-    letter-spacing: 1px;
+    font-size: 0.9em;
+    align-self: center;
 }
+
 .vega-bind select {
     background: #0b1026;
     color: #fff;
     border: 1px solid #00d2ff;
     padding: 8px 15px;
-    border-radius: 4px;
+    border-radius: 5px;
     font-family: 'Montserrat', sans-serif;
     outline: none;
     cursor: pointer;
 }
 
-/* LÁBLÉC */
+/* --- LÁBLÉC --- */
 footer {
     text-align: center;
     padding: 50px;
     color: #5d6d7e;
     font-size: 0.9em;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Mobil nézet javítás */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.5em; }
+    .hero p { font-size: 1em; }
+    .card { padding: 20px; }
 }
 </style>
 </head>
@@ -158,17 +191,12 @@ footer {
         Az alábbi adatvizualizáció feltárja a populációk állapotát, az ökológiai összefüggéseket 
         és a fajmegőrzés gazdasági hatásait a 21. században.
     </p>
-    <div class="scroll-indicator">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
-            <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
-        </svg>
-    </div>
 </div>
 
 <div class="container">
 
     <div class="card">
-        <h2 class="section-title"> Élőhely és Védettség Elemzése</h2>
+        <h2 class="section-title">🗺️ Élőhely és Védettség Elemzése</h2>
         <p class="section-desc">
             Hol élnek a hópárducok, és mennyire védettek ezek a területek? 
             Az alábbi diagram nemcsak a becsült egyedszámot mutatja régiónként, hanem színkóddal jelzi az élőhely minőségét is. 
@@ -178,18 +206,17 @@ footer {
     </div>
 
     <div class="card">
-        <h2 class="section-title"> A Zsákmányállatok Szerepe</h2>
+        <h2 class="section-title">⚖️ A Zsákmányállatok Szerepe</h2>
         <p class="section-desc">
             Van-e statisztikai összefüggés a zsákmányállatok (kék juh, kőszáli kecske) sűrűsége és a hópárducok száma között?
             <strong>Ez a Scatter Plot (Pontdiagram) választ ad:</strong> Minden pont egy megfigyelt területet jelöl. 
             Az emelkedő trendvonal egyértelmű pozitív korrelációt mutat: több zsákmány = több ragadozó.
-            <em>Vidd az egeret a pontokra a részletekért!</em>
         </p>
         <div id="viz2" class="viz-container"></div>
     </div>
 
     <div class="card">
-        <h2 class="section-title"> Konfliktus vs. Megőrzés </h2>
+        <h2 class="section-title">💰 Konfliktus vs. Megőrzés (Trendek)</h2>
         <p class="section-desc">
             Hogyan változott az orvvadászat és a turizmus kapcsolata? 
             Az interaktív vonaldiagramon látható, hogy ahogy nő a "Turizmus Bevétel" (zöld vonal), 
@@ -203,11 +230,11 @@ footer {
 
 <footer>
     <p>Adatok forrása: Snow Leopard Trust, IUCN Red List, GSLEP Program Estimates</p>
-    <p>Business Intelligence Projekt - 2026</p>
+    <p>BI Projekt 2024 - Természetvédelmi Elemzés</p>
 </footer>
 
 <script>
-    // JS a hóeséshez
+    // --- HÓESÉS EFFEKT JS ---
     const snowContainer = document.getElementById('snow-container');
     for(let i=0; i<50; i++){
         let flake = document.createElement('div');
@@ -219,14 +246,14 @@ footer {
         snowContainer.appendChild(flake);
     }
 
-    // VEGA-LITE KONFIGURÁCIÓ
+    // --- VEGA-LITE KONFIGURÁCIÓ ---
     const commonConfig = {
         actions: false,
         background: "transparent",
-        theme: "dark" // Sötét téma a diagramoknak is
+        theme: "dark"
     };
 
-    // 1. SPEC: Populáció + Élőhely Minőség (Oszlopdiagram Heatmap színezéssel)
+    // 1. SPEC: Populáció
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container",
@@ -239,7 +266,7 @@ footer {
                 "type": "nominal", 
                 "sort": "-y", 
                 "title": null,
-                "axis": {"labelAngle": -45, "labelColor": "#aed9e0"}
+                "axis": {"labelAngle": -45, "labelColor": "#aed9e0", "labelLimit": 200}
             },
             "y": {
                 "field": "Populacio_Becsles", 
@@ -250,8 +277,8 @@ footer {
             "color": {
                 "field": "Elohely_Minoseg_Pontszam", 
                 "type": "quantitative", 
-                "title": "Élőhely Minőség (1-10)",
-                "scale": {"scheme": "tealblues"} // Kékes színskála
+                "title": "Minőség (1-10)",
+                "scale": {"scheme": "tealblues"}
             },
             "tooltip": [
                 {"field": "Orszag", "title": "Ország"},
@@ -262,7 +289,7 @@ footer {
         }
     };
 
-    // 2. SPEC: Zsákmány vs Ragadozó (Scatter Plot)
+    // 2. SPEC: Scatter Plot
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container",
@@ -291,7 +318,6 @@ footer {
                 "scale": {"range": ["#ff6b6b", "#feca57", "#48dbfb", "#1dd1a1"]}
             },
             "size": {
-                 // Interakció: Nagyobb pötty, ha ráviszed az egeret
                 "condition": {"param": "hover", "value": 300},
                 "value": 150
             },
@@ -304,19 +330,17 @@ footer {
         "params": [{"name": "hover", "select": {"type": "point", "on": "mouseover"}}]
     };
 
-    // 3. SPEC: Gazdaság és Konfliktus (Multi-Line Chart)
-    // 3. SPEC: Gazdaság és Konfliktus (JAVÍTOTT - FOLD MÓDSZERREL)
+    // 3. SPEC: Gazdaság (A JAVÍTOTT FOLD VERZIÓ)
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container",
         "height": 400,
         "data": { "url": "leopard_economy.csv" },
         
-        // PARAMÉTER (A legördülő menü)
         "params": [
             {
                 "name": "Kivalasztott_Adat",
-                "value": "Orvvadaszat_Esetek", // Alapértelmezett érték
+                "value": "Orvvadaszat_Esetek",
                 "bind": {
                     "input": "select",
                     "options": [
@@ -336,9 +360,7 @@ footer {
             }
         ],
 
-        // TRANSZFORMÁCIÓ (Itt van a javítás lényege!)
         "transform": [
-            // 1. "Fold": A széles táblázatot hosszúvá alakítjuk
             {
                 "fold": [
                     "Orvvadaszat_Esetek", 
@@ -348,18 +370,16 @@ footer {
                 ],
                 "as": ["Mutato_Tipus", "Ertek"]
             },
-            // 2. Szűrés: Csak azt tartjuk meg, amit a menüben kiválasztottál
             {
                 "filter": "datum.Mutato_Tipus == Kivalasztott_Adat"
             }
         ],
 
-        // MEGJELENÍTÉS
         "mark": {
             "type": "line", 
             "point": true, 
             "strokeWidth": 4,
-            "interpolate": "monotone" // Szép íves vonalak
+            "interpolate": "monotone"
         },
         "encoding": {
             "x": {
@@ -371,12 +391,10 @@ footer {
             "y": {
                 "field": "Ertek", 
                 "type": "quantitative",
-                "title": null, // Nem kell cím, mert a menüben úgyis ott van
+                "title": null,
                 "axis": {"gridColor": "#334", "labelColor": "#fff"}
             },
-            "color": {
-                "value": "#00d2ff" // A szép neonkék szín
-            },
+            "color": { "value": "#00d2ff" },
             "tooltip": [
                 {"field": "Ev", "title": "Év"},
                 {"field": "Ertek", "title": "Érték"},
@@ -384,6 +402,12 @@ footer {
             ]
         }
     };
+
+    // Diagramok kirajzolása
+    vegaEmbed('#viz1', spec1, commonConfig).catch(console.error);
+    vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);
+    vegaEmbed('#viz3', spec3, commonConfig).catch(console.error);
+
 </script>
 </body>
 </html>

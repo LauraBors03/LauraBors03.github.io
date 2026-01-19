@@ -20,13 +20,26 @@ body {
     overflow-x: hidden;
 }
 
-/* --- HÁTTÉR EFFEKT --- */
+/* --- HÁTTÉR EFFEKT (HÓESÉS) - JAVÍTVA! --- */
 .snow-bg {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at bottom, #1b2949 0%, #0b1026 100%);
-    z-index: -1;
+    /* ITT A VÁLTOZÁS: Nincs háttérszín, csak a részecskék */
+    background: transparent; 
+    
+    /* FONTOS: Előre hozzuk a réteget (z-index: 10), 
+       de átkattinthatóvá tesszük (pointer-events: none) */
+    z-index: 10; 
     pointer-events: none;
+}
+
+/* A háttér sötétítése külön réteg lett, hogy a hó ne takarja ki a hátteret, csak a képet */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at bottom, #1b2949 0%, #0b1026 100%);
+    z-index: -2;
 }
 
 .snowflake {
@@ -36,12 +49,14 @@ body {
     border-radius: 50%;
     opacity: 0.8;
     animation: fall linear infinite;
+    /* Egy kis homályosítás, hogy térhatású legyen */
+    filter: blur(1px); 
 }
 @keyframes fall {
     to { transform: translateY(105vh); }
 }
 
-/* --- HERO SECTION (ÚJ KÉPPEL!) --- */
+/* --- HERO SECTION --- */
 .hero {
     height: 100vh;
     display: flex;
@@ -52,15 +67,16 @@ body {
     padding: 20px;
     position: relative;
     
-    /* ITT A VÁLTOZÁS: Az új kép URL-je került be */
-    /* A sötét átmenet (gradient) marad, hogy a szöveg olvasható legyen */
+    /* A SAJÁT KÉPED BETÖLTÉSE */
     background: linear-gradient(rgba(11, 16, 38, 0.3), rgba(11, 16, 38, 0.8)),
-                url('https://images.unsplash.com/photo-1555666836-163414990930?q=80&w=1920&auto=format&fit=crop');
+                url('snowleo.jpg'); 
     
     background-size: cover;
-    background-position: center 40%; /* Kicsit igazítottam, hogy a párduc jól látsszon */
+    background-position: center;
     background-attachment: fixed;
     box-shadow: inset 0 -150px 150px #0b1026;
+    /* Ez biztosítja, hogy a hero tartalom a hó alatt, de a háttér felett legyen */
+    z-index: 1; 
 }
 
 .hero h1 {
@@ -71,6 +87,8 @@ body {
     text-shadow: 0 5px 20px rgba(0,0,0,0.9);
     margin-bottom: 20px;
     text-transform: uppercase;
+    position: relative;
+    z-index: 20; /* A szöveg legyen a hó felett is, hogy olvasható maradjon */
 }
 
 .hero p {
@@ -85,6 +103,8 @@ body {
     border-radius: 15px;
     backdrop-filter: blur(3px);
     border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    z-index: 20;
 }
 
 /* --- TARTALOM --- */
@@ -92,6 +112,8 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 50px 20px;
+    position: relative;
+    z-index: 5; /* A tartalom legyen a háttér felett */
 }
 
 .card {
@@ -133,6 +155,8 @@ footer {
     color: #5d6d7e;
     font-size: 0.9em;
     border-top: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    z-index: 5;
 }
 
 @media (max-width: 768px) {
@@ -203,9 +227,10 @@ footer {
         let flake = document.createElement('div');
         flake.className = 'snowflake';
         flake.style.left = Math.random() * 100 + 'vw';
-        flake.style.width = flake.style.height = (Math.random() * 3 + 2) + 'px';
+        // Véletlenszerű méret, hogy természetesebb legyen
+        flake.style.width = flake.style.height = (Math.random() * 4 + 2) + 'px';
         flake.style.animationDuration = (Math.random() * 10 + 5) + 's';
-        flake.style.opacity = Math.random();
+        flake.style.opacity = Math.random() * 0.7 + 0.3;
         snowContainer.appendChild(flake);
     }
 
@@ -239,7 +264,7 @@ footer {
         }
     };
 
-    // 3. SPEC: DUAL AXIS (Zöld és Piros vonal egyszerre)
+    // 3. SPEC: DUAL AXIS
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,

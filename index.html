@@ -39,7 +39,7 @@ body {
     to { transform: translateY(105vh); }
 }
 
-/* HERO SECTION */
+/* HERO SECTION - HÓPÁRDUC HÁTTÉRREL */
 .hero {
     height: 100vh;
     display: flex;
@@ -49,32 +49,17 @@ body {
     text-align: center;
     padding: 20px;
     position: relative;
-}
-
-.hero h1 {
-    font-size: 4.5em;
-    font-weight: 800;
-    letter-spacing: -2px;
-    background: linear-gradient(to right, #ffffff, #aed9e0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 1.4em;
-    max-width: 800px;
-    color: #aed9e0;
-    font-weight: 300;
-    line-height: 1.6;
-}
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 40px;
-    animation: bounce 2s infinite;
-    opacity: 0.7;
+    
+    /* ITT A VÁLTOZÁS: */
+    /* 1. réteg: Sötét átmenet, hogy a szöveg olvasható legyen */
+    /* 2. réteg: Maga a hópárduc fotó (Unsplash-ről) */
+    background: linear-gradient(rgba(11, 16, 38, 0.5), rgba(11, 16, 38, 0.9)),
+                url('https://images.unsplash.com/photo-1564731071754-001b5e1966f3?q=80&w=1920&auto=format&fit=crop');
+    
+    background-size: cover;      /* Kitölti az egészet */
+    background-position: center; /* Középre igazítja */
+    background-attachment: fixed; /* PARALLAX EFFEKT: A kép áll, miközben görgetsz! */
+    box-shadow: inset 0 -100px 100px #0b1026; /* Finom átmenet az alján a sötétbe */
 }
 
 @keyframes bounce {

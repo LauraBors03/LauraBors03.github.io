@@ -22,7 +22,7 @@ body::before {
     z-index: -2; 
 }
 
-/* HÓESÉS (ELŐTÉR) */
+/* HÓESÉS */
 .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 .snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; }
 @keyframes fall { 
@@ -72,7 +72,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
    <div class="card">
         <h2 class="section-title">🗺️ Élőhelyek Térképes Elemzése</h2>
         <p class="section-desc">
-            A hópárducok eloszlása Ázsiában. A körök mérete a populációt, a szín az élőhely minőségét jelzi.
+            <strong>Interaktív Térkép:</strong> Használd az <span style="color:#00d2ff">egérgörgőt</span> a nagyításhoz, és <span style="color:#00d2ff">húzd a térképet</span> a mozgatáshoz!
         </p>
         <div id="viz1" class="viz-container"></div>
     </div>
@@ -81,7 +81,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         <div class="card">
             <h2 class="section-title">🥩 Táplálék & Konfliktus</h2>
             <p class="section-desc">
-                Mit eszik a "szellem"? A <span style="color:#ff6b6b">Háziállatok (18%)</span> aránya közvetlen konfliktusforrás a pásztorokkal.
+                Mit eszik a "szellem"? A <span style="color:#ff6b6b">Háziállatok (18%)</span> aránya közvetlen konfliktusforrás.
             </p>
             <div id="viz4" class="viz-container"></div>
         </div>
@@ -89,7 +89,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         <div class="card">
             <h2 class="section-title">🏔️ Szezonális Vándorlás</h2>
             <p class="section-desc">
-                Követik a hóhatárt: nyáron (Július-Augusztus) 4500m fölé húzódnak a hőség elől.
+                Követik a hóhatárt: nyáron (Július-Augusztus) 4500m fölé húzódnak.
             </p>
             <div id="viz5" class="viz-container"></div>
         </div>
@@ -99,7 +99,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         <h2 class="section-title">📡 Mozgáskövetés GPS alapján</h2>
         <p class="section-desc">
             <strong>1000 GPS adatpont:</strong> 5 jeladóval ellátott hópárduc mozgása a mongol Altaj-hegységben.
-            <br><em>Interakció: Nagyíthatsz és mozgathatod!</em>
         </p>
         <div id="viz2" class="viz-container"></div>
     </div>
@@ -107,7 +106,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     <div class="card">
         <h2 class="section-title">💰 Konfliktus vs. Megőrzés</h2>
         <p class="section-desc">
-            Hogyan hat a pénz? Ahogy a <span style="color:#00d2ff">Turizmus Bevétel</span> nő, úgy csökken az <span style="color:#ff6b6b">Orvvadászat</span>.
+            Ahogy a <span style="color:#00d2ff">Turizmus Bevétel</span> nő, úgy csökken az <span style="color:#ff6b6b">Orvvadászat</span>.
         </p>
         <div id="viz3" class="viz-container"></div>
     </div>
@@ -137,7 +136,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     // --- ADATGENERÁLÁS ---
     
-    // 1. GPS ADATOK
+    // GPS ADATOK
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
     const bases = {
@@ -155,68 +154,67 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         });
     }
 
-    // 2. DIET DATA (Reális becslések!)
-    // Forrás alap: Blue sheep is main prey (~50-60%)
     const dietData = [
-        {category: "Kék Juh (Bharal)", value: 55, color: "#00d2ff"},
-        {category: "Kőszáli Kecske", value: 20, color: "#2980b9"},
-        {category: "Mormota & Kisemlős", value: 7, color: "#aed9e0"},
-        {category: "Háziállat (Konfliktus)", value: 18, color: "#ff6b6b"}
+        {category: "Kék Juh (Bharal)", value: 55}, {category: "Kőszáli Kecske", value: 20},
+        {category: "Mormota & Kisemlős", value: 7}, {category: "Háziállat (Konfliktus)", value: 18}
     ];
 
-    // 3. ELEVATION DATA
     const elevationData = [
-        {honap: "Jan", magassag: 2800}, {honap: "Feb", magassag: 2900},
-        {honap: "Már", magassag: 3200}, {honap: "Ápr", magassag: 3600},
-        {honap: "Máj", magassag: 4100}, {honap: "Jún", magassag: 4500},
-        {honap: "Júl", magassag: 4600}, {honap: "Aug", magassag: 4400},
-        {honap: "Szep", magassag: 4000}, {honap: "Okt", magassag: 3500},
-        {honap: "Nov", magassag: 3000}, {honap: "Dec", magassag: 2800}
+        {honap: "Jan", magassag: 2800}, {honap: "Feb", magassag: 2900}, {honap: "Már", magassag: 3200}, {honap: "Ápr", magassag: 3600},
+        {honap: "Máj", magassag: 4100}, {honap: "Jún", magassag: 4500}, {honap: "Júl", magassag: 4600}, {honap: "Aug", magassag: 4400},
+        {honap: "Szep", magassag: 4000}, {honap: "Okt", magassag: 3500}, {honap: "Nov", magassag: 3000}, {honap: "Dec", magassag: 2800}
     ];
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: TÉRKÉP ---
-   // --- SPEC 1: INTERAKTÍV ZOOMOS TÉRKÉP ---
+    // --- SPEC 1: TÉRKÉP (EGÉR ZOOM & PAN) ---
+    // Ez a varázslat: Signals használatával kötjük a görgőt és a húzást a térképhez.
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 500,
         "background": "transparent",
         
-        // ITT A VARÁZSLAT: Paraméterek (Vezérlők) definíciója
+        // PARAMÉTEREK: Itt definiáljuk a változókat, amik az egérre reagálnak
         "params": [
             {
-                "name": "ZoomLevel",
+                "name": "zoom",
                 "value": 400,
-                "bind": { "input": "range", "min": 100, "max": 1500, "step": 10, "name": "🔍 Zoom: " }
+                // WHEEL (Görgő) esemény: szorozza a zoom értéket
+                "on": [{
+                    "events": {"type": "wheel", "consume": true},
+                    "update": "clamp(zoom * pow(1.001, -event.deltaY), 150, 3000)"
+                }]
             },
             {
-                "name": "CenterLon",
+                "name": "clon",
                 "value": 85,
-                "bind": { "input": "range", "min": 20, "max": 140, "step": 1, "name": "↔️ Hosszúság: " }
+                // DRAG (Húzás) esemény X tengelyen: mozgatja a középpontot
+                "on": [{
+                    "events": {"type": "mousemove", "consume": true, "between": [{"type": "mousedown"}, {"type": "mouseup"}]},
+                    "update": "clon - (event.movementX / (zoom / 100))"
+                }]
             },
             {
-                "name": "CenterLat",
+                "name": "clat",
                 "value": 40,
-                "bind": { "input": "range", "min": 0, "max": 70, "step": 1, "name": "↕️ Szélesség: " }
+                 // DRAG (Húzás) esemény Y tengelyen: mozgatja a középpontot
+                "on": [{
+                    "events": {"type": "mousemove", "consume": true, "between": [{"type": "mousedown"}, {"type": "mouseup"}]},
+                    "update": "clat + (event.movementY / (zoom / 100))"
+                }]
             }
         ],
 
-        // A PROJEKCIÓ MOST MÁR A VEZÉRLŐKTŐL FÜGG
+        // PROJEKCIÓ: A fenti változókat használja
         "projection": {
             "type": "mercator",
-            "scale": { "expr": "ZoomLevel" },           // A Zoom csúszka értéke
-            "center": { "expr": "[CenterLon, CenterLat]" } // A pozíció csúszkák értékei
+            "scale": {"signal": "zoom"},
+            "center": [{"signal": "clon"}, {"signal": "clat"}]
         },
 
         "layer": [
-            // 1. RÉTEG: HÁTTÉR ORSZÁGOK
-            {
-                "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
-                "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 }
-            },
-            // 2. RÉTEG: ADATOK
+            { "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } }, "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 } },
             {
                 "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
                 "transform": [
@@ -231,7 +229,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             }
         ]
     };
-    // --- SPEC 2: GPS (SCATTER - BIZTOS VERZIÓ) ---
+
+    // --- SPEC 2: GPS (SCATTER) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "values": gpsData },
@@ -256,7 +255,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ], "resolve": {"scale": {"y": "independent"}}
     };
 
-    // --- SPEC 4: TÁPLÁLÉK (BAR CHART - SÁVOK) ---
+    // --- SPEC 4: TÁPLÁLÉK (SÁV) ---
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 300, 
@@ -270,7 +269,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         }
     };
 
-    // --- SPEC 5: MAGASSÁG (AREA) ---
+    // --- SPEC 5: MAGASSÁG (TERÜLET) ---
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 300, "data": { "values": elevationData },

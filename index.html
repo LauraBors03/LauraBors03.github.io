@@ -11,18 +11,18 @@
 <link rel="icon" type="image/png" href="mammal.png">
 
 <style>
-/* --- DESIGN --- */
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Montserrat', sans-serif; background-color: #0b1026; color: #e6f4f1; overflow-x: hidden; }
 
-/* HÁTTÉR */
+
 body::before { 
     content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: radial-gradient(circle at 50% 100%, #1b2949 0%, #050814 100%); 
     z-index: -2; 
 }
 
-/* HÓESÉS */
+
 .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 .snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; }
 @keyframes fall { 
@@ -31,12 +31,12 @@ body::before {
     100% { transform: translateY(110vh) translateX(20px); opacity: 0.3; } 
 }
 
-/* HERO */
+
 .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; background: linear-gradient(rgba(11, 16, 38, 0.5), rgba(11, 16, 38, 0.9)), url('snowleo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; box-shadow: inset 0 -150px 150px #0b1026; z-index: 2; }
 .hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); margin-bottom: 20px; text-transform: uppercase; }
 .hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 
-/* KONTÉNER */
+
 .container { max-width: 1000px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
 .card { background: rgba(20, 30, 60, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(0, 210, 255, 0.1); border-radius: 20px; padding: 40px; margin-bottom: 80px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: transform 0.3s; }
 .card:hover { border-color: rgba(0, 210, 255, 0.3); box-shadow: 0 0 30px rgba(0, 210, 255, 0.1); }
@@ -119,7 +119,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
 <script>
     const fxContainer = document.getElementById('fx-container');
-    // HÓESÉS
+    
     for(let i=0; i<200; i++){
         let flake = document.createElement('div');
         flake.className = 'snowflake';
@@ -132,7 +132,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         fxContainer.appendChild(flake);
     }
 
-    // --- ADATGENERÁLÁS (JAVÍTVA: SZÉLES KITERJEDÉS) ---
+   
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
     const bases = {
@@ -145,7 +145,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     for(let i=0; i<1000; i++) {
         const leo = leopards[Math.floor(Math.random() * leopards.length)];
         const base = bases[leo];
-        // ITT A TITOK: Nagy számokkal (3.0) szorzom a véletlent, hogy szétszóródjanak!
+       
         gpsData.push({
             Latitude: base.lat + (Math.random() - 0.5) * 3.0,
             Longitude: base.lon + (Math.random() - 0.5) * 3.0,
@@ -166,7 +166,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: TÉRKÉP ---
+   
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 500, "background": "transparent",
@@ -193,7 +193,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ]
     };
 
-    // --- SPEC 2: GPS PÖTTYÖK (VÉGLEGES, JAVÍTOTT!) ---
+    
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -216,11 +216,11 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             "color": { "field": "Leopard_ID", "type": "nominal", "scale": {"scheme": "set2"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff", "title": "Párduc"} },
             "tooltip": [{"field": "Leopard_ID", "title": "Név"}]
         },
-        // Itt is engedélyezzük a zoomot, ha esetleg interaktívvá akarod tenni
+        
         "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
     };
 
-    // --- SPEC 3: GAZDASÁG ---
+   
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "url": "leopard_economy.csv" },
@@ -231,7 +231,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ], "resolve": {"scale": {"y": "independent"}}
     };
 
-    // --- SPEC 4: TÁPLÁLÉK ---
+   
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, 
@@ -245,16 +245,15 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         }
     };
 
-    // --- SPEC 5: HEGY (VONALDIAGRAM!) ---
-    // Itt a csere: "type": "line". Sokkal tisztább, elegánsabb, mint a terület.
+    
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "values": elevationData },
         "mark": { 
-            "type": "line", // Vonal
-            "point": { "filled": true, "size": 80 }, // Pöttyökkel a hónapoknál
-            "interpolate": "monotone", // Szép íves legyen a vonal
-            "strokeWidth": 4 // Vastag vonal
+            "type": "line", 
+            "point": { "filled": true, "size": 80 }, 
+            "interpolate": "monotone", 
+            "strokeWidth": 4 
         },
         "encoding": {
             "x": { "field": "honap", "type": "ordinal", "sort": null, "title": null, "axis": {"labelColor": "#fff", "grid": false} },
@@ -265,7 +264,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
                 "scale": {"domain": [2500, 5000], "zero": false}, 
                 "axis": {"gridColor": "#334", "labelColor": "#fff"} 
             },
-            "color": { "value": "#00d2ff" }, // Szép kék szín
+            "color": { "value": "#00d2ff" }, 
             "tooltip": [ {"field": "honap", "title": "Hónap"}, {"field": "magassag", "title": "Magasság"} ]
         }
     };

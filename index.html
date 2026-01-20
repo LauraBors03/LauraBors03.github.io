@@ -154,11 +154,13 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         });
     }
 
+    // DIET DATA
     const dietData = [
         {category: "Kék Juh (Bharal)", value: 55}, {category: "Kőszáli Kecske", value: 20},
         {category: "Mormota & Kisemlős", value: 7}, {category: "Háziállat (Konfliktus)", value: 18}
     ];
 
+    // ELEVATION DATA
     const elevationData = [
         {honap: "Jan", magassag: 2800}, {honap: "Feb", magassag: 2900}, {honap: "Már", magassag: 3200}, {honap: "Ápr", magassag: 3600},
         {honap: "Máj", magassag: 4100}, {honap: "Jún", magassag: 4500}, {honap: "Júl", magassag: 4600}, {honap: "Aug", magassag: 4400},
@@ -167,20 +169,18 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: TÉRKÉP (EGÉR ZOOM & PAN) ---
-    // Ez a varázslat: Signals használatával kötjük a görgőt és a húzást a térképhez.
+    // --- SPEC 1: TÉRKÉP (JAVÍTOTT KONTRASZTTAL) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 500,
         "background": "transparent",
         
-        // PARAMÉTEREK: Itt definiáljuk a változókat, amik az egérre reagálnak
+        // INTERAKCIÓ: ZOOM ÉS PAN (EGÉRREL)
         "params": [
             {
                 "name": "zoom",
                 "value": 400,
-                // WHEEL (Görgő) esemény: szorozza a zoom értéket
                 "on": [{
                     "events": {"type": "wheel", "consume": true},
                     "update": "clamp(zoom * pow(1.001, -event.deltaY), 150, 3000)"
@@ -189,7 +189,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             {
                 "name": "clon",
                 "value": 85,
-                // DRAG (Húzás) esemény X tengelyen: mozgatja a középpontot
                 "on": [{
                     "events": {"type": "mousemove", "consume": true, "between": [{"type": "mousedown"}, {"type": "mouseup"}]},
                     "update": "clon - (event.movementX / (zoom / 100))"
@@ -198,7 +197,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             {
                 "name": "clat",
                 "value": 40,
-                 // DRAG (Húzás) esemény Y tengelyen: mozgatja a középpontot
                 "on": [{
                     "events": {"type": "mousemove", "consume": true, "between": [{"type": "mousedown"}, {"type": "mouseup"}]},
                     "update": "clat + (event.movementY / (zoom / 100))"
@@ -206,7 +204,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             }
         ],
 
-        // PROJEKCIÓ: A fenti változókat használja
         "projection": {
             "type": "mercator",
             "scale": {"signal": "zoom"},
@@ -214,7 +211,17 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         },
 
         "layer": [
-            { "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } }, "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 } },
+            // HÁTTÉR ORSZÁGOK - VILÁGOSABB, HOGY LÁTSZÓDJON!
+            { 
+                "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } }, 
+                "mark": { 
+                    "type": "geoshape", 
+                    "fill": "#233456",   // Kicsit világosabb kék, hogy elüssön a háttértől
+                    "stroke": "#4a6fa5", // Világosabb határvonalak
+                    "strokeWidth": 1 
+                } 
+            },
+            // ADATOK
             {
                 "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
                 "transform": [
@@ -230,7 +237,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ]
     };
 
-    // --- SPEC 2: GPS (SCATTER) ---
+    // --- SPEC 2: GPS ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "values": gpsData },
@@ -255,7 +262,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ], "resolve": {"scale": {"y": "independent"}}
     };
 
-    // --- SPEC 4: TÁPLÁLÉK (SÁV) ---
+    // --- SPEC 4: TÁPLÁLÉK ---
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 300, 
@@ -269,14 +276,30 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         }
     };
 
-    // --- SPEC 5: MAGASSÁG (TERÜLET) ---
+    // --- SPEC 5: MAGASSÁG (HEGY JAVÍTÁS!) ---
+    // Itt volt a hiba: a skála 0-tól indult, ezért lett "tégla".
+    // Most beállítjuk, hogy 2000-től induljon.
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 300, "data": { "values": elevationData },
-        "mark": { "type": "area", "line": { "color": "#00d2ff" }, "color": { "x1": 1, "y1": 1, "x2": 1, "y2": 0, "gradient": "linear", "stops": [ {"offset": 0, "color": "rgba(0, 210, 255, 0.5)"}, {"offset": 1, "color": "rgba(0, 210, 255, 0)"} ] } },
+        "mark": { 
+            "type": "area", 
+            "line": { "color": "#00d2ff" }, 
+            "color": { 
+                "x1": 1, "y1": 1, "x2": 1, "y2": 0, 
+                "gradient": "linear", 
+                "stops": [ {"offset": 0, "color": "rgba(0, 210, 255, 0.6)"}, {"offset": 1, "color": "rgba(0, 210, 255, 0.1)"} ] 
+            } 
+        },
         "encoding": {
             "x": { "field": "honap", "type": "ordinal", "sort": null, "title": null, "axis": {"labelColor": "#fff", "grid": false} },
-            "y": { "field": "magassag", "type": "quantitative", "title": "Magasság (m)", "scale": {"domain": [2000, 5000]}, "axis": {"gridColor": "#334", "labelColor": "#fff"} },
+            "y": { 
+                "field": "magassag", 
+                "type": "quantitative", 
+                "title": "Magasság (m)", 
+                "scale": {"domain": [2000, 5000], "zero": false}, // <--- EZ A JAVÍTÁS KULCSA!
+                "axis": {"gridColor": "#334", "labelColor": "#fff"} 
+            },
             "tooltip": [ {"field": "honap", "title": "Hónap"}, {"field": "magassag", "title": "Magasság"} ]
         }
     };

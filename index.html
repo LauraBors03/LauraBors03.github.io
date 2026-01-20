@@ -36,7 +36,7 @@ body::before {
 .hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); margin-bottom: 20px; text-transform: uppercase; }
 .hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 
-/* KONTÉNER & KÁRTYÁK */
+/* KONTÉNER */
 .container { max-width: 1000px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
 .card { background: rgba(20, 30, 60, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(0, 210, 255, 0.1); border-radius: 20px; padding: 40px; margin-bottom: 80px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: transform 0.3s; }
 .card:hover { border-color: rgba(0, 210, 255, 0.3); box-shadow: 0 0 30px rgba(0, 210, 255, 0.1); }
@@ -48,8 +48,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #0b1026; }
 ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 4px; }
-
-/* Mobilon kisebb betűk */
 @media (max-width: 768px) { .hero h1 { font-size: 2.5em; } }
 </style>
 </head>
@@ -131,7 +129,9 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         fxContainer.appendChild(flake);
     }
 
-    // --- ADATGENERÁLÁS ---
+    // --- ADATGENERÁLÁS (ELŐRE HOZVA!) ---
+    
+    // GPS ADATOK - Kicsit nagyobb szórással, hogy kitöltse a képet
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
     const bases = {
@@ -142,10 +142,9 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     for(let i=0; i<1000; i++) {
         const leo = leopards[Math.floor(Math.random() * leopards.length)];
         const base = bases[leo];
-        // Kicsit nagyobb szórás, hogy jobban mutasson
         gpsData.push({
-            Latitude: base.lat + (Math.random() - 0.5) * 0.6,
-            Longitude: base.lon + (Math.random() - 0.5) * 0.6,
+            Latitude: base.lat + (Math.random() - 0.5) * 1.5,  // JAVÍTÁS: Nagyobb szórás (0.6 helyett 1.5)
+            Longitude: base.lon + (Math.random() - 0.5) * 1.5, // JAVÍTÁS: Nagyobb szórás
             Leopard_ID: leo
         });
     }
@@ -163,7 +162,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: TÉRKÉP (EGÉR ZOOM & PAN) ---
+    // --- SPEC 1: TÉRKÉP ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 500, "background": "transparent",
@@ -190,28 +189,28 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ]
     };
 
-    // --- SPEC 2: GPS (JAVÍTOTT SKÁLA!) ---
+    // --- SPEC 2: GPS PÖTTYÖK (JAVÍTOTT!) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400, "data": { "values": gpsData },
-        "mark": { "type": "circle", "size": 60, "opacity": 0.6 },
+        "width": "container", "height": 400, 
+        "data": { "values": gpsData },
+        "mark": { "type": "circle", "size": 80, "opacity": 0.7 }, // Kicsit nagyobb, láthatóbb pöttyök
         "encoding": {
             "x": { 
                 "field": "Longitude", 
                 "type": "quantitative", 
-                "scale": {"zero": false}, // <--- FONTOS! Ne 0-tól induljon
+                "scale": {"zero": false, "padding": 10}, // FONTOS: Ne 0-tól induljon, hanem fókuszáljon az adatra!
                 "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Hosszúság"} 
             },
             "y": { 
                 "field": "Latitude", 
                 "type": "quantitative", 
-                "scale": {"zero": false}, // <--- FONTOS! Ne 0-tól induljon
+                "scale": {"zero": false, "padding": 10}, // FONTOS: Ne 0-tól induljon!
                 "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Szélesség"} 
             },
             "color": { "field": "Leopard_ID", "type": "nominal", "scale": {"scheme": "set2"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff", "title": "Párduc"} },
             "tooltip": [{"field": "Leopard_ID", "title": "Név"}]
-        },
-        "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
+        }
     };
 
     // --- SPEC 3: GAZDASÁG ---
@@ -225,7 +224,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ], "resolve": {"scale": {"y": "independent"}}
     };
 
-    // --- SPEC 4: TÁPLÁLÉK (SÁV) ---
+    // --- SPEC 4: TÁPLÁLÉK ---
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, 
@@ -239,7 +238,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         }
     };
 
-    // --- SPEC 5: MAGASSÁG (JAVÍTOTT SKÁLA!) ---
+    // --- SPEC 5: HEGY (JAVÍTOTT SKÁLA!) ---
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "values": elevationData },
@@ -258,7 +257,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
                 "field": "magassag", 
                 "type": "quantitative", 
                 "title": "Magasság (m)", 
-                "scale": {"domain": [2000, 5000], "zero": false}, // <--- FONTOS!
+                "scale": {"domain": [2700, 5000], "zero": false}, // JAVÍTÁS: 2700-tól indul, így eltűnik a "tégla" alap!
                 "axis": {"gridColor": "#334", "labelColor": "#fff"} 
             },
             "tooltip": [ {"field": "honap", "title": "Hónap"}, {"field": "magassag", "title": "Magasság"} ]

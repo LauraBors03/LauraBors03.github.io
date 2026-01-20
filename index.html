@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hópárduc Projekt</title>
+<title>Hópárduc Projekt - Timeline</title>
 <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
@@ -36,18 +36,17 @@ body::before {
 .hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); margin-bottom: 20px; text-transform: uppercase; }
 .hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 
-/* KONTÉNER ÉS KÁRTYÁK (JAVÍTVA: Nincs többé csúnya szürke doboz!) */
-.container { max-width: 1000px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
+/* KONTÉNER ÉS KÁRTYÁK */
+.container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
 
 .card { 
-    /* Ez a rész változott: */
-    background: rgba(11, 16, 38, 0.3); /* Nagyon halvány sötétkék, szinte átlátszó */
-    backdrop-filter: blur(10px);       /* Homályosítás a háttér előtt (Jég-effekt) */
+    background: rgba(11, 16, 38, 0.3);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 210, 255, 0.15); 
     border-radius: 20px; 
     padding: 40px; 
     margin-bottom: 80px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Lágyabb árnyék */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     transition: transform 0.3s; 
 }
 
@@ -78,6 +77,22 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 </div>
 
 <div class="container">
+
+    <!-- ÚJ: TIMELINE DIAGRAM -->
+    <div class="card">
+        <h2 class="section-title">⏳ A Hópárduc Évszázada - Populáció Összeomlás</h2>
+        <p class="section-desc">
+            Ez a drámai diagram megmutatja, hogyan zuhant a hópárduc populáció az elmúlt 125 évben.
+            Az 1900-as <strong>~100,000 egyedről</strong> mára mindössze <strong>~4,000-re</strong> csökkent a száma.
+            A <span style="color:#ff4444;">piros zónák</span> jelzik a kritikus veszélyeztetettségi időszakokat,
+            míg a <span style="color:#ffaa00;">sárga</span> a mai "sebezhető" státuszt.
+            <br><br>
+            <em style="font-size: 0.9em; opacity: 0.8; color: #00d2ff;">
+                🎯 Kulcs események: Vidd az egeret a vonalra és a pontokra!
+            </em>
+        </p>
+        <div id="vizTimeline" class="viz-container"></div>
+    </div>
 
    <div class="card">
         <h2 class="section-title">🗺️ Élőhelyek Térképes Feltárása</h2>
@@ -148,6 +163,32 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     // --- ADATOK ---
     
+    // ÚJ: TIMELINE ADATOK (1900-2025)
+    const timelineData = [
+        {ev: 1900, populacio: 100000, statusz: "Unknown", esemeny: null},
+        {ev: 1920, populacio: 85000, statusz: "Unknown", esemeny: null},
+        {ev: 1940, populacio: 70000, statusz: "Unknown", esemeny: null},
+        {ev: 1960, populacio: 50000, statusz: "Unknown", esemeny: null},
+        {ev: 1972, populacio: 35000, statusz: "Endangered", esemeny: "IUCN: Veszélyeztetett státusz"},
+        {ev: 1975, populacio: 28000, statusz: "Endangered", esemeny: "Prémvadászat csúcsa"},
+        {ev: 1980, populacio: 22000, statusz: "Endangered", esemeny: null},
+        {ev: 1990, populacio: 15000, statusz: "Endangered", esemeny: null},
+        {ev: 2000, populacio: 8000, statusz: "Endangered", esemeny: null},
+        {ev: 2003, populacio: 6500, statusz: "Endangered", esemeny: "Snow Leopard Trust megerősödése"},
+        {ev: 2010, populacio: 5500, statusz: "Endangered", esemeny: null},
+        {ev: 2013, populacio: 5000, statusz: "Endangered", esemeny: "Globális védőprogram indítása"},
+        {ev: 2017, populacio: 4500, statusz: "Vulnerable", esemeny: "Státusz: Sebezhető (javulás!)"},
+        {ev: 2020, populacio: 4200, statusz: "Vulnerable", esemeny: null},
+        {ev: 2025, populacio: 4000, statusz: "Vulnerable", esemeny: "Klímaváltozás új veszély"}
+    ];
+
+    // HÁTTÉR ZÓNÁK STÁTUSZHOZ
+    const statusZones = [
+        {start: 1900, end: 1972, statusz: "Unknown", color: "#334455"},
+        {start: 1972, end: 2017, statusz: "Endangered", color: "#cc2222"},
+        {start: 2017, end: 2025, statusz: "Vulnerable", color: "#ffaa00"}
+    ];
+    
     // TÁPLÁLÉK ADATOK
     const dietData = [
         {category: "Kék Juh (Bharal)", value: 55}, {category: "Kőszáli Kecske", value: 20},
@@ -161,7 +202,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         {honap: "Szep", magassag: 4000}, {honap: "Okt", magassag: 3500}, {honap: "Nov", magassag: 3000}, {honap: "Dec", magassag: 2800}
     ];
 
-    // VESZÉLY MÁTRIX ADATOK (GPS HELYETT)
+    // VESZÉLY MÁTRIX ADATOK
     const riskData = [
         {orszag: "Mongólia", veszely: "Túllegeltetés", sulyossag: 5},
         {orszag: "Mongólia", veszely: "Bányászat", sulyossag: 3},
@@ -185,6 +226,120 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     ];
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
+
+    // --- ÚJ: TIMELINE VIZUALIZÁCIÓ ---
+    const specTimeline = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container",
+        "height": 500,
+        "background": "transparent",
+        "data": {"values": timelineData},
+        "layer": [
+            // HÁTTÉR SZÍNES ZÓNÁK (Státusz szerint)
+            {
+                "data": {"values": statusZones},
+                "mark": {"type": "rect", "opacity": 0.15},
+                "encoding": {
+                    "x": {"field": "start", "type": "quantitative"},
+                    "x2": {"field": "end"},
+                    "color": {
+                        "field": "statusz",
+                        "type": "nominal",
+                        "scale": {
+                            "domain": ["Unknown", "Endangered", "Vulnerable"],
+                            "range": ["#334455", "#cc2222", "#ffaa00"]
+                        },
+                        "legend": {
+                            "title": "IUCN Státusz",
+                            "titleColor": "#fff",
+                            "labelColor": "#fff",
+                            "orient": "top-right"
+                        }
+                    }
+                }
+            },
+            // FŐ VONAL (Area chart a drámaiságért)
+            {
+                "mark": {
+                    "type": "area",
+                    "line": {"color": "#00d2ff", "strokeWidth": 3},
+                    "color": {
+                        "gradient": "linear",
+                        "stops": [
+                            {"offset": 0, "color": "#00d2ff"},
+                            {"offset": 1, "color": "rgba(0, 210, 255, 0.1)"}
+                        ]
+                    },
+                    "interpolate": "monotone"
+                },
+                "encoding": {
+                    "x": {
+                        "field": "ev",
+                        "type": "quantitative",
+                        "title": "Év",
+                        "axis": {
+                            "labelColor": "#fff",
+                            "titleColor": "#aed9e0",
+                            "gridColor": "#334",
+                            "tickCount": 10
+                        }
+                    },
+                    "y": {
+                        "field": "populacio",
+                        "type": "quantitative",
+                        "title": "Becsült Populáció",
+                        "axis": {
+                            "labelColor": "#fff",
+                            "titleColor": "#aed9e0",
+                            "gridColor": "#334"
+                        }
+                    },
+                    "tooltip": [
+                        {"field": "ev", "title": "Év"},
+                        {"field": "populacio", "title": "Populáció", "format": ","},
+                        {"field": "statusz", "title": "IUCN Státusz"}
+                    ]
+                }
+            },
+            // ESEMÉNYEK PONTOK (csak ahol van esemény)
+            {
+                "transform": [{"filter": "datum.esemeny != null"}],
+                "mark": {
+                    "type": "point",
+                    "filled": true,
+                    "size": 150,
+                    "color": "#ff6b6b"
+                },
+                "encoding": {
+                    "x": {"field": "ev", "type": "quantitative"},
+                    "y": {"field": "populacio", "type": "quantitative"},
+                    "tooltip": [
+                        {"field": "ev", "title": "Év"},
+                        {"field": "esemeny", "title": "Esemény"},
+                        {"field": "populacio", "title": "Populáció", "format": ","}
+                    ]
+                }
+            },
+            // ESEMÉNY CÍMKÉK (Text annotations)
+            {
+                "transform": [{"filter": "datum.esemeny != null"}],
+                "mark": {
+                    "type": "text",
+                    "align": "left",
+                    "dx": 8,
+                    "dy": -10,
+                    "fontSize": 11,
+                    "fontWeight": "bold",
+                    "color": "#ff6b6b"
+                },
+                "encoding": {
+                    "x": {"field": "ev", "type": "quantitative"},
+                    "y": {"field": "populacio", "type": "quantitative"},
+                    "text": {"field": "esemeny", "type": "nominal"}
+                }
+            }
+        ]
+    };
 
     // --- 1. TÉRKÉP ---
     const spec1 = {
@@ -292,6 +447,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         }
     };
 
+    // RENDER
+    vegaEmbed('#vizTimeline', specTimeline, commonConfig);
     vegaEmbed('#viz1', spec1, commonConfig);
     vegaEmbed('#viz4', spec4, commonConfig);
     vegaEmbed('#viz5', spec5, commonConfig);

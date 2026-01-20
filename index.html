@@ -50,11 +50,13 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
 
 <div class="container">
 
-    <div class="card">
-        <h2 class="section-title">🗺️ Élőhely és Védettség Elemzése</h2>
+   <div class="card">
+        <h2 class="section-title">🗺️ Élőhelyek Térképes Elemzése</h2>
         <p class="section-desc">
-            Hol élnek a hópárducok? Az alábbi diagram a becsült egyedszámot mutatja régiónként, 
-            a színek pedig az élőhely minőségét jelzik (sötétebb kék = jobb minőség).
+            Ez a térkép vizualizálja a hópárducok eloszlását Ázsiában. 
+            A <strong>körök mérete</strong> a populáció nagyságát jelzi (nagyobb kör = több párduc), 
+            míg a <strong>színárnyalat</strong> az élőhely minőségét mutatja (sötétebb = jobb életkörülmények).
+            Jól látható a Tibeti-fennsík dominanciája.
         </p>
         <div id="viz1" class="viz-container"></div>
     </div>
@@ -129,25 +131,56 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: POPULÁCIÓ ---
+    // --- SPEC 1: TÉRKÉPES NÉZET (ÚJ!) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 450,
-        "data": { "url": "snow_leopard_extended.csv" },
-        "mark": { "type": "bar", "cornerRadiusEnd": 4, "cursor": "pointer" },
-        "encoding": {
-            "y": { "field": "Regio", "type": "nominal", "sort": "-x", "title": null, "axis": {"labelFontSize": 12, "labelColor": "#aed9e0", "grid": false} },
-            "x": { "field": "Populacio_Becsles", "type": "quantitative", "title": "Becsült Egyedszám", "axis": {"gridColor": "#334", "labelColor": "#fff"} },
-            "color": { "field": "Elohely_Minoseg_Pontszam", "type": "quantitative", "scale": {"scheme": "tealblues"}, "legend": {"title": "Élőhely Minőség", "orient": "bottom"} },
-            "opacity": { "condition": {"param": "hover", "value": 1}, "value": 0.5 },
-            "tooltip": [
-                {"field": "Orszag", "title": "Ország"},
-                {"field": "Regio", "title": "Régió"},
-                {"field": "Populacio_Becsles", "title": "Egyedszám"},
-                {"field": "Elohely_Minoseg_Pontszam", "title": "Minőség"}
-            ]
-        },
-        "params": [{ "name": "hover", "select": {"type": "point", "on": "mouseover"} }]
+        "layer": [
+            // 1. RÉTEG: A VILÁGTÉRKÉP HÁTTÉR (Országok határai)
+            {
+                "data": { "url": "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json" },
+                "format": { "type": "topojson", "feature": "countries1" },
+                "mark": { "type": "geoshape", "fill": "#1b2949", "stroke": "#3a4b6b" } // Sötétkék országok
+            },
+            // 2. RÉTEG: A PÖTTYÖK (A mi adataink)
+            {
+                "data": { "url": "snow_leopard_extended.csv" },
+                "mark": { "type": "circle", "opacity": 0.8, "cursor": "pointer" },
+                "encoding": {
+                    "longitude": { "field": "Lon", "type": "quantitative" },
+                    "latitude":  { "field": "Lat", "type": "quantitative" },
+                    
+                    // MÉRET: A populáció nagysága
+                    "size": { 
+                        "field": "Populacio_Becsles", 
+                        "type": "quantitative", 
+                        "scale": { "range": [100, 1000] }, // Pötty mérete pixelben
+                        "legend": { "title": "Populáció" }
+                    },
+                    
+                    // SZÍN: Az élőhely minősége (Kékes-zöldes)
+                    "color": { 
+                        "field": "Elohely_Minoseg_Pontszam", 
+                        "type": "quantitative", 
+                        "scale": { "scheme": "tealblues" }, 
+                        "legend": { "title": "Élőhely Minőség" }
+                    },
+                    
+                    "tooltip": [
+                        {"field": "Orszag", "title": "Ország"},
+                        {"field": "Regio", "title": "Régió"},
+                        {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"},
+                        {"field": "Elohely_Minoseg_Pontszam", "title": "Minőség (1-10)"}
+                    ]
+                }
+            }
+        ],
+        // FÓKUSZÁLÁS ÁZSIÁRA (Hogy ne az egész világot mutassa kicsiben)
+        "projection": {
+            "type": "mercator",
+            "scale": 550,          // Nagyítás mértéke
+            "center": [90, 35]     // Középpont (Tibet környéke)
+        }
     };
 
     // --- SPEC 2: GPS (GENERÁLT ADATTAL) ---

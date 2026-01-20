@@ -217,6 +217,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 300,
+        "background": "transparent",
         "data": { "values": riskData },
         "mark": "rect",
         "encoding": {
@@ -240,7 +241,9 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     // --- 3. GAZDASÁG ---
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400, "data": { "url": "leopard_economy.csv" },
+        "width": "container", "height": 400, 
+        "background": "transparent",
+        "data": { "url": "leopard_economy.csv" },
         "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff", "grid": false} } },
         "layer": [
             { "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} }, "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD"}] } },
@@ -252,6 +255,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, 
+        "background": "transparent",
         "data": { "values": dietData },
         "mark": { "type": "bar", "cornerRadiusEnd": 4, "height": {"band": 0.5} },
         "encoding": {
@@ -265,7 +269,9 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     // --- 5. VÁNDORLÁS ---
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400, "data": { "values": elevationData },
+        "width": "container", "height": 400, 
+        "background": "transparent",
+        "data": { "values": elevationData },
         "mark": { 
             "type": "line", 
             "point": { "filled": true, "size": 80 }, 

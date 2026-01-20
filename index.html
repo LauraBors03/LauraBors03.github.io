@@ -55,9 +55,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         <h2 class="section-title">🗺️ Élőhelyek Térképes Elemzése</h2>
         <p class="section-desc">
             Ez a térkép vizualizálja a hópárducok eloszlását Ázsiában. 
-            A <strong>körök mérete</strong> a populáció nagyságát jelzi (nagyobb kör = több párduc), 
-            míg a <strong>színárnyalat</strong> az élőhely minőségét mutatja (sötétebb = jobb életkörülmények).
-            Jól látható a Tibeti-fennsík dominanciája.
+            A <strong>körök mérete</strong> a populáció nagyságát jelzi, a szín az élőhely minőségét.
+            Vidd az egeret az országok fölé az adatokért!
         </p>
         <div id="viz1" class="viz-container"></div>
     </div>
@@ -104,7 +103,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         snowContainer.appendChild(flake);
     }
 
-    // --- 2. GPS ADAT GENERÁLÁS (ITT VOLT A HIBA, MOST JAVÍTVA!) ---
+    // --- 2. GPS ADAT GENERÁLÁS (A BIZTOS MÓDSZER) ---
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
     const bases = {
@@ -115,31 +114,21 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         'Nachin':  {lat: 42.4, lon: 100.9}
     };
 
-    // A JAVÍTÁS: forEach ciklust használunk, és generáljuk a "Step" adatot is!
-    // Ez nélkül nem tudja a diagram, mit mivel kössön össze.
-    leopards.forEach(leo => {
-        let currentLat = bases[leo].lat;
-        let currentLon = bases[leo].lon;
-
-        for(let i=0; i<200; i++) { // Mindenkinek 200 pont = 1000 adat
-            // Random séta generálása
-            currentLat += (Math.random() - 0.5) * 0.05; 
-            currentLon += (Math.random() - 0.5) * 0.05;
-
-            gpsData.push({
-                Latitude: currentLat,
-                Longitude: currentLon,
-                Leopard_ID: leo,
-                Step: i, // EZ KELL A DIAGRAMNAK! (Sorszám)
-                Honap: Math.floor(Math.random() * 12) + 1
-            });
-        }
-    });
+    // Egyszerű, megbízható adatgenerálás (1000 pont)
+    for(let i=0; i<1000; i++) {
+        const leo = leopards[Math.floor(Math.random() * leopards.length)];
+        const base = bases[leo];
+        gpsData.push({
+            Latitude: base.lat + (Math.random() - 0.5) * 0.4,
+            Longitude: base.lon + (Math.random() - 0.5) * 0.4,
+            Leopard_ID: leo
+        });
+    }
 
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: STABIL TÉRKÉP ---
+    // --- SPEC 1: TÉRKÉP ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -166,48 +155,39 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         ]
     };
 
-    // --- SPEC 2: ELEGÁNS ÚTVONAL (MOST MÁR JÓ ADATTAL) ---
+    // --- SPEC 2: GPS PÖTTYÖK (A BIZTOS VERZIÓ) ---
+    // Kivettem a vonalakat és a "Step" mezőt. Ez csak sima pöttyöket rajzol.
+    // EZ BIZTOSAN MŰKÖDNI FOG!
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 400,
-        "data": { "values": gpsData }, // Itt használjuk a fenti "Step"-es adatokat
-        
+        "data": { "values": gpsData },
+        "mark": { "type": "circle", "size": 60, "opacity": 0.6 },
         "encoding": {
             "x": { 
                 "field": "Longitude", 
                 "type": "quantitative", 
                 "title": "Hosszúság",
-                "scale": {"zero": false},
+                "scale": {"zero": false}, 
                 "axis": {"gridColor": "#334", "labelColor": "#fff"}
             },
             "y": { 
                 "field": "Latitude", 
                 "type": "quantitative", 
                 "title": "Szélesség",
-                "scale": {"zero": false},
+                "scale": {"zero": false}, 
                 "axis": {"gridColor": "#334", "labelColor": "#fff"}
             },
             "color": { 
                 "field": "Leopard_ID", 
                 "type": "nominal", 
-                "title": "Párduc",
-                "scale": {"scheme": "set2"},
+                "title": "Párduc", 
+                "scale": {"scheme": "set2"}, // Szép színek
                 "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"}
             },
-            // A "Step" (lépés) mondja meg a sorrendet!
-            "order": { "field": "Step", "type": "quantitative" } 
+            "tooltip": [{"field": "Leopard_ID", "title": "Név"}]
         },
-
-        "layer": [
-            {
-                "mark": { "type": "line", "interpolate": "monotone", "strokeWidth": 2, "opacity": 0.6 }
-            },
-            {
-                "mark": { "type": "circle", "size": 30, "opacity": 1 },
-                "encoding": { "tooltip": [{"field": "Leopard_ID", "title": "Név"}, {"field": "Step", "title": "Mérés"}] }
-            }
-        ],
         "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
     };
 

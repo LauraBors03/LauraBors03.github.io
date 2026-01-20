@@ -131,7 +131,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
- // --- SPEC 1: TÉRKÉP JAVÍTOTT HOVER EFFEKTUSSAL ---
+ // --- SPEC 1: STABIL TÉRKÉP (CSAK TOOLTIP, NINCS SZÍNVÁLTÁS) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -145,7 +145,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         },
 
         "layer": [
-            // 1. RÉTEG: HÁTTÉR ORSZÁGOK
+            // 1. RÉTEG: HÁTTÉR ORSZÁGOK (Sötétkék)
             {
                 "data": {
                     "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
@@ -159,7 +159,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 }
             },
 
-            // 2. RÉTEG: ADATOK ÉS INTERAKCIÓ
+            // 2. RÉTEG: ADATOK (Stabil színezés)
             {
                 "data": {
                     "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
@@ -177,39 +177,25 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                     { "filter": "datum.Populacio_Becsles != null" }
                 ],
                 
+                // Kurzor marad mutatóujj, hogy jelezze: itt van adat!
                 "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5, "cursor": "pointer" },
                 
                 "encoding": {
+                    // SZÍN: Nincs kondíció, mindig a populációt mutatja
                     "color": {
-                        // A FELTÉTELES SZÍNEZÉS
-                        "condition": {
-                            // Ha a 'hover' aktív, akkor legyen türkiz
-                            "param": "hover",    
-                            "value": "#00d2ff"
-                        },
-                        // ALAPÁLLAPOTBAN (Ha nincs hover) pedig a populáció skála
                         "field": "Populacio_Becsles",
                         "type": "quantitative",
                         "scale": { "scheme": "tealblues" },
                         "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" }
                     },
                     
+                    // TOOLTIP: Ez teszi interaktívvá!
                     "tooltip": [
                         {"field": "Orszag", "title": "Ország"},
                         {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"},
                         {"field": "Elohely_Minoseg_Pontszam", "title": "Élőhely Minőség"}
                     ]
-                },
-                // --- ITT A JAVÍTÁS! ---
-                "params": [{
-                    "name": "hover",
-                    "select": { 
-                        "type": "point", 
-                        "on": "mouseover",
-                        "empty": "none" // <-- EZ A KULCS! Kezdetben nincs kijelölés.
-                    }
-                }]
-                // ---------------------
+                }
             }
         ]
     };

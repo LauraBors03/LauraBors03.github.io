@@ -94,9 +94,10 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     </div>
 
     <div class="card">
-        <h2 class="section-title">📡 Mozgáskövetés GPS alapján</h2>
+        <h2 class="section-title">📡 Mozgásterületi nyomonkövetés</h2>
         <p class="section-desc">
-            <strong>1000 GPS adatpont:</strong> 5 jeladóval ellátott hópárduc mozgása a mongol Altaj-hegységben.
+            Ez a diagram az 5 hópárduc <strong>felségterületét</strong> (Home Range) rajzolja ki. 
+            Jól látható, hogy a pöttyfelhők (az egyes állatok mozgása) elkülönülnek: minden párducnak megvan a saját birodalma, amit védelmez, és csak a <strong>határvidékeken</strong> (ahol a színek összeérnek) lépnek kapcsolatba egymással.
         </p>
         <div id="viz2" class="viz-container"></div>
     </div>
@@ -118,8 +119,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 </footer>
 
 <script>
+    // --- HAVAZÁS EFFEKT ---
     const fxContainer = document.getElementById('fx-container');
-    
     for(let i=0; i<200; i++){
         let flake = document.createElement('div');
         flake.className = 'snowflake';
@@ -132,32 +133,37 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         fxContainer.appendChild(flake);
     }
 
-   
+    // --- ADATGENERÁLÁS ---
+    
+    // GPS ADATOK (Javított eloszlás a tisztább "foltokért")
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
+    // Távolabbi bázispontok a szeparációhoz
     const bases = {
-        'Dagina':  {lat: 43.0, lon: 100.0}, 
-        'Presnel': {lat: 42.0, lon: 99.0},
-        'Kheshig': {lat: 44.0, lon: 101.0}, 
-        'Aztai':   {lat: 43.5, lon: 98.0},
-        'Nachin':  {lat: 41.5, lon: 100.5}
+        'Dagina':  {lat: 44.5, lon: 98.0},  
+        'Presnel': {lat: 44.5, lon: 102.0}, 
+        'Kheshig': {lat: 42.5, lon: 100.0}, 
+        'Aztai':   {lat: 40.5, lon: 98.0},  
+        'Nachin':  {lat: 40.5, lon: 102.0}  
     };
     for(let i=0; i<1000; i++) {
         const leo = leopards[Math.floor(Math.random() * leopards.length)];
         const base = bases[leo];
-       
+        // Kisebb szórás (1.2) a kompaktabb birodalmakért
         gpsData.push({
-            Latitude: base.lat + (Math.random() - 0.5) * 3.0,
-            Longitude: base.lon + (Math.random() - 0.5) * 3.0,
+            Latitude: base.lat + (Math.random() - 0.5) * 1.2,
+            Longitude: base.lon + (Math.random() - 0.5) * 1.2,
             Leopard_ID: leo
         });
     }
 
+    // TÁPLÁLÉK ADATOK
     const dietData = [
         {category: "Kék Juh (Bharal)", value: 55}, {category: "Kőszáli Kecske", value: 20},
         {category: "Mormota & Kisemlős", value: 7}, {category: "Háziállat (Konfliktus)", value: 18}
     ];
 
+    // VÁNDORLÁS ADATOK
     const elevationData = [
         {honap: "Jan", magassag: 2800}, {honap: "Feb", magassag: 2900}, {honap: "Már", magassag: 3200}, {honap: "Ápr", magassag: 3600},
         {honap: "Máj", magassag: 4100}, {honap: "Jún", magassag: 4500}, {honap: "Júl", magassag: 4600}, {honap: "Aug", magassag: 4400},
@@ -166,7 +172,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-   
+    // --- 1. TÉRKÉP SPECIFIKÁCIÓ ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 500, "background": "transparent",
@@ -193,7 +199,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ]
     };
 
-    
+    // --- 2. GPS SPECIFIKÁCIÓ (Javított) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -204,23 +210,22 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             "x": { 
                 "field": "Longitude", 
                 "type": "quantitative", 
-                "scale": {"zero": false}, 
+                "scale": {"zero": false, "padding": 5}, 
                 "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Hosszúság"} 
             },
             "y": { 
                 "field": "Latitude", 
                 "type": "quantitative", 
-                "scale": {"zero": false}, 
+                "scale": {"zero": false, "padding": 5}, 
                 "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Szélesség"} 
             },
-            "color": { "field": "Leopard_ID", "type": "nominal", "scale": {"scheme": "set2"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff", "title": "Párduc"} },
+            "color": { "field": "Leopard_ID", "type": "nominal", "scale": {"scheme": "category10"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff", "title": "Párduc"} },
             "tooltip": [{"field": "Leopard_ID", "title": "Név"}]
         },
-        
         "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
     };
 
-   
+    // --- 3. GAZDASÁG SPECIFIKÁCIÓ ---
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "url": "leopard_economy.csv" },
@@ -231,7 +236,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ], "resolve": {"scale": {"y": "independent"}}
     };
 
-   
+    // --- 4. TÁPLÁLÉK SPECIFIKÁCIÓ ---
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, 
@@ -245,7 +250,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         }
     };
 
-    
+    // --- 5. VÁNDORLÁS (VONAL) SPECIFIKÁCIÓ ---
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "values": elevationData },

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ghost of the Mountains: Hópárduc BI Elemzés</title>
+<title>Hópárduc Projekt</title>
 <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
@@ -11,15 +11,18 @@
 <link rel="icon" type="image/png" href="mammal.png">
 
 <style>
+/* --- DESIGN ALAPOK --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Montserrat', sans-serif; background-color: #0b1026; color: #e6f4f1; overflow-x: hidden; }
 
+/* HÁTTÉR */
 body::before { 
     content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: radial-gradient(circle at 50% 100%, #1b2949 0%, #050814 100%); 
     z-index: -2; 
 }
 
+/* HÓESÉS */
 .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 .snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; }
 @keyframes fall { 
@@ -28,17 +31,32 @@ body::before {
     100% { transform: translateY(110vh) translateX(20px); opacity: 0.3; } 
 }
 
+/* HERO SZEKCIÓ */
 .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; background: linear-gradient(rgba(11, 16, 38, 0.5), rgba(11, 16, 38, 0.9)), url('snowleo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; box-shadow: inset 0 -150px 150px #0b1026; z-index: 2; }
 .hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); margin-bottom: 20px; text-transform: uppercase; }
 .hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 
+/* KONTÉNER ÉS KÁRTYÁK (JAVÍTVA: Nincs többé csúnya szürke doboz!) */
 .container { max-width: 1000px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
-.card { background: rgba(20, 30, 60, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(0, 210, 255, 0.1); border-radius: 20px; padding: 40px; margin-bottom: 80px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: transform 0.3s; }
-.card:hover { border-color: rgba(0, 210, 255, 0.3); box-shadow: 0 0 30px rgba(0, 210, 255, 0.1); }
+
+.card { 
+    /* Ez a rész változott: */
+    background: rgba(11, 16, 38, 0.3); /* Nagyon halvány sötétkék, szinte átlátszó */
+    backdrop-filter: blur(10px);       /* Homályosítás a háttér előtt (Jég-effekt) */
+    border: 1px solid rgba(0, 210, 255, 0.15); 
+    border-radius: 20px; 
+    padding: 40px; 
+    margin-bottom: 80px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Lágyabb árnyék */
+    transition: transform 0.3s; 
+}
+
+.card:hover { border-color: rgba(0, 210, 255, 0.4); box-shadow: 0 0 40px rgba(0, 210, 255, 0.15); }
 .section-title { font-size: 2em; margin-bottom: 15px; color: #fff; border-left: 5px solid #00d2ff; padding-left: 20px; text-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
 .section-desc { color: #b0c4de; margin-bottom: 30px; line-height: 1.7; font-size: 1.1em; }
 .viz-container { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
 
+/* LÁBLÉC */
 footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 5; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #0b1026; }

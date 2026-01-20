@@ -104,12 +104,9 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         snowContainer.appendChild(flake);
     }
 
-    // --- 2. GPS ADAT GENERÁLÁS (ÚJ NEVEKKEL!) ---
+    // --- 2. GPS ADAT GENERÁLÁS (JAVÍTVA!) ---
     const gpsData = [];
-    // ITT VAN A JAVÍTÁS: A valós nevek használata
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
-    
-    // A bázis koordinátákat hozzáigazítottam a nevekhez
     const bases = {
         'Dagina':  {lat: 43.1, lon: 100.4},
         'Presnel': {lat: 42.9, lon: 99.1},
@@ -118,96 +115,64 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         'Nachin':  {lat: 42.4, lon: 100.9}
     };
 
-    for(let i=0; i<1000; i++) {
-        const leo = leopards[Math.floor(Math.random() * leopards.length)];
-        const base = bases[leo];
-        gpsData.push({
-            Latitude: base.lat + (Math.random() - 0.5) * 0.4,
-            Longitude: base.lon + (Math.random() - 0.5) * 0.4,
-            Leopard_ID: leo,
-            Honap: Math.floor(Math.random() * 12) + 1
-        });
-    }
+    // FONTOS JAVÍTÁS: A ciklust átírtam, hogy legyen "Step" (sorrend) adat!
+    // Ez kell ahhoz, hogy a vonalak össze legyenek kötve.
+    leopards.forEach(leo => {
+        let currentLat = bases[leo].lat;
+        let currentLon = bases[leo].lon;
+
+        for(let i=0; i<200; i++) { // Mindenkinek 200 pont
+            // Random Walk mozgás
+            currentLat += (Math.random() - 0.5) * 0.05; 
+            currentLon += (Math.random() - 0.5) * 0.05;
+
+            gpsData.push({
+                Latitude: currentLat,
+                Longitude: currentLon,
+                Leopard_ID: leo,
+                Step: i, // EZ HIÁNYZOTT! Most már van sorrend.
+                Honap: Math.floor(Math.random() * 12) + 1
+            });
+        }
+    });
 
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
- // --- SPEC 1: STABIL TÉRKÉP (CSAK TOOLTIP, NINCS SZÍNVÁLTÁS) ---
+ // --- SPEC 1: STABIL TÉRKÉP ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 500,
         "background": "transparent",
-        
-        "projection": {
-            "type": "mercator",
-            "scale": 400,          
-            "center": [85, 40]     
-        },
-
+        "projection": { "type": "mercator", "scale": 400, "center": [85, 40] },
         "layer": [
-            // 1. RÉTEG: HÁTTÉR ORSZÁGOK (Sötétkék)
             {
-                "data": {
-                    "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
-                    "format": { "type": "topojson", "feature": "countries" }
-                },
-                "mark": { 
-                    "type": "geoshape", 
-                    "fill": "#162038",   
-                    "stroke": "#2c3e50", 
-                    "strokeWidth": 0.5
-                }
+                "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
+                "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 }
             },
-
-            // 2. RÉTEG: ADATOK (Stabil színezés)
             {
-                "data": {
-                    "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
-                    "format": { "type": "topojson", "feature": "countries" }
-                },
+                "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
                 "transform": [
-                    {
-                        "lookup": "id",
-                        "from": {
-                            "data": { "url": "snow_leopard_extended.csv" },
-                            "key": "id",
-                            "fields": ["Populacio_Becsles", "Orszag", "Elohely_Minoseg_Pontszam"]
-                        }
-                    },
+                    { "lookup": "id", "from": { "data": { "url": "snow_leopard_extended.csv" }, "key": "id", "fields": ["Populacio_Becsles", "Orszag", "Elohely_Minoseg_Pontszam"] } },
                     { "filter": "datum.Populacio_Becsles != null" }
                 ],
-                
-                // Kurzor marad mutatóujj, hogy jelezze: itt van adat!
                 "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5, "cursor": "pointer" },
-                
                 "encoding": {
-                    // SZÍN: Nincs kondíció, mindig a populációt mutatja
-                    "color": {
-                        "field": "Populacio_Becsles",
-                        "type": "quantitative",
-                        "scale": { "scheme": "tealblues" },
-                        "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" }
-                    },
-                    
-                    // TOOLTIP: Ez teszi interaktívvá!
-                    "tooltip": [
-                        {"field": "Orszag", "title": "Ország"},
-                        {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"},
-                        {"field": "Elohely_Minoseg_Pontszam", "title": "Élőhely Minőség"}
-                    ]
+                    "color": { "field": "Populacio_Becsles", "type": "quantitative", "scale": { "scheme": "tealblues" }, "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" } },
+                    "tooltip": [ {"field": "Orszag", "title": "Ország"}, {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"}, {"field": "Elohely_Minoseg_Pontszam", "title": "Élőhely Minőség"} ]
                 }
             }
         ]
     };
-  // --- SPEC 2: ELEGÁNS ÚTVONAL (Anti-Spaghetti Verzió) ---
+
+    // --- SPEC 2: ELEGÁNS ÚTVONAL (JAVÍTOTT ADATTAL) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 400,
-        "data": { "values": gpsData },
+        "data": { "values": gpsData }, // Most már tartalmazza a Step-et!
         
-        // KÖZÖS BEÁLLÍTÁSOK (Hogy a vonal és a pötty is tudja, kihez tartozik)
         "encoding": {
             "x": { 
                 "field": "Longitude", 
@@ -227,47 +192,25 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 "field": "Leopard_ID", 
                 "type": "nominal", 
                 "title": "Párduc",
-                "scale": {"scheme": "set2"}, // Jól elkülönülő pasztell színek
+                "scale": {"scheme": "set2"},
                 "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"}
             },
-            // EZ A TITOK: A "Step" (lépés) mondja meg a sorrendet!
+            // A Step itt már létezik az adatban, ezért működni fog!
             "order": { "field": "Step" } 
         },
 
         "layer": [
-            // 1. RÉTEG: A VONALAK (Ívelten, halványan)
             {
-                "mark": {
-                    "type": "line",
-                    "interpolate": "monotone", // Ettől lesz szép ívelt (organikus)!
-                    "strokeWidth": 2,
-                    "opacity": 0.6 // Átlátszóbb, hogy ne legyen zavaró
-                }
+                "mark": { "type": "line", "interpolate": "monotone", "strokeWidth": 2, "opacity": 0.6 }
             },
-            // 2. RÉTEG: A PONTOK (Kisebbek, de láthatóak)
             {
-                "mark": {
-                    "type": "circle",
-                    "size": 30, // Kicsit kisebb pöttyök
-                    "opacity": 1
-                },
-                // Tooltip csak a pöttyökre kell
-                "encoding": {
-                    "tooltip": [
-                        {"field": "Leopard_ID", "title": "Név"},
-                        {"field": "Step", "title": "Mérés sorszáma"}
-                    ]
-                }
+                "mark": { "type": "circle", "size": 30, "opacity": 1 },
+                "encoding": { "tooltip": [{"field": "Leopard_ID", "title": "Név"}, {"field": "Step", "title": "Mérés"}] }
             }
         ],
-        
-        // Zoomolhatóság megmarad
-        "params": [{
-            "name": "grid",
-            "select": "interval",
-            "bind": "scales"
-        }]
+        "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
     };
+
     // --- SPEC 3: GAZDASÁG ---
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",

@@ -131,14 +131,13 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
- // --- SPEC 1: VÉGLEGES INTERAKTÍV TÉRKÉP (JAVÍTOTT SZÍNEKKEL) ---
+ // --- SPEC 1: TÉRKÉP JAVÍTOTT HOVER EFFEKTUSSAL ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 500,
         "background": "transparent",
         
-        // KÖZÖS PROJEKCIÓ
         "projection": {
             "type": "mercator",
             "scale": 400,          
@@ -146,7 +145,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         },
 
         "layer": [
-            // 1. RÉTEG: HÁTTÉR ORSZÁGOK (Sötétkék)
+            // 1. RÉTEG: HÁTTÉR ORSZÁGOK
             {
                 "data": {
                     "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
@@ -178,23 +177,22 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                     { "filter": "datum.Populacio_Becsles != null" }
                 ],
                 
-                // Mark beállítása
                 "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5, "cursor": "pointer" },
                 
                 "encoding": {
-                    // --- ITT A JAVÍTÁS! ---
                     "color": {
+                        // A FELTÉTELES SZÍNEZÉS
                         "condition": {
+                            // Ha a 'hover' aktív, akkor legyen türkiz
                             "param": "hover",    
-                            "value": "#00d2ff"   // Sárga helyett a téma CIÁNKÉK színe! Sokkal szebb.
+                            "value": "#00d2ff"
                         },
-                        // Alapállapotban marad a populáció szerinti kék skála
+                        // ALAPÁLLAPOTBAN (Ha nincs hover) pedig a populáció skála
                         "field": "Populacio_Becsles",
                         "type": "quantitative",
                         "scale": { "scheme": "tealblues" },
                         "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" }
                     },
-                    // ---------------------
                     
                     "tooltip": [
                         {"field": "Orszag", "title": "Ország"},
@@ -202,11 +200,16 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                         {"field": "Elohely_Minoseg_Pontszam", "title": "Élőhely Minőség"}
                     ]
                 },
-                // Interakció aktiválása
+                // --- ITT A JAVÍTÁS! ---
                 "params": [{
                     "name": "hover",
-                    "select": { "type": "point", "on": "mouseover" }
+                    "select": { 
+                        "type": "point", 
+                        "on": "mouseover",
+                        "empty": "none" // <-- EZ A KULCS! Kezdetben nincs kijelölés.
+                    }
                 }]
+                // ---------------------
             }
         ]
     };

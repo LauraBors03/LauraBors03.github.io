@@ -131,18 +131,19 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: TÉRKÉPES NÉZET (ÚJ!) ---
+    // --- SPEC 1: TÉRKÉPES NÉZET (JAVÍTOTT FORRÁSSAL) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 450,
+        "width": "container", 
+        "height": 450,
         "layer": [
-            // 1. RÉTEG: A VILÁGTÉRKÉP HÁTTÉR (Országok határai)
+            // 1. RÉTEG: VILÁGTÉRKÉP (Stabilabb forrásból!)
             {
-                "data": { "url": "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json" },
-                "format": { "type": "topojson", "feature": "countries1" },
-                "mark": { "type": "geoshape", "fill": "#1b2949", "stroke": "#3a4b6b" } // Sötétkék országok
+                "data": { "url": "https://raw.githubusercontent.com/vega/vega/master/docs/data/world-110m.json" },
+                "format": { "type": "topojson", "feature": "countries" },
+                "mark": { "type": "geoshape", "fill": "#1b2949", "stroke": "#3a4b6b" } 
             },
-            // 2. RÉTEG: A PÖTTYÖK (A mi adataink)
+            // 2. RÉTEG: A PÖTTYÖK
             {
                 "data": { "url": "snow_leopard_extended.csv" },
                 "mark": { "type": "circle", "opacity": 0.8, "cursor": "pointer" },
@@ -150,36 +151,36 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                     "longitude": { "field": "Lon", "type": "quantitative" },
                     "latitude":  { "field": "Lat", "type": "quantitative" },
                     
-                    // MÉRET: A populáció nagysága
+                    // MÉRET: Populáció
                     "size": { 
                         "field": "Populacio_Becsles", 
                         "type": "quantitative", 
-                        "scale": { "range": [100, 1000] }, // Pötty mérete pixelben
+                        "scale": { "range": [50, 600] }, // Kicsit nagyítottam a pöttyökön
                         "legend": { "title": "Populáció" }
                     },
                     
-                    // SZÍN: Az élőhely minősége (Kékes-zöldes)
+                    // SZÍN: Minőség
                     "color": { 
                         "field": "Elohely_Minoseg_Pontszam", 
                         "type": "quantitative", 
                         "scale": { "scheme": "tealblues" }, 
-                        "legend": { "title": "Élőhely Minőség" }
+                        "legend": { "title": "Minőség" }
                     },
                     
                     "tooltip": [
                         {"field": "Orszag", "title": "Ország"},
                         {"field": "Regio", "title": "Régió"},
-                        {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"},
-                        {"field": "Elohely_Minoseg_Pontszam", "title": "Minőség (1-10)"}
+                        {"field": "Populacio_Becsles", "title": "Egyedszám"},
+                        {"field": "Elohely_Minoseg_Pontszam", "title": "Minőség"}
                     ]
                 }
             }
         ],
-        // FÓKUSZÁLÁS ÁZSIÁRA (Hogy ne az egész világot mutassa kicsiben)
+        // NAGYÍTÁS ÁZSIÁRA
         "projection": {
             "type": "mercator",
-            "scale": 550,          // Nagyítás mértéke
-            "center": [90, 35]     // Középpont (Tibet környéke)
+            "scale": 550,          
+            "center": [85, 35]     // Kína/India határa
         }
     };
 

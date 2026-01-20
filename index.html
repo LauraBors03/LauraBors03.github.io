@@ -22,8 +22,11 @@ body::before {
     z-index: -2; 
 }
 
-/* 1. TURBÓ HÓESÉS */
-.snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+/* 1. TURBÓ HÓESÉS & RÉSZECSKÉK */
+/* JAVÍTÁS: z-index növelve 10-re, hogy a HERO kép és minden más FÖLÖTT essen a hó! */
+/* A pointer-events: none miatt át lehet kattintani rajta, nem zavar. */
+.snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+
 .snowflake { 
     position: absolute; top: -10px; background: white; border-radius: 50%; 
     opacity: 0.8; animation: fall linear infinite; 
@@ -34,7 +37,6 @@ body::before {
     position: absolute; background: #00d2ff; border-radius: 50%;
     box-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; /* Ragyogás! */
     opacity: 0; animation: floatUp ease-in-out infinite;
-    z-index: 0; /* A tartalom mögött, de a háttér előtt */
 }
 
 @keyframes fall { 

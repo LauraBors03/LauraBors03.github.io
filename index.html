@@ -22,9 +22,8 @@ body::before {
     z-index: -2; 
 }
 
-/* 1. TURBÓ HÓESÉS & RÉSZECSKÉK */
-/* JAVÍTÁS: z-index növelve 10-re, hogy a HERO kép és minden más FÖLÖTT essen a hó! */
-/* A pointer-events: none miatt át lehet kattintani rajta, nem zavar. */
+/* 1. TURBÓ HÓESÉS (Csak lefelé!) */
+/* z-index: 10 -> Minden elem felett esik a hó */
 .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 
 .snowflake { 
@@ -32,23 +31,10 @@ body::before {
     opacity: 0.8; animation: fall linear infinite; 
 }
 
-/* 2. PARTICLE EFFEKT (VARÁZSPOR) */
-.particle {
-    position: absolute; background: #00d2ff; border-radius: 50%;
-    box-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; /* Ragyogás! */
-    opacity: 0; animation: floatUp ease-in-out infinite;
-}
-
 @keyframes fall { 
     0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
     10% { opacity: 1; }
     100% { transform: translateY(110vh) translateX(20px); opacity: 0.3; } 
-}
-
-@keyframes floatUp {
-    0% { transform: translateY(110vh) scale(0); opacity: 0; }
-    50% { opacity: 0.6; }
-    100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
 }
 
 /* HERO */
@@ -130,6 +116,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     const fxContainer = document.getElementById('fx-container');
 
     // --- 1. SŰRŰ HÓESÉS GENERÁLÁS (200 db) ---
+    // Csak a hóesés maradt, a "felfelé szálló" részecskéket töröltem.
     for(let i=0; i<200; i++){
         let flake = document.createElement('div');
         flake.className = 'snowflake';
@@ -145,21 +132,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         fxContainer.appendChild(flake);
     }
 
-    // --- 2. PARTICLE / MAGIC DUST EFFEKT (50 db) ---
-    for(let i=0; i<50; i++){
-        let part = document.createElement('div');
-        part.className = 'particle';
-        part.style.left = Math.random() * 100 + 'vw';
-        // Véletlenszerű méret
-        let size = Math.random() * 4 + 1;
-        part.style.width = size + 'px';
-        part.style.height = size + 'px';
-        // Ezek lassan szállnak felfelé
-        part.style.animationDuration = (Math.random() * 10 + 10) + 's';
-        part.style.animationDelay = (Math.random() * 5) + 's';
-        fxContainer.appendChild(part);
-    }
-
     // --- 3. ADATOK ÉS DIAGRAMOK (STABIL VERZIÓ!) ---
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
@@ -171,7 +143,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         'Nachin':  {lat: 42.4, lon: 100.9}
     };
 
-    // Adatgenerálás (Sima 1000 pont, nincs Step)
+    // Adatgenerálás (Sima 1000 pont)
     for(let i=0; i<1000; i++) {
         const leo = leopards[Math.floor(Math.random() * leopards.length)];
         const base = bases[leo];

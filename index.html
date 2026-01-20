@@ -80,9 +80,9 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     <!-- ÚJ: TIMELINE DIAGRAM -->
     <div class="card">
-        <h2 class="section-title">⏳ A Hópárduc Évszázada - Populáció Összeomlás</h2>
+        <h2 class="section-title">⏳ Populációs Összeomlás</h2>
         <p class="section-desc">
-            Ez a drámai diagram megmutatja, hogyan zuhant a hópárduc populáció az elmúlt 125 évben.
+            Ezen diagram megmutatja, hogyan zuhant a hópárduc populáció az elmúlt 125 évben.
             Az 1900-as <strong>~100,000 egyedről</strong> mára mindössze <strong>~4,000-re</strong> csökkent a száma.
             A <span style="color:#ff4444;">piros zónák</span> jelzik a kritikus veszélyeztetettségi időszakokat,
             míg a <span style="color:#ffaa00;">sárga</span> a mai "sebezhető" státuszt.
@@ -227,7 +227,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- ÚJ: TIMELINE VIZUALIZÁCIÓ ---
+    // --- ÚJ: TIMELINE VIZUALIZÁCIÓ (JAVÍTOTT X TENGELLYEL) ---
     const specTimeline = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container",
@@ -240,7 +240,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
                 "data": {"values": statusZones},
                 "mark": {"type": "rect", "opacity": 0.15},
                 "encoding": {
-                    "x": {"field": "start", "type": "quantitative"},
+                    "x": {"field": "start", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
                     "x2": {"field": "end"},
                     "color": {
                         "field": "statusz",
@@ -277,6 +277,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
                         "field": "ev",
                         "type": "quantitative",
                         "title": "Év",
+                        "scale": {"domain": [1900, 2025]},
                         "axis": {
                             "labelColor": "#fff",
                             "titleColor": "#aed9e0",
@@ -311,7 +312,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
                     "color": "#ff6b6b"
                 },
                 "encoding": {
-                    "x": {"field": "ev", "type": "quantitative"},
+                    "x": {"field": "ev", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
                     "y": {"field": "populacio", "type": "quantitative"},
                     "tooltip": [
                         {"field": "ev", "title": "Év"},
@@ -333,7 +334,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
                     "color": "#ff6b6b"
                 },
                 "encoding": {
-                    "x": {"field": "ev", "type": "quantitative"},
+                    "x": {"field": "ev", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
                     "y": {"field": "populacio", "type": "quantitative"},
                     "text": {"field": "esemeny", "type": "nominal"}
                 }

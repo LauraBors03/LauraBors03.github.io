@@ -131,40 +131,48 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: TÉRKÉPES NÉZET (JAVÍTOTT FORRÁSSAL) ---
+    // --- SPEC 1: TÉRKÉP "RADAR" STÍLUSBAN (Hogy biztosan látszódjon valami) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
-        "height": 450,
+        "height": 500, // Kicsit magasabb
         "layer": [
-            // 1. RÉTEG: VILÁGTÉRKÉP (Stabilabb forrásból!)
+            // 1. RÉTEG: TENGER/HÁTTÉR (Kód rajzolja, nem fájl)
             {
-                "data": { "url": "https://raw.githubusercontent.com/vega/vega/master/docs/data/world-110m.json" },
-                "format": { "type": "topojson", "feature": "countries" },
-                "mark": { "type": "geoshape", "fill": "#1b2949", "stroke": "#3a4b6b" } 
+                "data": { "sphere": true },
+                "mark": { "type": "geoshape", "fill": "#162038" }
             },
-            // 2. RÉTEG: A PÖTTYÖK
+            // 2. RÉTEG: RÁCSHÁLÓ (GRATICULE) - Ez adja a térkép érzést fájl nélkül is!
+            {
+                "data": { "graticule": true },
+                "mark": { "type": "geoshape", "stroke": "#3a4b6b", "strokeWidth": 0.5 }
+            },
+            // 3. RÉTEG: ORSZÁGOK (Megpróbáljuk betölteni, de ha nem sikerül, a rács ott marad)
+            {
+                "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json" },
+                "format": { "type": "topojson", "feature": "countries" },
+                "mark": { "type": "geoshape", "fill": "#1b2949", "stroke": "#5c7091" } 
+            },
+            // 4. RÉTEG: AZ ADATPONTOK (A PÖTTYÖK)
             {
                 "data": { "url": "snow_leopard_extended.csv" },
-                "mark": { "type": "circle", "opacity": 0.8, "cursor": "pointer" },
+                "mark": { "type": "circle", "opacity": 0.9, "cursor": "pointer", "stroke": "white", "strokeWidth": 1 },
                 "encoding": {
                     "longitude": { "field": "Lon", "type": "quantitative" },
                     "latitude":  { "field": "Lat", "type": "quantitative" },
                     
-                    // MÉRET: Populáció
                     "size": { 
                         "field": "Populacio_Becsles", 
                         "type": "quantitative", 
-                        "scale": { "range": [50, 600] }, // Kicsit nagyítottam a pöttyökön
-                        "legend": { "title": "Populáció" }
+                        "scale": { "range": [50, 800] }, 
+                        "legend": { "title": "Populáció", "orient": "bottom-right" }
                     },
                     
-                    // SZÍN: Minőség
                     "color": { 
                         "field": "Elohely_Minoseg_Pontszam", 
                         "type": "quantitative", 
                         "scale": { "scheme": "tealblues" }, 
-                        "legend": { "title": "Minőség" }
+                        "legend": { "title": "Minőség", "orient": "bottom-right" }
                     },
                     
                     "tooltip": [
@@ -176,11 +184,11 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 }
             }
         ],
-        // NAGYÍTÁS ÁZSIÁRA
+        // FÓKUSZ: KÖZÉP-ÁZSIA
         "projection": {
             "type": "mercator",
-            "scale": 550,          
-            "center": [85, 35]     // Kína/India határa
+            "scale": 600,          
+            "center": [85, 38]     
         }
     };
 

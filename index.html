@@ -11,17 +11,14 @@
 <link rel="icon" type="image/png" href="mammal.png">
 
 <style>
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Montserrat', sans-serif; background-color: #0b1026; color: #e6f4f1; overflow-x: hidden; }
-
 
 body::before { 
     content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: radial-gradient(circle at 50% 100%, #1b2949 0%, #050814 100%); 
     z-index: -2; 
 }
-
 
 .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 .snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; }
@@ -31,11 +28,9 @@ body::before {
     100% { transform: translateY(110vh) translateX(20px); opacity: 0.3; } 
 }
 
-
 .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; background: linear-gradient(rgba(11, 16, 38, 0.5), rgba(11, 16, 38, 0.9)), url('snowleo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; box-shadow: inset 0 -150px 150px #0b1026; z-index: 2; }
 .hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); margin-bottom: 20px; text-transform: uppercase; }
 .hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
-
 
 .container { max-width: 1000px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
 .card { background: rgba(20, 30, 60, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(0, 210, 255, 0.1); border-radius: 20px; padding: 40px; margin-bottom: 80px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: transform 0.3s; }
@@ -94,10 +89,10 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     </div>
 
     <div class="card">
-        <h2 class="section-title">📡 Mozgásterületi nyomonkövetés</h2>
+        <h2 class="section-title">🔥 Veszélyeztetettségi Mátrix</h2>
         <p class="section-desc">
-            Ez a diagram az 5 hópárduc <strong>felségterületét</strong> (Home Range) rajzolja ki. 
-            Jól látható, hogy a pöttyfelhők (az egyes állatok mozgása) elkülönülnek: minden párducnak megvan a saját birodalma, amit védelmez, és csak a <strong>határvidékeken</strong> (ahol a színek összeérnek) lépnek kapcsolatba egymással.
+            Melyik országban mi fenyegeti leginkább a fajt? A <strong>Hőtérkép (Heatmap)</strong> megmutatja a kockázati szinteket. 
+            Látható, hogy míg Mongóliában a <span style="color:#ff6b6b">Túllegeltetés</span> a fő probléma, addig Kínában a <span style="color:#ff6b6b">Bányászat</span> és infrastruktúra jelenti a legnagyobb veszélyt.
         </p>
         <div id="viz2" class="viz-container"></div>
     </div>
@@ -133,30 +128,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         fxContainer.appendChild(flake);
     }
 
-    // --- ADATGENERÁLÁS ---
+    // --- ADATOK ---
     
-    // GPS ADATOK (Javított eloszlás a tisztább "foltokért")
-    const gpsData = [];
-    const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
-    // Távolabbi bázispontok a szeparációhoz
-    const bases = {
-        'Dagina':  {lat: 44.5, lon: 98.0},  
-        'Presnel': {lat: 44.5, lon: 102.0}, 
-        'Kheshig': {lat: 42.5, lon: 100.0}, 
-        'Aztai':   {lat: 40.5, lon: 98.0},  
-        'Nachin':  {lat: 40.5, lon: 102.0}  
-    };
-    for(let i=0; i<1000; i++) {
-        const leo = leopards[Math.floor(Math.random() * leopards.length)];
-        const base = bases[leo];
-        // Kisebb szórás (1.2) a kompaktabb birodalmakért
-        gpsData.push({
-            Latitude: base.lat + (Math.random() - 0.5) * 1.2,
-            Longitude: base.lon + (Math.random() - 0.5) * 1.2,
-            Leopard_ID: leo
-        });
-    }
-
     // TÁPLÁLÉK ADATOK
     const dietData = [
         {category: "Kék Juh (Bharal)", value: 55}, {category: "Kőszáli Kecske", value: 20},
@@ -170,9 +143,32 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         {honap: "Szep", magassag: 4000}, {honap: "Okt", magassag: 3500}, {honap: "Nov", magassag: 3000}, {honap: "Dec", magassag: 2800}
     ];
 
+    // VESZÉLY MÁTRIX ADATOK (GPS HELYETT)
+    const riskData = [
+        {orszag: "Mongólia", veszely: "Túllegeltetés", sulyossag: 5},
+        {orszag: "Mongólia", veszely: "Bányászat", sulyossag: 3},
+        {orszag: "Mongólia", veszely: "Orvvadászat", sulyossag: 2},
+        {orszag: "Mongólia", veszely: "Klímaváltozás", sulyossag: 4},
+        
+        {orszag: "Kína", veszely: "Túllegeltetés", sulyossag: 4},
+        {orszag: "Kína", veszely: "Bányászat", sulyossag: 5},
+        {orszag: "Kína", veszely: "Orvvadászat", sulyossag: 3},
+        {orszag: "Kína", veszely: "Klímaváltozás", sulyossag: 3},
+
+        {orszag: "India", veszely: "Túllegeltetés", sulyossag: 5},
+        {orszag: "India", veszely: "Bányászat", sulyossag: 1},
+        {orszag: "India", veszely: "Orvvadászat", sulyossag: 2},
+        {orszag: "India", veszely: "Klímaváltozás", sulyossag: 4},
+
+        {orszag: "Kirgizisztán", veszely: "Túllegeltetés", sulyossag: 3},
+        {orszag: "Kirgizisztán", veszely: "Bányászat", sulyossag: 4},
+        {orszag: "Kirgizisztán", veszely: "Orvvadászat", sulyossag: 4},
+        {orszag: "Kirgizisztán", veszely: "Klímaváltozás", sulyossag: 3}
+    ];
+
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- 1. TÉRKÉP SPECIFIKÁCIÓ ---
+    // --- 1. TÉRKÉP ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 500, "background": "transparent",
@@ -199,33 +195,31 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ]
     };
 
-    // --- 2. GPS SPECIFIKÁCIÓ (Javított) ---
+    // --- 2. VESZÉLY MÁTRIX (Heatmap) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", 
-        "height": 400, 
-        "data": { "values": gpsData },
-        "mark": { "type": "circle", "size": 60, "opacity": 0.6 },
+        "width": "container", "height": 300,
+        "data": { "values": riskData },
+        "mark": "rect",
         "encoding": {
-            "x": { 
-                "field": "Longitude", 
-                "type": "quantitative", 
-                "scale": {"zero": false, "padding": 5}, 
-                "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Hosszúság"} 
+            "x": { "field": "orszag", "type": "nominal", "title": "Ország", "axis": {"labelColor": "#fff", "titleColor": "#aed9e0", "labelAngle": 0} },
+            "y": { "field": "veszely", "type": "nominal", "title": null, "axis": {"labelColor": "#fff", "labelFontSize": 12} },
+            "color": {
+                "field": "sulyossag",
+                "type": "quantitative",
+                "title": "Kockázat",
+                "scale": {"scheme": "reds"},
+                "legend": {"titleColor": "#fff", "labelColor": "#fff"}
             },
-            "y": { 
-                "field": "Latitude", 
-                "type": "quantitative", 
-                "scale": {"zero": false, "padding": 5}, 
-                "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Szélesség"} 
-            },
-            "color": { "field": "Leopard_ID", "type": "nominal", "scale": {"scheme": "category10"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff", "title": "Párduc"} },
-            "tooltip": [{"field": "Leopard_ID", "title": "Név"}]
-        },
-        "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
+            "tooltip": [
+                {"field": "orszag", "title": "Ország"},
+                {"field": "veszely", "title": "Veszélyforrás"},
+                {"field": "sulyossag", "title": "Súlyosság (1-5)"}
+            ]
+        }
     };
 
-    // --- 3. GAZDASÁG SPECIFIKÁCIÓ ---
+    // --- 3. GAZDASÁG ---
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "url": "leopard_economy.csv" },
@@ -236,7 +230,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ], "resolve": {"scale": {"y": "independent"}}
     };
 
-    // --- 4. TÁPLÁLÉK SPECIFIKÁCIÓ ---
+    // --- 4. TÁPLÁLÉK ---
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, 
@@ -250,7 +244,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         }
     };
 
-    // --- 5. VÁNDORLÁS (VONAL) SPECIFIKÁCIÓ ---
+    // --- 5. VÁNDORLÁS ---
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400, "data": { "values": elevationData },

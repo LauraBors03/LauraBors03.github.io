@@ -200,21 +200,67 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
             }
         ]
     };
-    // --- SPEC 2: GPS (GENERÁLT ADATTAL) ---
+   // --- SPEC 2: A TE MEGOLDÁSOD (Connected Scatter Plot) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400,
-        "data": { "values": gpsData }, // A fenti generált adatot használja
-        "mark": {"type": "circle", "size": 60, "opacity": 0.6},
-        "encoding": {
-            "x": {"field": "Longitude", "type": "quantitative", "title": "Hosszúság", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
-            "y": {"field": "Latitude", "type": "quantitative", "title": "Szélesség", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"}},
-            "color": {"field": "Leopard_ID", "type": "nominal", "title": "Párduc", "scale": {"scheme": "set2"}},
-            "tooltip": [{"field": "Leopard_ID"}, {"field": "Honap"}]
+        "width": "container", 
+        "height": 400,
+        "data": { "values": gpsData }, // A generált adataink
+        
+        // ITT A TE KÓDRÉSZLETED BEÉPÍTVE:
+        "mark": {
+            "type": "line",  // Vonalat húz
+            "point": {       // De tesz pöttyöket is (mint a driving.json példában)
+                "filled": true, 
+                "size": 60 
+            },
+            "opacity": 0.8,
+            "strokeWidth": 2 // Vonal vastagsága
         },
-        "selection": { "grid": { "type": "interval", "bind": "scales" } }
+        
+        "encoding": {
+            // X tengely = Hosszúság (mint a "miles")
+            "x": { 
+                "field": "Longitude", 
+                "type": "quantitative", 
+                "title": "Hosszúság",
+                "scale": {"zero": false}, // Hogy ne 0-tól induljon, hanem rázoomoljon
+                "axis": {"gridColor": "#334", "labelColor": "#fff"}
+            },
+            
+            // Y tengely = Szélesség (mint a "gas")
+            "y": { 
+                "field": "Latitude", 
+                "type": "quantitative", 
+                "title": "Szélesség",
+                "scale": {"zero": false},
+                "axis": {"gridColor": "#334", "labelColor": "#fff"}
+            },
+            
+            // SORREND (EZ A LÉNYEG!): A "Step" alapján köti össze őket
+            "order": { "field": "Step" },
+            
+            // KÜLÖNBSÉG: Színekkel választjuk szét a párducokat
+            "color": { 
+                "field": "Leopard_ID", 
+                "type": "nominal", 
+                "title": "Párduc",
+                "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"},
+                "scale": {"scheme": "set2"} 
+            },
+            
+            "tooltip": [
+                {"field": "Leopard_ID", "title": "Név"},
+                {"field": "Step", "title": "Mérés sorszáma"}
+            ]
+        },
+        // Interakció: Zoomolható marad
+        "params": [{
+            "name": "grid",
+            "select": "interval",
+            "bind": "scales"
+        }]
     };
-
     // --- SPEC 3: GAZDASÁG ---
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",

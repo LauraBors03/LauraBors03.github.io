@@ -177,12 +177,46 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
     // --- SPEC 1: TÉRKÉP ---
+   // --- SPEC 1: INTERAKTÍV ZOOMOS TÉRKÉP ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400, "background": "transparent",
-        "projection": { "type": "mercator", "scale": 400, "center": [85, 40] },
+        "width": "container", 
+        "height": 500,
+        "background": "transparent",
+        
+        // ITT A VARÁZSLAT: Paraméterek (Vezérlők) definíciója
+        "params": [
+            {
+                "name": "ZoomLevel",
+                "value": 400,
+                "bind": { "input": "range", "min": 100, "max": 1500, "step": 10, "name": "🔍 Zoom: " }
+            },
+            {
+                "name": "CenterLon",
+                "value": 85,
+                "bind": { "input": "range", "min": 20, "max": 140, "step": 1, "name": "↔️ Hosszúság: " }
+            },
+            {
+                "name": "CenterLat",
+                "value": 40,
+                "bind": { "input": "range", "min": 0, "max": 70, "step": 1, "name": "↕️ Szélesség: " }
+            }
+        ],
+
+        // A PROJEKCIÓ MOST MÁR A VEZÉRLŐKTŐL FÜGG
+        "projection": {
+            "type": "mercator",
+            "scale": { "expr": "ZoomLevel" },           // A Zoom csúszka értéke
+            "center": { "expr": "[CenterLon, CenterLat]" } // A pozíció csúszkák értékei
+        },
+
         "layer": [
-            { "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } }, "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 } },
+            // 1. RÉTEG: HÁTTÉR ORSZÁGOK
+            {
+                "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
+                "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 }
+            },
+            // 2. RÉTEG: ADATOK
             {
                 "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
                 "transform": [
@@ -197,7 +231,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             }
         ]
     };
-
     // --- SPEC 2: GPS (SCATTER - BIZTOS VERZIÓ) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",

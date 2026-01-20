@@ -15,30 +15,65 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Montserrat', sans-serif; background-color: #0b1026; color: #e6f4f1; overflow-x: hidden; }
 
-/* HÓESÉS */
-.snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 10; pointer-events: none; }
-body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at bottom, #1b2949 0%, #0b1026 100%); z-index: -2; }
-.snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; filter: blur(1px); }
-@keyframes fall { to { transform: translateY(105vh); } }
+/* HÁTTÉR GRADIENT (Mélység) */
+body::before { 
+    content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: radial-gradient(circle at 50% 100%, #1b2949 0%, #050814 100%); 
+    z-index: -2; 
+}
+
+/* 1. TURBÓ HÓESÉS */
+.snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.snowflake { 
+    position: absolute; top: -10px; background: white; border-radius: 50%; 
+    opacity: 0.8; animation: fall linear infinite; 
+}
+
+/* 2. PARTICLE EFFEKT (VARÁZSPOR) */
+.particle {
+    position: absolute; background: #00d2ff; border-radius: 50%;
+    box-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; /* Ragyogás! */
+    opacity: 0; animation: floatUp ease-in-out infinite;
+    z-index: 0; /* A tartalom mögött, de a háttér előtt */
+}
+
+@keyframes fall { 
+    0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(110vh) translateX(20px); opacity: 0.3; } 
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(110vh) scale(0); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+}
 
 /* HERO */
-.hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; background: linear-gradient(rgba(11, 16, 38, 0.3), rgba(11, 16, 38, 0.8)), url('snowleo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; box-shadow: inset 0 -150px 150px #0b1026; z-index: 1; }
-.hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 5px 20px rgba(0,0,0,0.9); margin-bottom: 20px; text-transform: uppercase; position: relative; z-index: 20; }
-.hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(3px); border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 20; }
+.hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; background: linear-gradient(rgba(11, 16, 38, 0.5), rgba(11, 16, 38, 0.9)), url('snowleo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; box-shadow: inset 0 -150px 150px #0b1026; z-index: 2; }
+.hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); margin-bottom: 20px; text-transform: uppercase; }
+.hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 
 /* KONTÉNER */
 .container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
-.card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(174, 217, 224, 0.1); border-radius: 20px; padding: 40px; margin-bottom: 80px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
-.section-title { font-size: 2em; margin-bottom: 15px; color: #fff; border-left: 5px solid #00d2ff; padding-left: 20px; }
+.card { background: rgba(20, 30, 60, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(0, 210, 255, 0.1); border-radius: 20px; padding: 40px; margin-bottom: 80px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: transform 0.3s; }
+.card:hover { border-color: rgba(0, 210, 255, 0.3); box-shadow: 0 0 30px rgba(0, 210, 255, 0.1); }
+.section-title { font-size: 2em; margin-bottom: 15px; color: #fff; border-left: 5px solid #00d2ff; padding-left: 20px; text-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
 .section-desc { color: #b0c4de; margin-bottom: 30px; line-height: 1.7; font-size: 1.1em; }
 .viz-container { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
 footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 5; }
+
+/* GÖRGETŐSÁV */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0b1026; }
+::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 4px; }
+
 @media (max-width: 768px) { .hero h1 { font-size: 2.5em; } .hero p { font-size: 1em; } .card { padding: 20px; } }
 </style>
 </head>
 <body>
 
-<div class="snow-bg" id="snow-container"></div>
+<div class="snow-bg" id="fx-container"></div>
 
 <div class="hero">
     <h1>GHOST OF THE MOUNTAINS</h1>
@@ -56,7 +91,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         <p class="section-desc">
             Ez a térkép vizualizálja a hópárducok eloszlását Ázsiában. 
             A <strong>körök mérete</strong> a populáció nagyságát jelzi, a szín az élőhely minőségét.
-            Vidd az egeret az országok fölé az adatokért!
         </p>
         <div id="viz1" class="viz-container"></div>
     </div>
@@ -77,8 +111,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         <h2 class="section-title">💰 Konfliktus vs. Megőrzés</h2>
         <p class="section-desc">
             Hogyan hat a pénz a védelemre? Jól látható az "olló": ahogy a 
-            <span style="color:#00d2ff; font-weight:bold;">Turizmus Bevétel (Zöld, bal tengely)</span> nő, 
-            úgy csökken az <span style="color:#ff6b6b; font-weight:bold;">Orvvadászat (Piros, jobb tengely)</span>.
+            <span style="color:#00d2ff; font-weight:bold;">Turizmus Bevétel (Zöld)</span> nő, 
+            úgy csökken az <span style="color:#ff6b6b; font-weight:bold;">Orvvadászat (Piros)</span>.
         </p>
         <div id="viz3" class="viz-container"></div>
     </div>
@@ -91,19 +125,40 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
 </footer>
 
 <script>
-    // --- 1. HÓESÉS GENERÁLÁS ---
-    const snowContainer = document.getElementById('snow-container');
-    for(let i=0; i<50; i++){
+    const fxContainer = document.getElementById('fx-container');
+
+    // --- 1. SŰRŰ HÓESÉS GENERÁLÁS (200 db) ---
+    for(let i=0; i<200; i++){
         let flake = document.createElement('div');
         flake.className = 'snowflake';
         flake.style.left = Math.random() * 100 + 'vw';
-        flake.style.width = flake.style.height = (Math.random() * 4 + 2) + 'px';
-        flake.style.animationDuration = (Math.random() * 10 + 5) + 's';
+        // Véletlenszerű méret (1px-től 4px-ig) a mélységérzetért
+        let size = Math.random() * 3 + 1;
+        flake.style.width = size + 'px';
+        flake.style.height = size + 'px';
+        // Véletlenszerű sebesség és homályosítás
+        flake.style.animationDuration = (Math.random() * 5 + 3) + 's';
+        flake.style.filter = `blur(${Math.random()}px)`;
         flake.style.opacity = Math.random() * 0.7 + 0.3;
-        snowContainer.appendChild(flake);
+        fxContainer.appendChild(flake);
     }
 
-    // --- 2. GPS ADAT GENERÁLÁS (A BIZTOS MÓDSZER) ---
+    // --- 2. PARTICLE / MAGIC DUST EFFEKT (50 db) ---
+    for(let i=0; i<50; i++){
+        let part = document.createElement('div');
+        part.className = 'particle';
+        part.style.left = Math.random() * 100 + 'vw';
+        // Véletlenszerű méret
+        let size = Math.random() * 4 + 1;
+        part.style.width = size + 'px';
+        part.style.height = size + 'px';
+        // Ezek lassan szállnak felfelé
+        part.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        part.style.animationDelay = (Math.random() * 5) + 's';
+        fxContainer.appendChild(part);
+    }
+
+    // --- 3. ADATOK ÉS DIAGRAMOK (STABIL VERZIÓ!) ---
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
     const bases = {
@@ -114,7 +169,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         'Nachin':  {lat: 42.4, lon: 100.9}
     };
 
-    // Egyszerű, megbízható adatgenerálás (1000 pont)
+    // Adatgenerálás (Sima 1000 pont, nincs Step)
     for(let i=0; i<1000; i++) {
         const leo = leopards[Math.floor(Math.random() * leopards.length)];
         const base = bases[leo];
@@ -125,15 +180,12 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         });
     }
 
-    // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // --- SPEC 1: TÉRKÉP ---
+    // SPEC 1: TÉRKÉP
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", 
-        "height": 500,
-        "background": "transparent",
+        "width": "container", "height": 500, "background": "transparent",
         "projection": { "type": "mercator", "scale": 400, "center": [85, 40] },
         "layer": [
             {
@@ -155,43 +207,22 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         ]
     };
 
-    // --- SPEC 2: GPS PÖTTYÖK (A BIZTOS VERZIÓ) ---
-    // Kivettem a vonalakat és a "Step" mezőt. Ez csak sima pöttyöket rajzol.
-    // EZ BIZTOSAN MŰKÖDNI FOG!
+    // SPEC 2: GPS (BIZTOSAN MŰKÖDŐ SCATTER PLOT)
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", 
-        "height": 400,
+        "width": "container", "height": 400,
         "data": { "values": gpsData },
         "mark": { "type": "circle", "size": 60, "opacity": 0.6 },
         "encoding": {
-            "x": { 
-                "field": "Longitude", 
-                "type": "quantitative", 
-                "title": "Hosszúság",
-                "scale": {"zero": false}, 
-                "axis": {"gridColor": "#334", "labelColor": "#fff"}
-            },
-            "y": { 
-                "field": "Latitude", 
-                "type": "quantitative", 
-                "title": "Szélesség",
-                "scale": {"zero": false}, 
-                "axis": {"gridColor": "#334", "labelColor": "#fff"}
-            },
-            "color": { 
-                "field": "Leopard_ID", 
-                "type": "nominal", 
-                "title": "Párduc", 
-                "scale": {"scheme": "set2"}, // Szép színek
-                "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"}
-            },
+            "x": { "field": "Longitude", "type": "quantitative", "title": "Hosszúság", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"} },
+            "y": { "field": "Latitude", "type": "quantitative", "title": "Szélesség", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"} },
+            "color": { "field": "Leopard_ID", "type": "nominal", "title": "Párduc", "scale": {"scheme": "set2"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"} },
             "tooltip": [{"field": "Leopard_ID", "title": "Név"}]
         },
         "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
     };
 
-    // --- SPEC 3: GAZDASÁG ---
+    // SPEC 3: GAZDASÁG
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", "height": 400,
@@ -200,17 +231,11 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         "layer": [
             {
                 "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true},
-                "encoding": { 
-                    "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} },
-                    "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD", "title": "Bevétel ($)"}]
-                }
+                "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} }, "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD", "title": "Bevétel ($)"}] }
             },
             {
                 "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true},
-                "encoding": { 
-                    "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} },
-                    "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat (db)"}]
-                }
+                "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} }, "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat (db)"}] }
             }
         ],
         "resolve": {"scale": {"y": "independent"}}

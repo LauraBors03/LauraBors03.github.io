@@ -131,14 +131,14 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-   // --- SPEC 1: INTERAKTÍV TÉRKÉP (TUNINGOLVA) ---
+ // --- SPEC 1: VÉGLEGES INTERAKTÍV TÉRKÉP (JAVÍTOTT SZÍNEKKEL) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 500,
         "background": "transparent",
         
-        // KÖZÖS PROJEKCIÓ (Hogy minden réteg ugyanoda essen)
+        // KÖZÖS PROJEKCIÓ
         "projection": {
             "type": "mercator",
             "scale": 400,          
@@ -146,8 +146,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         },
 
         "layer": [
-            // 1. RÉTEG: HÁTTÉR ORSZÁGOK (A "szürke zóna")
-            // Ez azért kell, hogy ne a semmiben lebegjen a színes térkép
+            // 1. RÉTEG: HÁTTÉR ORSZÁGOK (Sötétkék)
             {
                 "data": {
                     "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
@@ -155,19 +154,18 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 },
                 "mark": { 
                     "type": "geoshape", 
-                    "fill": "#162038",   // Nagyon sötétkék háttérszín a többi országnak
-                    "stroke": "#2c3e50", // Halvány határvonalak
+                    "fill": "#162038",   
+                    "stroke": "#2c3e50", 
                     "strokeWidth": 0.5
                 }
             },
 
-            // 2. RÉTEG: AZ ADATOK (Színes országok + INTERAKCIÓ)
+            // 2. RÉTEG: ADATOK ÉS INTERAKCIÓ
             {
                 "data": {
                     "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
                     "format": { "type": "topojson", "feature": "countries" }
                 },
-                // ITT KAPCSOLJUK ÖSSZE A CSV-VEL
                 "transform": [
                     {
                         "lookup": "id",
@@ -177,34 +175,34 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                             "fields": ["Populacio_Becsles", "Orszag", "Elohely_Minoseg_Pontszam"]
                         }
                     },
-                    // Csak azokat tartjuk meg ebben a rétegben, ahol van adat
                     { "filter": "datum.Populacio_Becsles != null" }
                 ],
                 
-                // INTERAKCIÓ: Kiemelés egérrávitelre
+                // Mark beállítása
                 "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5, "cursor": "pointer" },
                 
                 "encoding": {
-                    // SZÍN: Alapból kék, de HA ráviszed az egeret (hover), akkor ARANY!
+                    // --- ITT A JAVÍTÁS! ---
                     "color": {
                         "condition": {
-                            "param": "hover",    // Ha aktív a 'hover' paraméter...
-                            "value": "#ffd700"   // ...legyen arany színű!
+                            "param": "hover",    
+                            "value": "#00d2ff"   // Sárga helyett a téma CIÁNKÉK színe! Sokkal szebb.
                         },
+                        // Alapállapotban marad a populáció szerinti kék skála
                         "field": "Populacio_Becsles",
                         "type": "quantitative",
                         "scale": { "scheme": "tealblues" },
                         "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" }
                     },
+                    // ---------------------
                     
-                    // TOOLTIP: A kis buborék adatokkal
                     "tooltip": [
                         {"field": "Orszag", "title": "Ország"},
                         {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"},
                         {"field": "Elohely_Minoseg_Pontszam", "title": "Élőhely Minőség"}
                     ]
                 },
-                // Ez aktiválja az egérkövetést
+                // Interakció aktiválása
                 "params": [{
                     "name": "hover",
                     "select": { "type": "point", "on": "mouseover" }
@@ -212,7 +210,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
             }
         ]
     };
-
     // --- SPEC 2: GPS (GENERÁLT ADATTAL) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",

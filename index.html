@@ -200,35 +200,22 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
             }
         ]
     };
-   // --- SPEC 2: A TE MEGOLDÁSOD (Connected Scatter Plot) ---
+  // --- SPEC 2: ELEGÁNS ÚTVONAL (Anti-Spaghetti Verzió) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 400,
-        "data": { "values": gpsData }, // A generált adataink
+        "data": { "values": gpsData },
         
-        // ITT A TE KÓDRÉSZLETED BEÉPÍTVE:
-        "mark": {
-            "type": "line",  // Vonalat húz
-            "point": {       // De tesz pöttyöket is (mint a driving.json példában)
-                "filled": true, 
-                "size": 60 
-            },
-            "opacity": 0.8,
-            "strokeWidth": 2 // Vonal vastagsága
-        },
-        
+        // KÖZÖS BEÁLLÍTÁSOK (Hogy a vonal és a pötty is tudja, kihez tartozik)
         "encoding": {
-            // X tengely = Hosszúság (mint a "miles")
             "x": { 
                 "field": "Longitude", 
                 "type": "quantitative", 
                 "title": "Hosszúság",
-                "scale": {"zero": false}, // Hogy ne 0-tól induljon, hanem rázoomoljon
+                "scale": {"zero": false},
                 "axis": {"gridColor": "#334", "labelColor": "#fff"}
             },
-            
-            // Y tengely = Szélesség (mint a "gas")
             "y": { 
                 "field": "Latitude", 
                 "type": "quantitative", 
@@ -236,25 +223,45 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 "scale": {"zero": false},
                 "axis": {"gridColor": "#334", "labelColor": "#fff"}
             },
-            
-            // SORREND (EZ A LÉNYEG!): A "Step" alapján köti össze őket
-            "order": { "field": "Step" },
-            
-            // KÜLÖNBSÉG: Színekkel választjuk szét a párducokat
             "color": { 
                 "field": "Leopard_ID", 
                 "type": "nominal", 
                 "title": "Párduc",
-                "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"},
-                "scale": {"scheme": "set2"} 
+                "scale": {"scheme": "set2"}, // Jól elkülönülő pasztell színek
+                "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"}
             },
-            
-            "tooltip": [
-                {"field": "Leopard_ID", "title": "Név"},
-                {"field": "Step", "title": "Mérés sorszáma"}
-            ]
+            // EZ A TITOK: A "Step" (lépés) mondja meg a sorrendet!
+            "order": { "field": "Step" } 
         },
-        // Interakció: Zoomolható marad
+
+        "layer": [
+            // 1. RÉTEG: A VONALAK (Ívelten, halványan)
+            {
+                "mark": {
+                    "type": "line",
+                    "interpolate": "monotone", // Ettől lesz szép ívelt (organikus)!
+                    "strokeWidth": 2,
+                    "opacity": 0.6 // Átlátszóbb, hogy ne legyen zavaró
+                }
+            },
+            // 2. RÉTEG: A PONTOK (Kisebbek, de láthatóak)
+            {
+                "mark": {
+                    "type": "circle",
+                    "size": 30, // Kicsit kisebb pöttyök
+                    "opacity": 1
+                },
+                // Tooltip csak a pöttyökre kell
+                "encoding": {
+                    "tooltip": [
+                        {"field": "Leopard_ID", "title": "Név"},
+                        {"field": "Step", "title": "Mérés sorszáma"}
+                    ]
+                }
+            }
+        ],
+        
+        // Zoomolhatóság megmarad
         "params": [{
             "name": "grid",
             "select": "interval",

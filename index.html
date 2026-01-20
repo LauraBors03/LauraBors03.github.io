@@ -11,26 +11,20 @@
 <link rel="icon" type="image/png" href="mammal.png">
 
 <style>
-/* --- STÍLUSOK (DESIGN) --- */
+/* --- DESIGN --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Montserrat', sans-serif; background-color: #0b1026; color: #e6f4f1; overflow-x: hidden; }
 
-/* HÁTTÉR GRADIENT (Mélység) */
+/* HÁTTÉR */
 body::before { 
     content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: radial-gradient(circle at 50% 100%, #1b2949 0%, #050814 100%); 
     z-index: -2; 
 }
 
-/* 1. TURBÓ HÓESÉS (Csak lefelé!) */
-/* z-index: 10 -> Minden elem felett esik a hó */
+/* HÓESÉS (ELŐTÉR) */
 .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
-
-.snowflake { 
-    position: absolute; top: -10px; background: white; border-radius: 50%; 
-    opacity: 0.8; animation: fall linear infinite; 
-}
-
+.snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; }
 @keyframes fall { 
     0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
     10% { opacity: 1; }
@@ -49,14 +43,15 @@ body::before {
 .section-title { font-size: 2em; margin-bottom: 15px; color: #fff; border-left: 5px solid #00d2ff; padding-left: 20px; text-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
 .section-desc { color: #b0c4de; margin-bottom: 30px; line-height: 1.7; font-size: 1.1em; }
 .viz-container { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
-footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 5; }
 
-/* GÖRGETŐSÁV */
+/* GRID */
+.grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+@media (max-width: 768px) { .grid-2-col { grid-template-columns: 1fr; } .hero h1 { font-size: 2.5em; } }
+
+footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 5; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #0b1026; }
 ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 4px; }
-
-@media (max-width: 768px) { .hero h1 { font-size: 2.5em; } .hero p { font-size: 1em; } .card { padding: 20px; } }
 </style>
 </head>
 <body>
@@ -67,8 +62,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     <h1>GHOST OF THE MOUNTAINS</h1>
     <p>
         A hópárduc (Panthera uncia) Belső-Ázsia legrejtélyesebb csúcsragadozója. 
-        Az alábbi vizualizációk feltárják a populációk állapotát, mozgási mintázataikat
-        és a fajmegőrzés gazdasági hatásait.
+        Az alábbi vizualizációk feltárják a populációk állapotát, mozgási mintázataikat,
+        táplálkozási szokásaikat és a fajmegőrzés gazdasági hatásait.
     </p>
 </div>
 
@@ -77,20 +72,34 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
    <div class="card">
         <h2 class="section-title">🗺️ Élőhelyek Térképes Elemzése</h2>
         <p class="section-desc">
-            Ez a térkép vizualizálja a hópárducok eloszlását Ázsiában. 
-            A <strong>körök mérete</strong> a populáció nagyságát jelzi, a szín az élőhely minőségét.
+            A hópárducok eloszlása Ázsiában. A körök mérete a populációt, a szín az élőhely minőségét jelzi.
         </p>
         <div id="viz1" class="viz-container"></div>
+    </div>
+
+    <div class="grid-2-col">
+        <div class="card">
+            <h2 class="section-title">🥩 Táplálék & Konfliktus</h2>
+            <p class="section-desc">
+                Mit eszik a "szellem"? A <span style="color:#ff6b6b">Háziállatok (18%)</span> aránya közvetlen konfliktusforrás a pásztorokkal.
+            </p>
+            <div id="viz4" class="viz-container"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">🏔️ Szezonális Vándorlás</h2>
+            <p class="section-desc">
+                Követik a hóhatárt: nyáron (Július-Augusztus) 4500m fölé húzódnak a hőség elől.
+            </p>
+            <div id="viz5" class="viz-container"></div>
+        </div>
     </div>
 
     <div class="card">
         <h2 class="section-title">📡 Mozgáskövetés GPS alapján</h2>
         <p class="section-desc">
-            A modern természetvédelem alapja az adat. Ezen a diagramon 
-            <strong>1000 GPS adatpontot</strong> láthatunk, amely 5 különböző, 
-            jeladóval ellátott hópárduc mozgását követi a mongol Altaj-hegységben.
-            <br>
-            <em>Interakció: Nagyíthatsz (görgő) és mozgathatod a térképet!</em>
+            <strong>1000 GPS adatpont:</strong> 5 jeladóval ellátott hópárduc mozgása a mongol Altaj-hegységben.
+            <br><em>Interakció: Nagyíthatsz és mozgathatod!</em>
         </p>
         <div id="viz2" class="viz-container"></div>
     </div>
@@ -98,9 +107,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     <div class="card">
         <h2 class="section-title">💰 Konfliktus vs. Megőrzés</h2>
         <p class="section-desc">
-            Hogyan hat a pénz a védelemre? Jól látható az "olló": ahogy a 
-            <span style="color:#00d2ff; font-weight:bold;">Turizmus Bevétel (Zöld)</span> nő, 
-            úgy csökken az <span style="color:#ff6b6b; font-weight:bold;">Orvvadászat (Piros)</span>.
+            Hogyan hat a pénz? Ahogy a <span style="color:#00d2ff">Turizmus Bevétel</span> nő, úgy csökken az <span style="color:#ff6b6b">Orvvadászat</span>.
         </p>
         <div id="viz3" class="viz-container"></div>
     </div>
@@ -109,41 +116,35 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
 
 <footer>
     <p>Adatok forrása: Snow Leopard Trust, IUCN Red List</p>
+    <p><em>Jogi nyilatkozat: A megjelenített adatok oktatási célú szimulációk, amelyek valós trendeken alapulnak.</em></p>
     <p>BI Projekt 2026</p>
 </footer>
 
 <script>
     const fxContainer = document.getElementById('fx-container');
-
-    // --- 1. SŰRŰ HÓESÉS GENERÁLÁS (200 db) ---
-    // Csak a hóesés maradt, a "felfelé szálló" részecskéket töröltem.
+    // HÓESÉS
     for(let i=0; i<200; i++){
         let flake = document.createElement('div');
         flake.className = 'snowflake';
         flake.style.left = Math.random() * 100 + 'vw';
-        // Véletlenszerű méret (1px-től 4px-ig) a mélységérzetért
         let size = Math.random() * 3 + 1;
-        flake.style.width = size + 'px';
-        flake.style.height = size + 'px';
-        // Véletlenszerű sebesség és homályosítás
+        flake.style.width = size + 'px'; flake.style.height = size + 'px';
         flake.style.animationDuration = (Math.random() * 5 + 3) + 's';
         flake.style.filter = `blur(${Math.random()}px)`;
         flake.style.opacity = Math.random() * 0.7 + 0.3;
         fxContainer.appendChild(flake);
     }
 
-    // --- 3. ADATOK ÉS DIAGRAMOK (STABIL VERZIÓ!) ---
+    // --- ADATGENERÁLÁS ---
+    
+    // 1. GPS ADATOK
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
     const bases = {
-        'Dagina':  {lat: 43.1, lon: 100.4},
-        'Presnel': {lat: 42.9, lon: 99.1},
-        'Kheshig': {lat: 43.5, lon: 101.2},
-        'Aztai':   {lat: 43.8, lon: 98.7},
+        'Dagina':  {lat: 43.1, lon: 100.4}, 'Presnel': {lat: 42.9, lon: 99.1},
+        'Kheshig': {lat: 43.5, lon: 101.2}, 'Aztai':   {lat: 43.8, lon: 98.7},
         'Nachin':  {lat: 42.4, lon: 100.9}
     };
-
-    // Adatgenerálás (Sima 1000 pont)
     for(let i=0; i<1000; i++) {
         const leo = leopards[Math.floor(Math.random() * leopards.length)];
         const base = bases[leo];
@@ -154,18 +155,34 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         });
     }
 
+    // 2. DIET DATA (Reális becslések!)
+    // Forrás alap: Blue sheep is main prey (~50-60%)
+    const dietData = [
+        {category: "Kék Juh (Bharal)", value: 55, color: "#00d2ff"},
+        {category: "Kőszáli Kecske", value: 20, color: "#2980b9"},
+        {category: "Mormota & Kisemlős", value: 7, color: "#aed9e0"},
+        {category: "Háziállat (Konfliktus)", value: 18, color: "#ff6b6b"}
+    ];
+
+    // 3. ELEVATION DATA
+    const elevationData = [
+        {honap: "Jan", magassag: 2800}, {honap: "Feb", magassag: 2900},
+        {honap: "Már", magassag: 3200}, {honap: "Ápr", magassag: 3600},
+        {honap: "Máj", magassag: 4100}, {honap: "Jún", magassag: 4500},
+        {honap: "Júl", magassag: 4600}, {honap: "Aug", magassag: 4400},
+        {honap: "Szep", magassag: 4000}, {honap: "Okt", magassag: 3500},
+        {honap: "Nov", magassag: 3000}, {honap: "Dec", magassag: 2800}
+    ];
+
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-    // SPEC 1: TÉRKÉP
+    // --- SPEC 1: TÉRKÉP ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 500, "background": "transparent",
+        "width": "container", "height": 400, "background": "transparent",
         "projection": { "type": "mercator", "scale": 400, "center": [85, 40] },
         "layer": [
-            {
-                "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
-                "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 }
-            },
+            { "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } }, "mark": { "type": "geoshape", "fill": "#162038", "stroke": "#2c3e50", "strokeWidth": 0.5 } },
             {
                 "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": { "type": "topojson", "feature": "countries" } },
                 "transform": [
@@ -175,49 +192,68 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5, "cursor": "pointer" },
                 "encoding": {
                     "color": { "field": "Populacio_Becsles", "type": "quantitative", "scale": { "scheme": "tealblues" }, "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" } },
-                    "tooltip": [ {"field": "Orszag", "title": "Ország"}, {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"}, {"field": "Elohely_Minoseg_Pontszam", "title": "Élőhely Minőség"} ]
+                    "tooltip": [ {"field": "Orszag", "title": "Ország"}, {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"} ]
                 }
             }
         ]
     };
 
-    // SPEC 2: GPS (BIZTOSAN MŰKÖDŐ SCATTER PLOT)
+    // --- SPEC 2: GPS (SCATTER - BIZTOS VERZIÓ) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400,
-        "data": { "values": gpsData },
+        "width": "container", "height": 400, "data": { "values": gpsData },
         "mark": { "type": "circle", "size": 60, "opacity": 0.6 },
         "encoding": {
-            "x": { "field": "Longitude", "type": "quantitative", "title": "Hosszúság", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"} },
-            "y": { "field": "Latitude", "type": "quantitative", "title": "Szélesség", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"} },
-            "color": { "field": "Leopard_ID", "type": "nominal", "title": "Párduc", "scale": {"scheme": "set2"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"} },
+            "x": { "field": "Longitude", "type": "quantitative", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Hosszúság"} },
+            "y": { "field": "Latitude", "type": "quantitative", "scale": {"zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff", "title": "Szélesség"} },
+            "color": { "field": "Leopard_ID", "type": "nominal", "scale": {"scheme": "set2"}, "legend": {"titleColor": "#aed9e0", "labelColor": "#fff", "title": "Párduc"} },
             "tooltip": [{"field": "Leopard_ID", "title": "Név"}]
         },
         "params": [{ "name": "grid", "select": "interval", "bind": "scales" }]
     };
 
-    // SPEC 3: GAZDASÁG
+    // --- SPEC 3: GAZDASÁG ---
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400,
-        "data": { "url": "leopard_economy.csv" },
+        "width": "container", "height": 400, "data": { "url": "leopard_economy.csv" },
         "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff", "grid": false} } },
         "layer": [
-            {
-                "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true},
-                "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} }, "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD", "title": "Bevétel ($)"}] }
-            },
-            {
-                "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true},
-                "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} }, "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek", "title": "Orvvadászat (db)"}] }
-            }
-        ],
-        "resolve": {"scale": {"y": "independent"}}
+            { "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} }, "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD"}] } },
+            { "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} }, "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek"}] } }
+        ], "resolve": {"scale": {"y": "independent"}}
     };
 
-    vegaEmbed('#viz1', spec1, commonConfig).catch(console.error);
-    vegaEmbed('#viz2', spec2, commonConfig).catch(console.error);
-    vegaEmbed('#viz3', spec3, commonConfig).catch(console.error);
+    // --- SPEC 4: TÁPLÁLÉK (BAR CHART - SÁVOK) ---
+    const spec4 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container", "height": 300, 
+        "data": { "values": dietData },
+        "mark": { "type": "bar", "cornerRadiusEnd": 4, "height": {"band": 0.6} },
+        "encoding": {
+            "x": { "field": "value", "type": "quantitative", "title": "Arány (%)", "axis": {"gridColor": "#334", "labelColor": "#fff"} },
+            "y": { "field": "category", "type": "nominal", "sort": "-x", "title": null, "axis": {"labelColor": "#fff", "labelFontSize": 11} },
+            "color": { "field": "category", "type": "nominal", "scale": {"range": ["#00d2ff", "#ff6b6b", "#2980b9", "#aed9e0"]}, "legend": null },
+            "tooltip": [ {"field": "category", "title": "Zsákmány"}, {"field": "value", "title": "Százalék"} ]
+        }
+    };
+
+    // --- SPEC 5: MAGASSÁG (AREA) ---
+    const spec5 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container", "height": 300, "data": { "values": elevationData },
+        "mark": { "type": "area", "line": { "color": "#00d2ff" }, "color": { "x1": 1, "y1": 1, "x2": 1, "y2": 0, "gradient": "linear", "stops": [ {"offset": 0, "color": "rgba(0, 210, 255, 0.5)"}, {"offset": 1, "color": "rgba(0, 210, 255, 0)"} ] } },
+        "encoding": {
+            "x": { "field": "honap", "type": "ordinal", "sort": null, "title": null, "axis": {"labelColor": "#fff", "grid": false} },
+            "y": { "field": "magassag", "type": "quantitative", "title": "Magasság (m)", "scale": {"domain": [2000, 5000]}, "axis": {"gridColor": "#334", "labelColor": "#fff"} },
+            "tooltip": [ {"field": "honap", "title": "Hónap"}, {"field": "magassag", "title": "Magasság"} ]
+        }
+    };
+
+    vegaEmbed('#viz1', spec1, commonConfig);
+    vegaEmbed('#viz2', spec2, commonConfig);
+    vegaEmbed('#viz3', spec3, commonConfig);
+    vegaEmbed('#viz4', spec4, commonConfig);
+    vegaEmbed('#viz5', spec5, commonConfig);
 </script>
 </body>
 </html>

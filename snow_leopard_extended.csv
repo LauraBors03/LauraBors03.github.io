@@ -1,17 +1,17 @@
-Orszag,Regio,Populacio_Becsles,Terulet_km2,Vedett_Terulet_Arany,Elohely_Minoseg_Pontszam
-Kína,Tibet-Qinghai,2500,600000,15,8.5
-Kína,Xinjiang,1200,350000,10,7.2
-Kína,Gansu,600,150000,5,6.1
-Mongólia,Altai-hegység,800,80000,25,9.0
-Mongólia,Dél-Góbi,300,21000,15,7.5
-India,Ladakh,350,45000,30,8.2
-India,Himachal,100,20000,20,6.8
-Kirgizisztán,Tian Shan,350,105000,40,8.8
-Tádzsikisztán,Pamír,280,86000,18,7.9
-Nepál,Annapurna,150,12000,55,9.2
-Nepál,Kelet-Himalája,250,18000,45,8.5
-Pakisztán,Karakorum,300,60000,35,7.1
-Oroszország,Altaj-Szaján,90,60000,22,8.0
-Kazahsztán,Dzungarian,110,50000,12,6.5
-Bhután,Jigme Dorji,150,15000,60,9.5
-Afganisztán,Wakhan,120,50000,10,7.0
+Orszag,Regio,Populacio_Becsles,Terulet_km2,Vedett_Terulet_Arany,Elohely_Minoseg_Pontszam,Lat,Lon
+Kína,Tibet-Qinghai,2500,600000,15,8.5,34.0,92.0
+Kína,Xinjiang,1200,350000,10,7.2,41.0,85.0
+Kína,Gansu,600,150000,5,6.1,38.0,100.0
+Mongólia,Altai-hegység,800,80000,25,9.0,47.0,92.0
+Mongólia,Dél-Góbi,300,21000,15,7.5,43.0,104.0
+India,Ladakh,350,45000,30,8.2,34.5,77.5
+India,Himachal,100,20000,20,6.8,32.0,77.0
+Kirgizisztán,Tian Shan,350,105000,40,8.8,41.5,74.5
+Tádzsikisztán,Pamír,280,86000,18,7.9,38.5,73.0
+Nepál,Annapurna,150,12000,55,9.2,28.5,84.0
+Nepál,Kelet-Himalája,250,18000,45,8.5,27.5,87.0
+Pakisztán,Karakorum,300,60000,35,7.1,36.0,75.0
+Oroszország,Altaj-Szaján,90,60000,22,8.0,51.0,89.0
+Kazahsztán,Dzungarian,110,50000,12,6.5,45.0,80.0
+Bhután,Jigme Dorji,150,15000,60,9.5,27.8,89.6
+Afganisztán,Wakhan,120,50000,10,7.0,37.0,73.5

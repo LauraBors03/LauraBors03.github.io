@@ -163,133 +163,22 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 
     // --- ADATOK ---
     
-    // ÚJ: INTERPOLÁLT TIMELINE ADATOK (1900-2025) - 126 ADATPONT!
+    // ÚJ: TIMELINE ADATOK (1900-2025)
     const timelineData = [
         {ev: 1900, populacio: 100000, statusz: "Unknown", esemeny: null},
-        {ev: 1901, populacio: 99250, statusz: "Unknown", esemeny: null},
-        {ev: 1902, populacio: 98500, statusz: "Unknown", esemeny: null},
-        {ev: 1903, populacio: 97750, statusz: "Unknown", esemeny: null},
-        {ev: 1904, populacio: 97000, statusz: "Unknown", esemeny: null},
-        {ev: 1905, populacio: 96250, statusz: "Unknown", esemeny: null},
-        {ev: 1906, populacio: 95500, statusz: "Unknown", esemeny: null},
-        {ev: 1907, populacio: 94750, statusz: "Unknown", esemeny: null},
-        {ev: 1908, populacio: 94000, statusz: "Unknown", esemeny: null},
-        {ev: 1909, populacio: 93250, statusz: "Unknown", esemeny: null},
-        {ev: 1910, populacio: 92500, statusz: "Unknown", esemeny: null},
-        {ev: 1911, populacio: 91750, statusz: "Unknown", esemeny: null},
-        {ev: 1912, populacio: 91000, statusz: "Unknown", esemeny: null},
-        {ev: 1913, populacio: 90250, statusz: "Unknown", esemeny: null},
-        {ev: 1914, populacio: 89500, statusz: "Unknown", esemeny: null},
-        {ev: 1915, populacio: 88750, statusz: "Unknown", esemeny: null},
-        {ev: 1916, populacio: 88000, statusz: "Unknown", esemeny: null},
-        {ev: 1917, populacio: 87250, statusz: "Unknown", esemeny: null},
-        {ev: 1918, populacio: 86500, statusz: "Unknown", esemeny: null},
-        {ev: 1919, populacio: 85750, statusz: "Unknown", esemeny: null},
         {ev: 1920, populacio: 85000, statusz: "Unknown", esemeny: null},
-        {ev: 1921, populacio: 84250, statusz: "Unknown", esemeny: null},
-        {ev: 1922, populacio: 83500, statusz: "Unknown", esemeny: null},
-        {ev: 1923, populacio: 82750, statusz: "Unknown", esemeny: null},
-        {ev: 1924, populacio: 82000, statusz: "Unknown", esemeny: null},
-        {ev: 1925, populacio: 81250, statusz: "Unknown", esemeny: null},
-        {ev: 1926, populacio: 80500, statusz: "Unknown", esemeny: null},
-        {ev: 1927, populacio: 79750, statusz: "Unknown", esemeny: null},
-        {ev: 1928, populacio: 79000, statusz: "Unknown", esemeny: null},
-        {ev: 1929, populacio: 78250, statusz: "Unknown", esemeny: null},
-        {ev: 1930, populacio: 77500, statusz: "Unknown", esemeny: null},
-        {ev: 1931, populacio: 76750, statusz: "Unknown", esemeny: null},
-        {ev: 1932, populacio: 76000, statusz: "Unknown", esemeny: null},
-        {ev: 1933, populacio: 75250, statusz: "Unknown", esemeny: null},
-        {ev: 1934, populacio: 74500, statusz: "Unknown", esemeny: null},
-        {ev: 1935, populacio: 73750, statusz: "Unknown", esemeny: null},
-        {ev: 1936, populacio: 73000, statusz: "Unknown", esemeny: null},
-        {ev: 1937, populacio: 72250, statusz: "Unknown", esemeny: null},
-        {ev: 1938, populacio: 71500, statusz: "Unknown", esemeny: null},
-        {ev: 1939, populacio: 70750, statusz: "Unknown", esemeny: null},
         {ev: 1940, populacio: 70000, statusz: "Unknown", esemeny: null},
-        {ev: 1941, populacio: 69000, statusz: "Unknown", esemeny: null},
-        {ev: 1942, populacio: 68000, statusz: "Unknown", esemeny: null},
-        {ev: 1943, populacio: 67000, statusz: "Unknown", esemeny: null},
-        {ev: 1944, populacio: 66000, statusz: "Unknown", esemeny: null},
-        {ev: 1945, populacio: 65000, statusz: "Unknown", esemeny: null},
-        {ev: 1946, populacio: 64000, statusz: "Unknown", esemeny: null},
-        {ev: 1947, populacio: 63000, statusz: "Unknown", esemeny: null},
-        {ev: 1948, populacio: 62000, statusz: "Unknown", esemeny: null},
-        {ev: 1949, populacio: 61000, statusz: "Unknown", esemeny: null},
-        {ev: 1950, populacio: 60000, statusz: "Unknown", esemeny: null},
-        {ev: 1951, populacio: 59000, statusz: "Unknown", esemeny: null},
-        {ev: 1952, populacio: 58000, statusz: "Unknown", esemeny: null},
-        {ev: 1953, populacio: 57000, statusz: "Unknown", esemeny: null},
-        {ev: 1954, populacio: 56000, statusz: "Unknown", esemeny: null},
-        {ev: 1955, populacio: 55000, statusz: "Unknown", esemeny: null},
-        {ev: 1956, populacio: 54000, statusz: "Unknown", esemeny: null},
-        {ev: 1957, populacio: 53000, statusz: "Unknown", esemeny: null},
-        {ev: 1958, populacio: 52000, statusz: "Unknown", esemeny: null},
-        {ev: 1959, populacio: 51000, statusz: "Unknown", esemeny: null},
         {ev: 1960, populacio: 50000, statusz: "Unknown", esemeny: null},
-        {ev: 1961, populacio: 48750, statusz: "Unknown", esemeny: null},
-        {ev: 1962, populacio: 47500, statusz: "Unknown", esemeny: null},
-        {ev: 1963, populacio: 46250, statusz: "Unknown", esemeny: null},
-        {ev: 1964, populacio: 45000, statusz: "Unknown", esemeny: null},
-        {ev: 1965, populacio: 43750, statusz: "Unknown", esemeny: null},
-        {ev: 1966, populacio: 42500, statusz: "Unknown", esemeny: null},
-        {ev: 1967, populacio: 41250, statusz: "Unknown", esemeny: null},
-        {ev: 1968, populacio: 40000, statusz: "Unknown", esemeny: null},
-        {ev: 1969, populacio: 38750, statusz: "Unknown", esemeny: null},
-        {ev: 1970, populacio: 37500, statusz: "Unknown", esemeny: null},
-        {ev: 1971, populacio: 36250, statusz: "Unknown", esemeny: null},
         {ev: 1972, populacio: 35000, statusz: "Endangered", esemeny: "IUCN: Veszélyeztetett státusz"},
-        {ev: 1973, populacio: 32667, statusz: "Endangered", esemeny: null},
-        {ev: 1974, populacio: 30333, statusz: "Endangered", esemeny: null},
         {ev: 1975, populacio: 28000, statusz: "Endangered", esemeny: "Prémvadászat csúcsa"},
-        {ev: 1976, populacio: 26800, statusz: "Endangered", esemeny: null},
-        {ev: 1977, populacio: 25600, statusz: "Endangered", esemeny: null},
-        {ev: 1978, populacio: 24400, statusz: "Endangered", esemeny: null},
-        {ev: 1979, populacio: 23200, statusz: "Endangered", esemeny: null},
         {ev: 1980, populacio: 22000, statusz: "Endangered", esemeny: null},
-        {ev: 1981, populacio: 21300, statusz: "Endangered", esemeny: null},
-        {ev: 1982, populacio: 20600, statusz: "Endangered", esemeny: null},
-        {ev: 1983, populacio: 19900, statusz: "Endangered", esemeny: null},
-        {ev: 1984, populacio: 19200, statusz: "Endangered", esemeny: null},
-        {ev: 1985, populacio: 18500, statusz: "Endangered", esemeny: null},
-        {ev: 1986, populacio: 17800, statusz: "Endangered", esemeny: null},
-        {ev: 1987, populacio: 17100, statusz: "Endangered", esemeny: null},
-        {ev: 1988, populacio: 16400, statusz: "Endangered", esemeny: null},
-        {ev: 1989, populacio: 15700, statusz: "Endangered", esemeny: null},
         {ev: 1990, populacio: 15000, statusz: "Endangered", esemeny: null},
-        {ev: 1991, populacio: 14300, statusz: "Endangered", esemeny: null},
-        {ev: 1992, populacio: 13600, statusz: "Endangered", esemeny: null},
-        {ev: 1993, populacio: 12900, statusz: "Endangered", esemeny: null},
-        {ev: 1994, populacio: 12200, statusz: "Endangered", esemeny: null},
-        {ev: 1995, populacio: 11500, statusz: "Endangered", esemeny: null},
-        {ev: 1996, populacio: 10800, statusz: "Endangered", esemeny: null},
-        {ev: 1997, populacio: 10100, statusz: "Endangered", esemeny: null},
-        {ev: 1998, populacio: 9400, statusz: "Endangered", esemeny: null},
-        {ev: 1999, populacio: 8700, statusz: "Endangered", esemeny: null},
         {ev: 2000, populacio: 8000, statusz: "Endangered", esemeny: null},
-        {ev: 2001, populacio: 7500, statusz: "Endangered", esemeny: null},
-        {ev: 2002, populacio: 7000, statusz: "Endangered", esemeny: null},
         {ev: 2003, populacio: 6500, statusz: "Endangered", esemeny: "Snow Leopard Trust megerősödése"},
-        {ev: 2004, populacio: 6357, statusz: "Endangered", esemeny: null},
-        {ev: 2005, populacio: 6214, statusz: "Endangered", esemeny: null},
-        {ev: 2006, populacio: 6071, statusz: "Endangered", esemeny: null},
-        {ev: 2007, populacio: 5929, statusz: "Endangered", esemeny: null},
-        {ev: 2008, populacio: 5786, statusz: "Endangered", esemeny: null},
-        {ev: 2009, populacio: 5643, statusz: "Endangered", esemeny: null},
         {ev: 2010, populacio: 5500, statusz: "Endangered", esemeny: null},
-        {ev: 2011, populacio: 5333, statusz: "Endangered", esemeny: null},
-        {ev: 2012, populacio: 5167, statusz: "Endangered", esemeny: null},
         {ev: 2013, populacio: 5000, statusz: "Endangered", esemeny: "Globális védőprogram indítása"},
-        {ev: 2014, populacio: 4875, statusz: "Endangered", esemeny: null},
-        {ev: 2015, populacio: 4750, statusz: "Endangered", esemeny: null},
-        {ev: 2016, populacio: 4625, statusz: "Endangered", esemeny: null},
         {ev: 2017, populacio: 4500, statusz: "Vulnerable", esemeny: "Státusz: Sebezhető (javulás!)"},
-        {ev: 2018, populacio: 4400, statusz: "Vulnerable", esemeny: null},
-        {ev: 2019, populacio: 4300, statusz: "Vulnerable", esemeny: null},
         {ev: 2020, populacio: 4200, statusz: "Vulnerable", esemeny: null},
-        {ev: 2021, populacio: 4160, statusz: "Vulnerable", esemeny: null},
-        {ev: 2022, populacio: 4120, statusz: "Vulnerable", esemeny: null},
-        {ev: 2023, populacio: 4080, statusz: "Vulnerable", esemeny: null},
-        {ev: 2024, populacio: 4040, statusz: "Vulnerable", esemeny: null},
         {ev: 2025, populacio: 4000, statusz: "Vulnerable", esemeny: "Klímaváltozás új veszély"}
     ];
 
@@ -300,10 +189,12 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         {start: 2017, end: 2025, statusz: "Vulnerable", color: "#ffaa00"}
     ];
     
-    // TÁPLÁLÉK ADATOK
+    // TÁPLÁLÉK ADATOK (EMOJI-S VERZIÓ)
     const dietData = [
-        {category: "Kék Juh (Bharal)", value: 55}, {category: "Kőszáli Kecske", value: 20},
-        {category: "Mormota & Kisemlős", value: 7}, {category: "Háziállat (Konfliktus)", value: 18}
+        {category: "Kék Juh (Bharal)", value: 55, emoji: "🐑"}, 
+        {category: "Kőszáli Kecske", value: 20, emoji: "🐐"},
+        {category: "Mormota & Kisemlős", value: 7, emoji: "🐿️"}, 
+        {category: "Háziállat (Konfliktus)", value: 18, emoji: "🐄"}
     ];
 
     // VÁNDORLÁS ADATOK
@@ -518,19 +409,70 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ], "resolve": {"scale": {"y": "independent"}}
     };
 
-    // --- 4. TÁPLÁLÉK ---
+    // --- 4. TÁPLÁLÉK (EMOJI OVERLAY) ---
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400, 
+        "width": "container", 
+        "height": 400, 
         "background": "transparent",
         "data": { "values": dietData },
-        "mark": { "type": "bar", "cornerRadiusEnd": 4, "height": {"band": 0.5} },
-        "encoding": {
-            "x": { "field": "value", "type": "quantitative", "title": "Arány (%)", "axis": {"gridColor": "#334", "labelColor": "#fff"} },
-            "y": { "field": "category", "type": "nominal", "sort": "-x", "title": null, "axis": {"labelColor": "#fff", "labelFontSize": 12} },
-            "color": { "field": "category", "type": "nominal", "scale": {"range": ["#00d2ff", "#ff6b6b", "#2980b9", "#aed9e0"]}, "legend": null },
-            "tooltip": [ {"field": "category", "title": "Zsákmány"}, {"field": "value", "title": "Százalék"} ]
-        }
+        "layer": [
+            // LAYER 1: Bar chart
+            {
+                "mark": { 
+                    "type": "bar", 
+                    "cornerRadiusEnd": 4, 
+                    "height": {"band": 0.5} 
+                },
+                "encoding": {
+                    "x": { 
+                        "field": "value", 
+                        "type": "quantitative", 
+                        "title": "Arány (%)", 
+                        "axis": {"gridColor": "#334", "labelColor": "#fff"} 
+                    },
+                    "y": { 
+                        "field": "category", 
+                        "type": "nominal", 
+                        "sort": "-x", 
+                        "title": null, 
+                        "axis": {"labelColor": "#fff", "labelFontSize": 12} 
+                    },
+                    "color": { 
+                        "field": "category", 
+                        "type": "nominal", 
+                        "scale": {"range": ["#00d2ff", "#ff6b6b", "#2980b9", "#aed9e0"]}, 
+                        "legend": null 
+                    },
+                    "tooltip": [ 
+                        {"field": "category", "title": "Zsákmány"}, 
+                        {"field": "value", "title": "Százalék"} 
+                    ]
+                }
+            },
+            // LAYER 2: Emoji overlay az oszlopok végén
+            {
+                "mark": {
+                    "type": "text",
+                    "align": "left",
+                    "dx": 8,
+                    "fontSize": 28,
+                    "fontWeight": "bold"
+                },
+                "encoding": {
+                    "x": { 
+                        "field": "value", 
+                        "type": "quantitative"
+                    },
+                    "y": { 
+                        "field": "category", 
+                        "type": "nominal", 
+                        "sort": "-x"
+                    },
+                    "text": {"field": "emoji", "type": "nominal"}
+                }
+            }
+        ]
     };
 
     // --- 5. VÁNDORLÁS ---

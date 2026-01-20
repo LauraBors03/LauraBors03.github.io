@@ -132,47 +132,57 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
     // --- SPEC 1: TÉRKÉP "RADAR" STÍLUSBAN (Hogy biztosan látszódjon valami) ---
+    // --- SPEC 1: VALÓDI TÉRKÉP (National Geographic Stílus) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
-        "height": 500, // Kicsit magasabb
+        "height": 500,
+        "background": "transparent", // Átlátszó háttér, hogy a CSS érvényesüljön
         "layer": [
-            // 1. RÉTEG: TENGER/HÁTTÉR (Kód rajzolja, nem fájl)
+            // 1. RÉTEG: TENGER (Sötétkék gömb)
             {
                 "data": { "sphere": true },
-                "mark": { "type": "geoshape", "fill": "#162038" }
+                "mark": { "type": "geoshape", "fill": "#111a33" }
             },
-            // 2. RÉTEG: RÁCSHÁLÓ (GRATICULE) - Ez adja a térkép érzést fájl nélkül is!
-            {
-                "data": { "graticule": true },
-                "mark": { "type": "geoshape", "stroke": "#3a4b6b", "strokeWidth": 0.5 }
-            },
-            // 3. RÉTEG: ORSZÁGOK (Megpróbáljuk betölteni, de ha nem sikerül, a rács ott marad)
+            // 2. RÉTEG: ORSZÁGOK (Világosabb kék kontúrok)
             {
                 "data": { "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json" },
                 "format": { "type": "topojson", "feature": "countries" },
-                "mark": { "type": "geoshape", "fill": "#1b2949", "stroke": "#5c7091" } 
+                "mark": { 
+                    "type": "geoshape", 
+                    "fill": "#1b2949",      // Országok színe
+                    "stroke": "#4a5d7c",    // Határvonalak színe
+                    "strokeWidth": 1 
+                }
             },
-            // 4. RÉTEG: AZ ADATPONTOK (A PÖTTYÖK)
+            // 3. RÉTEG: ADATPONTOK (A PÖTTYÖK)
             {
                 "data": { "url": "snow_leopard_extended.csv" },
-                "mark": { "type": "circle", "opacity": 0.9, "cursor": "pointer", "stroke": "white", "strokeWidth": 1 },
+                "mark": { 
+                    "type": "circle", 
+                    "opacity": 0.8, 
+                    "cursor": "pointer",
+                    "stroke": "white",      // Fehér keret a pöttyöknek
+                    "strokeWidth": 1
+                },
                 "encoding": {
                     "longitude": { "field": "Lon", "type": "quantitative" },
                     "latitude":  { "field": "Lat", "type": "quantitative" },
                     
+                    // MÉRET: Populáció
                     "size": { 
                         "field": "Populacio_Becsles", 
                         "type": "quantitative", 
                         "scale": { "range": [50, 800] }, 
-                        "legend": { "title": "Populáció", "orient": "bottom-right" }
+                        "legend": { "title": "Populáció", "orient": "bottom-right", "titleColor": "#aed9e0", "labelColor": "#fff" }
                     },
                     
+                    // SZÍN: Minőség
                     "color": { 
                         "field": "Elohely_Minoseg_Pontszam", 
                         "type": "quantitative", 
                         "scale": { "scheme": "tealblues" }, 
-                        "legend": { "title": "Minőség", "orient": "bottom-right" }
+                        "legend": { "title": "Minőség", "orient": "bottom-right", "titleColor": "#aed9e0", "labelColor": "#fff" }
                     },
                     
                     "tooltip": [
@@ -184,7 +194,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 }
             }
         ],
-        // FÓKUSZ: KÖZÉP-ÁZSIA
+        // 4. BEÁLLÍTÁS: Fókuszálás Ázsiára
         "projection": {
             "type": "mercator",
             "scale": 600,          

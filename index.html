@@ -131,62 +131,86 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
-   // --- SPEC 1: CHOROPLETH MAP (ORSZÁG-SZÍNEZÉS) ---
+   // --- SPEC 1: INTERAKTÍV TÉRKÉP (TUNINGOLVA) ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 500,
         "background": "transparent",
         
-        // 1. ADATFORRÁS: A világtérkép geometriája
-        "data": {
-            "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
-            "format": { "type": "topojson", "feature": "countries" }
-        },
-        
-        // 2. POZÍCIÓ: Közép-Ázsiára fókuszálunk
+        // KÖZÖS PROJEKCIÓ (Hogy minden réteg ugyanoda essen)
         "projection": {
             "type": "mercator",
-            "scale": 450,          // Nagyítás
-            "center": [85, 40]     // Középpont
+            "scale": 400,          
+            "center": [85, 40]     
         },
 
-        // 3. ADAT KAPCSOLÁS (A varázslat itt történik!)
-        "transform": [
+        "layer": [
+            // 1. RÉTEG: HÁTTÉR ORSZÁGOK (A "szürke zóna")
+            // Ez azért kell, hogy ne a semmiben lebegjen a színes térkép
             {
-                "lookup": "id", // A térkép ID-ja
-                "from": {
-                    "data": { "url": "snow_leopard_extended.csv" },
-                    "key": "id", // A CSV ID-ja
-                    "fields": ["Populacio_Becsles", "Orszag", "Elohely_Minoseg_Pontszam"]
+                "data": {
+                    "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+                    "format": { "type": "topojson", "feature": "countries" }
+                },
+                "mark": { 
+                    "type": "geoshape", 
+                    "fill": "#162038",   // Nagyon sötétkék háttérszín a többi országnak
+                    "stroke": "#2c3e50", // Halvány határvonalak
+                    "strokeWidth": 0.5
                 }
             },
-            // Csak azokat az országokat tartjuk meg, ahol van adat (hogy ne legyen szürke a fél világ)
-            // VAGY: Ha azt akarod, hogy látszódjon a többi ország is szürkén, ezt a sort töröld ki!
-            // {"filter": "datum.Populacio_Becsles != null"} 
-        ],
 
-        // 4. MEGJELENÍTÉS (Geoshape)
-        "mark": { "type": "geoshape", "stroke": "#1b2949", "strokeWidth": 1 },
-        
-        "encoding": {
-            // SZÍN: A populáció alapján
-            "color": {
-                "field": "Populacio_Becsles",
-                "type": "quantitative",
-                "scale": { "scheme": "tealblues" }, // Kék színskála
-                "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" },
-                // Ha nincs adat (pl. Európa), legyen sötétkék/szürke
-                "condition": { "test": "datum.Populacio_Becsles == null", "value": "#162038" }
-            },
-            
-            // TOOLTIP: Ha ráviszed az egeret
-            "tooltip": [
-                {"field": "Orszag", "title": "Ország"},
-                {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"},
-                {"field": "Elohely_Minoseg_Pontszam", "title": "Minőség"}
-            ]
-        }
+            // 2. RÉTEG: AZ ADATOK (Színes országok + INTERAKCIÓ)
+            {
+                "data": {
+                    "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+                    "format": { "type": "topojson", "feature": "countries" }
+                },
+                // ITT KAPCSOLJUK ÖSSZE A CSV-VEL
+                "transform": [
+                    {
+                        "lookup": "id",
+                        "from": {
+                            "data": { "url": "snow_leopard_extended.csv" },
+                            "key": "id",
+                            "fields": ["Populacio_Becsles", "Orszag", "Elohely_Minoseg_Pontszam"]
+                        }
+                    },
+                    // Csak azokat tartjuk meg ebben a rétegben, ahol van adat
+                    { "filter": "datum.Populacio_Becsles != null" }
+                ],
+                
+                // INTERAKCIÓ: Kiemelés egérrávitelre
+                "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5, "cursor": "pointer" },
+                
+                "encoding": {
+                    // SZÍN: Alapból kék, de HA ráviszed az egeret (hover), akkor ARANY!
+                    "color": {
+                        "condition": {
+                            "param": "hover",    // Ha aktív a 'hover' paraméter...
+                            "value": "#ffd700"   // ...legyen arany színű!
+                        },
+                        "field": "Populacio_Becsles",
+                        "type": "quantitative",
+                        "scale": { "scheme": "tealblues" },
+                        "legend": { "title": "Populáció", "titleColor": "#aed9e0", "labelColor": "#fff" }
+                    },
+                    
+                    // TOOLTIP: A kis buborék adatokkal
+                    "tooltip": [
+                        {"field": "Orszag", "title": "Ország"},
+                        {"field": "Populacio_Becsles", "title": "Becsült Egyedszám"},
+                        {"field": "Elohely_Minoseg_Pontszam", "title": "Élőhely Minőség"}
+                    ]
+                },
+                // Ez aktiválja az egérkövetést
+                "params": [{
+                    "name": "hover",
+                    "select": { "type": "point", "on": "mouseover" }
+                }]
+            }
+        ]
     };
 
     // --- SPEC 2: GPS (GENERÁLT ADATTAL) ---

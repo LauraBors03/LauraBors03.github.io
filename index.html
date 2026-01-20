@@ -104,7 +104,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         snowContainer.appendChild(flake);
     }
 
-    // --- 2. GPS ADAT GENERÁLÁS (JAVÍTVA!) ---
+    // --- 2. GPS ADAT GENERÁLÁS (ITT VOLT A HIBA, MOST JAVÍTVA!) ---
     const gpsData = [];
     const leopards = ['Dagina', 'Presnel', 'Kheshig', 'Aztai', 'Nachin'];
     const bases = {
@@ -115,14 +115,14 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         'Nachin':  {lat: 42.4, lon: 100.9}
     };
 
-    // FONTOS JAVÍTÁS: A ciklust átírtam, hogy legyen "Step" (sorrend) adat!
-    // Ez kell ahhoz, hogy a vonalak össze legyenek kötve.
+    // A JAVÍTÁS: forEach ciklust használunk, és generáljuk a "Step" adatot is!
+    // Ez nélkül nem tudja a diagram, mit mivel kössön össze.
     leopards.forEach(leo => {
         let currentLat = bases[leo].lat;
         let currentLon = bases[leo].lon;
 
-        for(let i=0; i<200; i++) { // Mindenkinek 200 pont
-            // Random Walk mozgás
+        for(let i=0; i<200; i++) { // Mindenkinek 200 pont = 1000 adat
+            // Random séta generálása
             currentLat += (Math.random() - 0.5) * 0.05; 
             currentLon += (Math.random() - 0.5) * 0.05;
 
@@ -130,7 +130,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 Latitude: currentLat,
                 Longitude: currentLon,
                 Leopard_ID: leo,
-                Step: i, // EZ HIÁNYZOTT! Most már van sorrend.
+                Step: i, // EZ KELL A DIAGRAMNAK! (Sorszám)
                 Honap: Math.floor(Math.random() * 12) + 1
             });
         }
@@ -139,7 +139,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
     // --- VEGA CONFIG ---
     const commonConfig = { actions: false, background: "transparent", theme: "dark" };
 
- // --- SPEC 1: STABIL TÉRKÉP ---
+    // --- SPEC 1: STABIL TÉRKÉP ---
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -166,12 +166,12 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
         ]
     };
 
-    // --- SPEC 2: ELEGÁNS ÚTVONAL (JAVÍTOTT ADATTAL) ---
+    // --- SPEC 2: ELEGÁNS ÚTVONAL (MOST MÁR JÓ ADATTAL) ---
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
         "height": 400,
-        "data": { "values": gpsData }, // Most már tartalmazza a Step-et!
+        "data": { "values": gpsData }, // Itt használjuk a fenti "Step"-es adatokat
         
         "encoding": {
             "x": { 
@@ -195,8 +195,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.9em; bo
                 "scale": {"scheme": "set2"},
                 "legend": {"titleColor": "#aed9e0", "labelColor": "#fff"}
             },
-            // A Step itt már létezik az adatban, ezért működni fog!
-            "order": { "field": "Step" } 
+            // A "Step" (lépés) mondja meg a sorrendet!
+            "order": { "field": "Step", "type": "quantitative" } 
         },
 
         "layer": [

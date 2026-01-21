@@ -1,0 +1,5 @@
+[
+  {"start": 1900, "end": 1972, "statusz": "Unknown", "color": "#334455"},
+  {"start": 1972, "end": 2017, "statusz": "Endangered", "color": "#cc2222"},
+  {"start": 2017, "end": 2025, "statusz": "Vulnerable", "color": "#ffaa00"}
+]

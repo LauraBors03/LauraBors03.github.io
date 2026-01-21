@@ -11,18 +11,18 @@
 <link rel="icon" type="image/png" href="mammal.png">
 
 <style>
-/* --- DESIGN ALAPOK --- */
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Montserrat', sans-serif; background-color: #0b1026; color: #e6f4f1; overflow-x: hidden; }
 
-/* HÁTTÉR */
+
 body::before { 
     content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: radial-gradient(circle at 50% 100%, #1b2949 0%, #050814 100%); 
     z-index: -2; 
 }
 
-/* HÓESÉS */
+
 .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 .snowflake { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; animation: fall linear infinite; }
 @keyframes fall { 
@@ -31,12 +31,12 @@ body::before {
     100% { transform: translateY(110vh) translateX(20px); opacity: 0.3; } 
 }
 
-/* HERO SZEKCIÓ */
+
 .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; background: linear-gradient(rgba(11, 16, 38, 0.5), rgba(11, 16, 38, 0.9)), url('snowleo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; box-shadow: inset 0 -150px 150px #0b1026; z-index: 2; }
 .hero h1 { font-size: 4em; font-weight: 800; letter-spacing: -2px; color: #fff; text-shadow: 0 0 30px rgba(0, 210, 255, 0.6); margin-bottom: 20px; text-transform: uppercase; }
 .hero p { font-size: 1.3em; max-width: 800px; color: #fff; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,1); background: rgba(0, 0, 0, 0.4); padding: 25px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 
-/* KONTÉNER ÉS KÁRTYÁK */
+
 .container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; position: relative; z-index: 5; }
 
 .card { 
@@ -55,7 +55,7 @@ body::before {
 .section-desc { color: #b0c4de; margin-bottom: 30px; line-height: 1.7; font-size: 1.1em; }
 .viz-container { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
 
-/* LÁBLÉC */
+
 footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 5; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #0b1026; }
@@ -84,8 +84,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         <p class="section-desc">
             Az alábbi térképen látható, hogy mely ázsiai országokban él a faj.
             A <strong>szín sötétsége</strong> a populáció nagyságát jelzi: minél sötétebb a kék, annál magasabb a becsült egyedszám az adott országban.
-            <br>
-            <em style="font-size: 0.9em; opacity: 0.8; color: #00d2ff;">(Interakció: Nagyíts, és vidd az egeret az országok fölé a pontos számokért!)</em>
         </p>
         <div id="viz1" class="viz-container"></div>
     </div>
@@ -97,10 +95,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             Az 1900-as <strong>~100,000 egyedről</strong> mára mindössze <strong>~4,000-re</strong> csökkent a száma.
             A <span style="color:#ff4444;">piros zónák</span> jelzik a kritikus veszélyeztetettségi időszakokat,
             míg a <span style="color:#ffaa00;">sárga</span> a mai "sebezhető" státuszt.
-            <br><br>
-            <em style="font-size: 0.9em; opacity: 0.8; color: #00d2ff;">
-                🎯 Kulcs események: Vidd az egeret a vonalra és a pontokra!
-            </em>
         </p>
         <div id="vizTimeline" class="viz-container"></div>
     </div>
@@ -147,7 +141,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 </footer>
 
 <script>
-// --- HAVAZÁS EFFEKT ---
+
 const fxContainer = document.getElementById('fx-container');
 for(let i=0; i<200; i++){
     let flake = document.createElement('div');
@@ -162,17 +156,17 @@ for(let i=0; i<200; i++){
     fxContainer.appendChild(flake);
 }
 
-// --- KÖZÖS VEGA KONFIGURÁCIÓ ---
+
 const commonConfig = { 
     actions: false, 
     background: "transparent", 
     theme: "dark" 
 };
 
-// --- ADATOK BETÖLTÉSE KÜLSŐ FÁJLOKBÓL ---
+
 async function loadData() {
     try {
-        // JSON fájlok betöltése párhuzamosan
+        //JSON fajl betoltesek
         const [timelineData, statusZones, dietData, elevationData, riskData] = await Promise.all([
             fetch('timeline_data.json').then(r => r.json()),
             fetch('status_zones.json').then(r => r.json()),
@@ -183,7 +177,7 @@ async function loadData() {
 
         console.log('✅ Adatok sikeresen betöltve!');
         
-        // Vizualizációk renderelése a betöltött adatokkal
+       
         renderVisualizations(timelineData, statusZones, dietData, elevationData, riskData);
         
     } catch (error) {
@@ -192,10 +186,10 @@ async function loadData() {
     }
 }
 
-// --- VIZUALIZÁCIÓK SPECIFIKÁCIÓI ÉS RENDERELÉSE ---
+
 function renderVisualizations(timelineData, statusZones, dietData, elevationData, riskData) {
     
-    // === 1. TÉRKÉP ===
+    
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -224,7 +218,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         ]
     };
 
-    // === 2. TIMELINE ===
+   
     const specTimeline = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -250,7 +244,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
                     }
                 }
             },
-            // Fő vonal (area chart)
+            
             {
                 "mark": {
                     "type": "area",
@@ -264,7 +258,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
                     "tooltip": [{"field": "ev", "title": "Év"}, {"field": "populacio", "title": "Populáció", "format": ","}, {"field": "statusz", "title": "IUCN Státusz"}]
                 }
             },
-            // Esemény pontok
+            
             {
                 "transform": [{"filter": "datum.esemeny != null"}],
                 "mark": {"type": "point", "filled": true, "size": 150, "color": "#ff6b6b"},
@@ -274,7 +268,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
                     "tooltip": [{"field": "ev", "title": "Év"}, {"field": "esemeny", "title": "Esemény"}, {"field": "populacio", "title": "Populáció", "format": ","}]
                 }
             },
-            // Esemény címkék
+           
             {
                 "transform": [{"filter": "datum.esemeny != null"}],
                 "mark": {"type": "text", "align": "left", "dx": 8, "dy": -10, "fontSize": 11, "fontWeight": "bold", "color": "#ff6b6b"},
@@ -287,7 +281,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         ]
     };
 
-    // === 3. VESZÉLY HEATMAP ===
+    
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -303,7 +297,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         }
     };
 
-    // === 4. GAZDASÁG (DUAL-AXIS) ===
+    
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -318,7 +312,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         "resolve": {"scale": {"y": "independent"}}
     };
 
-    // === 5. TÁPLÁLKOZÁS (EMOJI BAR CHART) ===
+   
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -346,7 +340,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         ]
     };
 
-    // === 6. VÁNDORLÁS (LINE CHART) ===
+    
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -362,7 +356,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         }
     };
 
-    // === RENDERELÉS ===
+    
     vegaEmbed('#vizTimeline', specTimeline, commonConfig);
     vegaEmbed('#viz1', spec1, commonConfig);
     vegaEmbed('#viz2', spec2, commonConfig);
@@ -373,7 +367,6 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
     console.log('✅ Összes vizualizáció renderelve!');
 }
 
-// === OLDAL BETÖLTÉSEKOR INDÍTÁS ===
 loadData();
 </script>
 </body>

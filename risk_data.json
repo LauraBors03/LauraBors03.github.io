@@ -1,0 +1,21 @@
+[
+  {"orszag": "Mongólia", "veszely": "Túllegeltetés", "sulyossag": 5},
+  {"orszag": "Mongólia", "veszely": "Bányászat", "sulyossag": 3},
+  {"orszag": "Mongólia", "veszely": "Orvvadászat", "sulyossag": 2},
+  {"orszag": "Mongólia", "veszely": "Klímaváltozás", "sulyossag": 4},
+  
+  {"orszag": "Kína", "veszely": "Túllegeltetés", "sulyossag": 4},
+  {"orszag": "Kína", "veszely": "Bányászat", "sulyossag": 5},
+  {"orszag": "Kína", "veszely": "Orvvadászat", "sulyossag": 3},
+  {"orszag": "Kína", "veszely": "Klímaváltozás", "sulyossag": 3},
+
+  {"orszag": "India", "veszely": "Túllegeltetés", "sulyossag": 5},
+  {"orszag": "India", "veszely": "Bányászat", "sulyossag": 1},
+  {"orszag": "India", "veszely": "Orvvadászat", "sulyossag": 2},
+  {"orszag": "India", "veszely": "Klímaváltozás", "sulyossag": 4},
+
+  {"orszag": "Kirgizisztán", "veszely": "Túllegeltetés", "sulyossag": 3},
+  {"orszag": "Kirgizisztán", "veszely": "Bányászat", "sulyossag": 4},
+  {"orszag": "Kirgizisztán", "veszely": "Orvvadászat", "sulyossag": 4},
+  {"orszag": "Kirgizisztán", "veszely": "Klímaváltozás", "sulyossag": 3}
+]

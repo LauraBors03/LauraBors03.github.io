@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snow Leopard Visualisation</title>
+<title>Hópárduc Projekt - Timeline</title>
 <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
@@ -84,6 +84,8 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         <p class="section-desc">
             Az alábbi térképen látható, hogy mely ázsiai országokban él a faj.
             A <strong>szín sötétsége</strong> a populáció nagyságát jelzi: minél sötétebb a kék, annál magasabb a becsült egyedszám az adott országban.
+            <br>
+            <em style="font-size: 0.9em; opacity: 0.8; color: #00d2ff;">(Interakció: Nagyíts, és vidd az egeret az országok fölé a pontos számokért!)</em>
         </p>
         <div id="viz1" class="viz-container"></div>
     </div>
@@ -95,6 +97,10 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
             Az 1900-as <strong>~100,000 egyedről</strong> mára mindössze <strong>~4,000-re</strong> csökkent a száma.
             A <span style="color:#ff4444;">piros zónák</span> jelzik a kritikus veszélyeztetettségi időszakokat,
             míg a <span style="color:#ffaa00;">sárga</span> a mai "sebezhető" státuszt.
+            <br><br>
+            <em style="font-size: 0.9em; opacity: 0.8; color: #00d2ff;">
+                🎯 Kulcs események: Vidd az egeret a vonalra és a pontokra!
+            </em>
         </p>
         <div id="vizTimeline" class="viz-container"></div>
     </div>
@@ -127,7 +133,7 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
    <div class="card">
         <h2 class="section-title">📈 Gazdasági Ösztönzők a Védelemért</h2>
         <p class="section-desc">
-            A diagram bizonyítja a modern természetvédelem sikerét: amint a helyi közösségek részesülnek a <span style="color:#00d2ff">Turizmus Bevételéből</span>, a hópárduc értékesebb lesz számukra élve, mint trófeaként, így drasztikusan zuhan az <span style="color:#ff6b6b">Orvvadászat</span>.
+            A diagram bizonyítja a modern természetvédelem sikerét: amint a helyi közösségek részesülnek a <span style="color:#00d2ff">Turizmus Bevételéből</span>, a hópárduc értékesebb lesz számukra élve, mint trófeaként, így drasztikusan zuhan az <span style="color:#dd3497">Orvvadászat</span>.
         </p>
         <div id="viz3" class="viz-container"></div>
     </div>
@@ -166,7 +172,7 @@ const commonConfig = {
 
 async function loadData() {
     try {
-        //JSON fajl betoltesek
+      
         const [timelineData, statusZones, dietData, elevationData, riskData] = await Promise.all([
             fetch('timeline_data.json').then(r => r.json()),
             fetch('status_zones.json').then(r => r.json()),
@@ -177,7 +183,7 @@ async function loadData() {
 
         console.log('✅ Adatok sikeresen betöltve!');
         
-       
+        
         renderVisualizations(timelineData, statusZones, dietData, elevationData, riskData);
         
     } catch (error) {
@@ -188,7 +194,6 @@ async function loadData() {
 
 
 function renderVisualizations(timelineData, statusZones, dietData, elevationData, riskData) {
-    
     
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -226,7 +231,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         "background": "transparent",
         "data": {"values": timelineData},
         "layer": [
-            // Háttér státusz zónák
+            
             {
                 "data": {"values": statusZones},
                 "mark": {"type": "rect", "opacity": 0.15},
@@ -244,7 +249,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
                     }
                 }
             },
-            
+           
             {
                 "mark": {
                     "type": "area",
@@ -258,7 +263,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
                     "tooltip": [{"field": "ev", "title": "Év"}, {"field": "populacio", "title": "Populáció", "format": ","}, {"field": "statusz", "title": "IUCN Státusz"}]
                 }
             },
-            
+         
             {
                 "transform": [{"filter": "datum.esemeny != null"}],
                 "mark": {"type": "point", "filled": true, "size": 150, "color": "#ff6b6b"},
@@ -307,12 +312,12 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff", "grid": false} } },
         "layer": [
             { "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} }, "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD"}] } },
-            { "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} }, "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek"}] } }
+            { "mark": {"type": "line", "stroke": "#dd3497", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#dd3497", "labelColor": "#dd3497", "grid": false, "orient": "right"} }, "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek"}] } }
         ], 
         "resolve": {"scale": {"y": "independent"}}
     };
 
-   
+    
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -340,7 +345,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         ]
     };
 
-    
+  
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -356,7 +361,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
         }
     };
 
-    
+   
     vegaEmbed('#vizTimeline', specTimeline, commonConfig);
     vegaEmbed('#viz1', spec1, commonConfig);
     vegaEmbed('#viz2', spec2, commonConfig);
@@ -366,6 +371,7 @@ function renderVisualizations(timelineData, statusZones, dietData, elevationData
     
     console.log('✅ Összes vizualizáció renderelve!');
 }
+
 
 loadData();
 </script>

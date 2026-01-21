@@ -1,0 +1,17 @@
+[
+  {"ev": 1900, "populacio": 100000, "statusz": "Unknown", "esemeny": null},
+  {"ev": 1920, "populacio": 85000, "statusz": "Unknown", "esemeny": null},
+  {"ev": 1940, "populacio": 70000, "statusz": "Unknown", "esemeny": null},
+  {"ev": 1960, "populacio": 50000, "statusz": "Unknown", "esemeny": null},
+  {"ev": 1972, "populacio": 35000, "statusz": "Endangered", "esemeny": "IUCN: Veszélyeztetett státusz"},
+  {"ev": 1975, "populacio": 28000, "statusz": "Endangered", "esemeny": "Prémvadászat csúcsa"},
+  {"ev": 1980, "populacio": 22000, "statusz": "Endangered", "esemeny": null},
+  {"ev": 1990, "populacio": 15000, "statusz": "Endangered", "esemeny": null},
+  {"ev": 2000, "populacio": 8000, "statusz": "Endangered", "esemeny": null},
+  {"ev": 2003, "populacio": 6500, "statusz": "Endangered", "esemeny": "Snow Leopard Trust megerősödése"},
+  {"ev": 2010, "populacio": 5500, "statusz": "Endangered", "esemeny": null},
+  {"ev": 2013, "populacio": 5000, "statusz": "Endangered", "esemeny": "Globális védőprogram indítása"},
+  {"ev": 2017, "populacio": 4500, "statusz": "Vulnerable", "esemeny": "Státusz: Sebezhető (javulás!)"},
+  {"ev": 2020, "populacio": 4200, "statusz": "Vulnerable", "esemeny": null},
+  {"ev": 2025, "populacio": 4000, "statusz": "Vulnerable", "esemeny": "Klímaváltozás új veszély"}
+]

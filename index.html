@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hópárduc Projekt - Timeline</title>
+<title>Hópárduc Projekt</title>
 <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
@@ -90,7 +90,6 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         <div id="viz1" class="viz-container"></div>
     </div>
 
-    <!-- ÚJ: TIMELINE DIAGRAM -->
     <div class="card">
         <h2 class="section-title">⏳ Populációs Összeomlás</h2>
         <p class="section-desc">
@@ -148,207 +147,60 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
 </footer>
 
 <script>
-    // --- HAVAZÁS EFFEKT ---
-    const fxContainer = document.getElementById('fx-container');
-    for(let i=0; i<200; i++){
-        let flake = document.createElement('div');
-        flake.className = 'snowflake';
-        flake.style.left = Math.random() * 100 + 'vw';
-        let size = Math.random() * 3 + 1;
-        flake.style.width = size + 'px'; flake.style.height = size + 'px';
-        flake.style.animationDuration = (Math.random() * 5 + 3) + 's';
-        flake.style.filter = `blur(${Math.random()}px)`;
-        flake.style.opacity = Math.random() * 0.7 + 0.3;
-        fxContainer.appendChild(flake);
-    }
+// --- HAVAZÁS EFFEKT ---
+const fxContainer = document.getElementById('fx-container');
+for(let i=0; i<200; i++){
+    let flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.style.left = Math.random() * 100 + 'vw';
+    let size = Math.random() * 3 + 1;
+    flake.style.width = size + 'px'; 
+    flake.style.height = size + 'px';
+    flake.style.animationDuration = (Math.random() * 5 + 3) + 's';
+    flake.style.filter = `blur(${Math.random()}px)`;
+    flake.style.opacity = Math.random() * 0.7 + 0.3;
+    fxContainer.appendChild(flake);
+}
 
-    // --- ADATOK ---
-    
-    // ÚJ: TIMELINE ADATOK (1900-2025)
-    const timelineData = [
-        {ev: 1900, populacio: 100000, statusz: "Unknown", esemeny: null},
-        {ev: 1920, populacio: 85000, statusz: "Unknown", esemeny: null},
-        {ev: 1940, populacio: 70000, statusz: "Unknown", esemeny: null},
-        {ev: 1960, populacio: 50000, statusz: "Unknown", esemeny: null},
-        {ev: 1972, populacio: 35000, statusz: "Endangered", esemeny: "IUCN: Veszélyeztetett státusz"},
-        {ev: 1975, populacio: 28000, statusz: "Endangered", esemeny: "Prémvadászat csúcsa"},
-        {ev: 1980, populacio: 22000, statusz: "Endangered", esemeny: null},
-        {ev: 1990, populacio: 15000, statusz: "Endangered", esemeny: null},
-        {ev: 2000, populacio: 8000, statusz: "Endangered", esemeny: null},
-        {ev: 2003, populacio: 6500, statusz: "Endangered", esemeny: "Snow Leopard Trust megerősödése"},
-        {ev: 2010, populacio: 5500, statusz: "Endangered", esemeny: null},
-        {ev: 2013, populacio: 5000, statusz: "Endangered", esemeny: "Globális védőprogram indítása"},
-        {ev: 2017, populacio: 4500, statusz: "Vulnerable", esemeny: "Státusz: Sebezhető (javulás!)"},
-        {ev: 2020, populacio: 4200, statusz: "Vulnerable", esemeny: null},
-        {ev: 2025, populacio: 4000, statusz: "Vulnerable", esemeny: "Klímaváltozás új veszély"}
-    ];
+// --- KÖZÖS VEGA KONFIGURÁCIÓ ---
+const commonConfig = { 
+    actions: false, 
+    background: "transparent", 
+    theme: "dark" 
+};
 
-    // HÁTTÉR ZÓNÁK STÁTUSZHOZ
-    const statusZones = [
-        {start: 1900, end: 1972, statusz: "Unknown", color: "#334455"},
-        {start: 1972, end: 2017, statusz: "Endangered", color: "#cc2222"},
-        {start: 2017, end: 2025, statusz: "Vulnerable", color: "#ffaa00"}
-    ];
-    
-    // TÁPLÁLÉK ADATOK (EMOJI-S VERZIÓ)
-    const dietData = [
-        {category: "Kék Juh (Bharal)", value: 55, emoji: "🐑"}, 
-        {category: "Kőszáli Kecske", value: 20, emoji: "🐐"},
-        {category: "Mormota & Kisemlős", value: 7, emoji: "🐿️"}, 
-        {category: "Háziállat (Konfliktus)", value: 18, emoji: "🐄"}
-    ];
+// --- ADATOK BETÖLTÉSE KÜLSŐ FÁJLOKBÓL ---
+async function loadData() {
+    try {
+        // JSON fájlok betöltése párhuzamosan
+        const [timelineData, statusZones, dietData, elevationData, riskData] = await Promise.all([
+            fetch('timeline_data.json').then(r => r.json()),
+            fetch('status_zones.json').then(r => r.json()),
+            fetch('diet_data.json').then(r => r.json()),
+            fetch('elevation_data.json').then(r => r.json()),
+            fetch('risk_data.json').then(r => r.json())
+        ]);
 
-    // VÁNDORLÁS ADATOK
-    const elevationData = [
-        {honap: "Jan", magassag: 2800}, {honap: "Feb", magassag: 2900}, {honap: "Már", magassag: 3200}, {honap: "Ápr", magassag: 3600},
-        {honap: "Máj", magassag: 4100}, {honap: "Jún", magassag: 4500}, {honap: "Júl", magassag: 4600}, {honap: "Aug", magassag: 4400},
-        {honap: "Szep", magassag: 4000}, {honap: "Okt", magassag: 3500}, {honap: "Nov", magassag: 3000}, {honap: "Dec", magassag: 2800}
-    ];
-
-    // VESZÉLY MÁTRIX ADATOK
-    const riskData = [
-        {orszag: "Mongólia", veszely: "Túllegeltetés", sulyossag: 5},
-        {orszag: "Mongólia", veszely: "Bányászat", sulyossag: 3},
-        {orszag: "Mongólia", veszely: "Orvvadászat", sulyossag: 2},
-        {orszag: "Mongólia", veszely: "Klímaváltozás", sulyossag: 4},
+        console.log('✅ Adatok sikeresen betöltve!');
         
-        {orszag: "Kína", veszely: "Túllegeltetés", sulyossag: 4},
-        {orszag: "Kína", veszely: "Bányászat", sulyossag: 5},
-        {orszag: "Kína", veszely: "Orvvadászat", sulyossag: 3},
-        {orszag: "Kína", veszely: "Klímaváltozás", sulyossag: 3},
+        // Vizualizációk renderelése a betöltött adatokkal
+        renderVisualizations(timelineData, statusZones, dietData, elevationData, riskData);
+        
+    } catch (error) {
+        console.error('❌ Hiba az adatok betöltésekor:', error);
+        alert('Nem sikerült betölteni az adatokat. Ellenőrizd, hogy minden JSON fájl elérhető-e a projekt mappában!');
+    }
+}
 
-        {orszag: "India", veszely: "Túllegeltetés", sulyossag: 5},
-        {orszag: "India", veszely: "Bányászat", sulyossag: 1},
-        {orszag: "India", veszely: "Orvvadászat", sulyossag: 2},
-        {orszag: "India", veszely: "Klímaváltozás", sulyossag: 4},
-
-        {orszag: "Kirgizisztán", veszely: "Túllegeltetés", sulyossag: 3},
-        {orszag: "Kirgizisztán", veszely: "Bányászat", sulyossag: 4},
-        {orszag: "Kirgizisztán", veszely: "Orvvadászat", sulyossag: 4},
-        {orszag: "Kirgizisztán", veszely: "Klímaváltozás", sulyossag: 3}
-    ];
-
-    const commonConfig = { actions: false, background: "transparent", theme: "dark" };
-
-    // --- ÚJ: TIMELINE VIZUALIZÁCIÓ (JAVÍTOTT X TENGELLYEL) ---
-    const specTimeline = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container",
-        "height": 500,
-        "background": "transparent",
-        "data": {"values": timelineData},
-        "layer": [
-            // HÁTTÉR SZÍNES ZÓNÁK (Státusz szerint)
-            {
-                "data": {"values": statusZones},
-                "mark": {"type": "rect", "opacity": 0.15},
-                "encoding": {
-                    "x": {"field": "start", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
-                    "x2": {"field": "end"},
-                    "color": {
-                        "field": "statusz",
-                        "type": "nominal",
-                        "scale": {
-                            "domain": ["Unknown", "Endangered", "Vulnerable"],
-                            "range": ["#334455", "#cc2222", "#ffaa00"]
-                        },
-                        "legend": {
-                            "title": "IUCN Státusz",
-                            "titleColor": "#fff",
-                            "labelColor": "#fff",
-                            "orient": "top-right"
-                        }
-                    }
-                }
-            },
-            // FŐ VONAL (Area chart a drámaiságért)
-            {
-                "mark": {
-                    "type": "area",
-                    "line": {"color": "#00d2ff", "strokeWidth": 3},
-                    "color": {
-                        "gradient": "linear",
-                        "stops": [
-                            {"offset": 0, "color": "#00d2ff"},
-                            {"offset": 1, "color": "rgba(0, 210, 255, 0.1)"}
-                        ]
-                    },
-                    "interpolate": "monotone"
-                },
-                "encoding": {
-                    "x": {
-                        "field": "ev",
-                        "type": "quantitative",
-                        "title": "Év",
-                        "scale": {"domain": [1900, 2025]},
-                        "axis": {
-                            "labelColor": "#fff",
-                            "titleColor": "#aed9e0",
-                            "gridColor": "#334",
-                            "tickCount": 10
-                        }
-                    },
-                    "y": {
-                        "field": "populacio",
-                        "type": "quantitative",
-                        "title": "Becsült Populáció",
-                        "axis": {
-                            "labelColor": "#fff",
-                            "titleColor": "#aed9e0",
-                            "gridColor": "#334"
-                        }
-                    },
-                    "tooltip": [
-                        {"field": "ev", "title": "Év"},
-                        {"field": "populacio", "title": "Populáció", "format": ","},
-                        {"field": "statusz", "title": "IUCN Státusz"}
-                    ]
-                }
-            },
-            // ESEMÉNYEK PONTOK (csak ahol van esemény)
-            {
-                "transform": [{"filter": "datum.esemeny != null"}],
-                "mark": {
-                    "type": "point",
-                    "filled": true,
-                    "size": 150,
-                    "color": "#ff6b6b"
-                },
-                "encoding": {
-                    "x": {"field": "ev", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
-                    "y": {"field": "populacio", "type": "quantitative"},
-                    "tooltip": [
-                        {"field": "ev", "title": "Év"},
-                        {"field": "esemeny", "title": "Esemény"},
-                        {"field": "populacio", "title": "Populáció", "format": ","}
-                    ]
-                }
-            },
-            // ESEMÉNY CÍMKÉK (Text annotations)
-            {
-                "transform": [{"filter": "datum.esemeny != null"}],
-                "mark": {
-                    "type": "text",
-                    "align": "left",
-                    "dx": 8,
-                    "dy": -10,
-                    "fontSize": 11,
-                    "fontWeight": "bold",
-                    "color": "#ff6b6b"
-                },
-                "encoding": {
-                    "x": {"field": "ev", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
-                    "y": {"field": "populacio", "type": "quantitative"},
-                    "text": {"field": "esemeny", "type": "nominal"}
-                }
-            }
-        ]
-    };
-
-    // --- 1. TÉRKÉP ---
+// --- VIZUALIZÁCIÓK SPECIFIKÁCIÓI ÉS RENDERELÉSE ---
+function renderVisualizations(timelineData, statusZones, dietData, elevationData, riskData) {
+    
+    // === 1. TÉRKÉP ===
     const spec1 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 500, "background": "transparent",
+        "width": "container", 
+        "height": 500, 
+        "background": "transparent",
         "params": [
             { "name": "zoom", "value": 400, "on": [{ "events": {"type": "wheel", "consume": true}, "update": "clamp(zoom * pow(1.001, -event.deltaY), 150, 3000)" }] },
             { "name": "clon", "value": 85, "on": [{ "events": {"type": "mousemove", "consume": true, "between": [{"type": "mousedown"}, {"type": "mouseup"}]}, "update": "clon - (event.movementX / (zoom / 100))" }] },
@@ -372,45 +224,101 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         ]
     };
 
-    // --- 2. VESZÉLY MÁTRIX (Heatmap) ---
+    // === 2. TIMELINE ===
+    const specTimeline = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": "container", 
+        "height": 500, 
+        "background": "transparent",
+        "data": {"values": timelineData},
+        "layer": [
+            // Háttér státusz zónák
+            {
+                "data": {"values": statusZones},
+                "mark": {"type": "rect", "opacity": 0.15},
+                "encoding": {
+                    "x": {"field": "start", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
+                    "x2": {"field": "end"},
+                    "color": {
+                        "field": "statusz", 
+                        "type": "nominal",
+                        "scale": {
+                            "domain": ["Unknown", "Endangered", "Vulnerable"],
+                            "range": ["#334455", "#cc2222", "#ffaa00"]
+                        },
+                        "legend": {"title": "IUCN Státusz", "titleColor": "#fff", "labelColor": "#fff", "orient": "top-right"}
+                    }
+                }
+            },
+            // Fő vonal (area chart)
+            {
+                "mark": {
+                    "type": "area",
+                    "line": {"color": "#00d2ff", "strokeWidth": 3},
+                    "color": {"gradient": "linear", "stops": [{"offset": 0, "color": "#00d2ff"}, {"offset": 1, "color": "rgba(0, 210, 255, 0.1)"}]},
+                    "interpolate": "monotone"
+                },
+                "encoding": {
+                    "x": {"field": "ev", "type": "quantitative", "title": "Év", "scale": {"domain": [1900, 2025]}, "axis": {"labelColor": "#fff", "titleColor": "#aed9e0", "gridColor": "#334", "tickCount": 10}},
+                    "y": {"field": "populacio", "type": "quantitative", "title": "Becsült Populáció", "axis": {"labelColor": "#fff", "titleColor": "#aed9e0", "gridColor": "#334"}},
+                    "tooltip": [{"field": "ev", "title": "Év"}, {"field": "populacio", "title": "Populáció", "format": ","}, {"field": "statusz", "title": "IUCN Státusz"}]
+                }
+            },
+            // Esemény pontok
+            {
+                "transform": [{"filter": "datum.esemeny != null"}],
+                "mark": {"type": "point", "filled": true, "size": 150, "color": "#ff6b6b"},
+                "encoding": {
+                    "x": {"field": "ev", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
+                    "y": {"field": "populacio", "type": "quantitative"},
+                    "tooltip": [{"field": "ev", "title": "Év"}, {"field": "esemeny", "title": "Esemény"}, {"field": "populacio", "title": "Populáció", "format": ","}]
+                }
+            },
+            // Esemény címkék
+            {
+                "transform": [{"filter": "datum.esemeny != null"}],
+                "mark": {"type": "text", "align": "left", "dx": 8, "dy": -10, "fontSize": 11, "fontWeight": "bold", "color": "#ff6b6b"},
+                "encoding": {
+                    "x": {"field": "ev", "type": "quantitative", "scale": {"domain": [1900, 2025]}},
+                    "y": {"field": "populacio", "type": "quantitative"},
+                    "text": {"field": "esemeny", "type": "nominal"}
+                }
+            }
+        ]
+    };
+
+    // === 3. VESZÉLY HEATMAP ===
     const spec2 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 300,
+        "width": "container", 
+        "height": 300, 
         "background": "transparent",
         "data": { "values": riskData },
         "mark": "rect",
         "encoding": {
             "x": { "field": "orszag", "type": "nominal", "title": "Ország", "axis": {"labelColor": "#fff", "titleColor": "#aed9e0", "labelAngle": 0} },
             "y": { "field": "veszely", "type": "nominal", "title": null, "axis": {"labelColor": "#fff", "labelFontSize": 12} },
-            "color": {
-                "field": "sulyossag",
-                "type": "quantitative",
-                "title": "Kockázat",
-                "scale": {"scheme": "purplered"},
-                "legend": {"titleColor": "#fff", "labelColor": "#fff"}
-            },
-            "tooltip": [
-                {"field": "orszag", "title": "Ország"},
-                {"field": "veszely", "title": "Veszélyforrás"},
-                {"field": "sulyossag", "title": "Súlyosság (1-5)"}
-            ]
+            "color": {"field": "sulyossag", "type": "quantitative", "title": "Kockázat", "scale": {"scheme": "purplered"}, "legend": {"titleColor": "#fff", "labelColor": "#fff"}},
+            "tooltip": [{"field": "orszag", "title": "Ország"}, {"field": "veszely", "title": "Veszélyforrás"}, {"field": "sulyossag", "title": "Súlyosság (1-5)"}]
         }
     };
 
-    // --- 3. GAZDASÁG ---
+    // === 4. GAZDASÁG (DUAL-AXIS) ===
     const spec3 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400, 
+        "width": "container", 
+        "height": 400, 
         "background": "transparent",
         "data": { "url": "leopard_economy.csv" },
         "encoding": { "x": { "field": "Ev", "type": "ordinal", "title": "Év", "axis": {"labelColor": "#fff", "grid": false} } },
         "layer": [
             { "mark": {"type": "line", "stroke": "#00d2ff", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Turizmus_Bevetel_USD", "type": "quantitative", "title": "Turizmus ($)", "axis": {"titleColor": "#00d2ff", "labelColor": "#00d2ff", "gridColor": "#334"} }, "tooltip": [{"field": "Ev"}, {"field": "Turizmus_Bevetel_USD"}] } },
             { "mark": {"type": "line", "stroke": "#ff6b6b", "strokeWidth": 4, "point": true}, "encoding": { "y": { "field": "Orvvadaszat_Esetek", "type": "quantitative", "title": "Orvvadászat (db)", "axis": {"titleColor": "#ff6b6b", "labelColor": "#ff6b6b", "grid": false, "orient": "right"} }, "tooltip": [{"field": "Ev"}, {"field": "Orvvadaszat_Esetek"}] } }
-        ], "resolve": {"scale": {"y": "independent"}}
+        ], 
+        "resolve": {"scale": {"y": "independent"}}
     };
 
-    // --- 4. TÁPLÁLÉK (EMOJI OVERLAY) ---
+    // === 5. TÁPLÁLKOZÁS (EMOJI BAR CHART) ===
     const spec4 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "width": "container", 
@@ -418,97 +326,55 @@ footer { text-align: center; padding: 50px; color: #5d6d7e; font-size: 0.8em; bo
         "background": "transparent",
         "data": { "values": dietData },
         "layer": [
-            // LAYER 1: Bar chart
             {
-                "mark": { 
-                    "type": "bar", 
-                    "cornerRadiusEnd": 4, 
-                    "height": {"band": 0.5} 
-                },
+                "mark": { "type": "bar", "cornerRadiusEnd": 4, "height": {"band": 0.5} },
                 "encoding": {
-                    "x": { 
-                        "field": "value", 
-                        "type": "quantitative", 
-                        "title": "Arány (%)", 
-                        "axis": {"gridColor": "#334", "labelColor": "#fff"} 
-                    },
-                    "y": { 
-                        "field": "category", 
-                        "type": "nominal", 
-                        "sort": "-x", 
-                        "title": null, 
-                        "axis": {"labelColor": "#fff", "labelFontSize": 12} 
-                    },
-                    "color": { 
-                        "field": "category", 
-                        "type": "nominal", 
-                        "scale": {"range": ["#00d2ff", "#ff6b6b", "#2980b9", "#aed9e0"]}, 
-                        "legend": null 
-                    },
-                    "tooltip": [ 
-                        {"field": "category", "title": "Zsákmány"}, 
-                        {"field": "value", "title": "Százalék"} 
-                    ]
+                    "x": { "field": "value", "type": "quantitative", "title": "Arány (%)", "axis": {"gridColor": "#334", "labelColor": "#fff"} },
+                    "y": { "field": "category", "type": "nominal", "sort": "-x", "title": null, "axis": {"labelColor": "#fff", "labelFontSize": 12} },
+                    "color": { "field": "category", "type": "nominal", "scale": {"range": ["#00d2ff", "#ff6b6b", "#2980b9", "#aed9e0"]}, "legend": null },
+                    "tooltip": [ {"field": "category", "title": "Zsákmány"}, {"field": "value", "title": "Százalék"} ]
                 }
             },
-            // LAYER 2: Emoji overlay az oszlopok végén
             {
-                "mark": {
-                    "type": "text",
-                    "align": "left",
-                    "dx": 8,
-                    "fontSize": 28,
-                    "fontWeight": "bold"
-                },
+                "mark": {"type": "text", "align": "left", "dx": 8, "fontSize": 28, "fontWeight": "bold"},
                 "encoding": {
-                    "x": { 
-                        "field": "value", 
-                        "type": "quantitative"
-                    },
-                    "y": { 
-                        "field": "category", 
-                        "type": "nominal", 
-                        "sort": "-x"
-                    },
+                    "x": { "field": "value", "type": "quantitative"},
+                    "y": { "field": "category", "type": "nominal", "sort": "-x"},
                     "text": {"field": "emoji", "type": "nominal"}
                 }
             }
         ]
     };
 
-    // --- 5. VÁNDORLÁS ---
+    // === 6. VÁNDORLÁS (LINE CHART) ===
     const spec5 = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "width": "container", "height": 400, 
+        "width": "container", 
+        "height": 400, 
         "background": "transparent",
         "data": { "values": elevationData },
-        "mark": { 
-            "type": "line", 
-            "point": { "filled": true, "size": 80 }, 
-            "interpolate": "monotone", 
-            "strokeWidth": 4 
-        },
+        "mark": { "type": "line", "point": { "filled": true, "size": 80 }, "interpolate": "monotone", "strokeWidth": 4 },
         "encoding": {
             "x": { "field": "honap", "type": "ordinal", "sort": null, "title": null, "axis": {"labelColor": "#fff", "grid": false} },
-            "y": { 
-                "field": "magassag", 
-                "type": "quantitative", 
-                "title": "Magasság (m)", 
-                "scale": {"domain": [2500, 5000], "zero": false}, 
-                "axis": {"gridColor": "#334", "labelColor": "#fff"} 
-            },
+            "y": { "field": "magassag", "type": "quantitative", "title": "Magasság (m)", "scale": {"domain": [2500, 5000], "zero": false}, "axis": {"gridColor": "#334", "labelColor": "#fff"} },
             "color": { "value": "#00d2ff" }, 
             "tooltip": [ {"field": "honap", "title": "Hónap"}, {"field": "magassag", "title": "Magasság"} ]
         }
     };
 
-    // RENDER
+    // === RENDERELÉS ===
     vegaEmbed('#vizTimeline', specTimeline, commonConfig);
     vegaEmbed('#viz1', spec1, commonConfig);
-    vegaEmbed('#viz4', spec4, commonConfig);
-    vegaEmbed('#viz5', spec5, commonConfig);
     vegaEmbed('#viz2', spec2, commonConfig);
     vegaEmbed('#viz3', spec3, commonConfig);
+    vegaEmbed('#viz4', spec4, commonConfig);
+    vegaEmbed('#viz5', spec5, commonConfig);
+    
+    console.log('✅ Összes vizualizáció renderelve!');
+}
+
+// === OLDAL BETÖLTÉSEKOR INDÍTÁS ===
+loadData();
 </script>
 </body>
 </html>

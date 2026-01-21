@@ -1,0 +1,14 @@
+[
+  {"honap": "Jan", "magassag": 2800},
+  {"honap": "Feb", "magassag": 2900},
+  {"honap": "Már", "magassag": 3200},
+  {"honap": "Ápr", "magassag": 3600},
+  {"honap": "Máj", "magassag": 4100},
+  {"honap": "Jún", "magassag": 4500},
+  {"honap": "Júl", "magassag": 4600},
+  {"honap": "Aug", "magassag": 4400},
+  {"honap": "Szep", "magassag": 4000},
+  {"honap": "Okt", "magassag": 3500},
+  {"honap": "Nov", "magassag": 3000},
+  {"honap": "Dec", "magassag": 2800}
+]
